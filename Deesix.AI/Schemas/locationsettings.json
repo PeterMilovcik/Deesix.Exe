@@ -1,0 +1,69 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "LocationName": {
+      "type": "string",
+      "description": "The unique name of the location within the region."
+    },
+    "LocationDescription": {
+      "type": "string",
+      "description": "A brief description of the location, highlighting its key characteristics or features.",
+      "maxLength": 300
+    },
+    "ExactPosition": {
+      "type": "string",
+      "description": "The exact geographical coordinates or descriptive position of the location in the region."
+    },
+    "Significance": {
+      "type": "string",
+      "description": "The significance of the location - historical, cultural, economic, magical, etc."
+    },
+    "DominantSpecies": {
+      "type": "string",
+      "description": "The species or race which has significant presence or influence at this location."
+    },
+    "Features": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "description": "Physical or non-tangible features that characterize the location."
+      }
+    },
+    "LocalCulture": {
+      "type": "string",
+      "description": "Specific cultural norms or customs observed at this location."
+    },
+    "HistoricalEvents": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "description": "Historical events of note that took place at this location."
+      }
+    },
+    "LocalEconomy": {
+      "type": "string",
+      "description": "Specific economic activities or resources that are central to this location.",
+      "maxLength": 200
+    },
+    "NoteworthyIndividuals": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "description": "Noteworthy individuals who hail from or are associated with this location."
+      }
+    }
+  },
+  "required": [
+    "LocationName",
+    "LocationDescription",
+    "ExactPosition",
+    "Significance",
+    "DominantSpecies",
+    "Features",
+    "LocalCulture",
+    "HistoricalEvents",
+    "LocalEconomy",
+    "NoteworthyIndividuals"
+  ]
+}

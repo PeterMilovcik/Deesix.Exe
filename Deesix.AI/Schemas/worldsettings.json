@@ -1,0 +1,114 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "WorldName": {
+      "type": "string",
+      "description": "The name of the fictional world."
+    },
+    "WorldDescription": {
+      "type": "string",
+      "description": "The description of the fictional world.",
+      "maxLength": 500
+    },
+    "Landmasses": {
+      "type": "string",
+      "description": "Description of the main landmasses in the world.",
+      "maxLength": 200
+    },
+    "Landmarks": {
+      "type": "string",
+      "description": "Prominent landmarks in the world.",
+      "maxLength": 150
+    },
+    "ClimateZones": {
+      "type": "string",
+      "description": "Description of the climate zones in the world.",
+      "maxLength": 150
+    },
+    "Societies": {
+      "type": "string",
+      "description": "Different societies inhabiting the world.",
+      "maxLength": 200
+    },
+    "Beliefs": {
+      "type": "string",
+      "description": "Beliefs and faiths followed by the inhabitants.",
+      "maxLength": 200
+    },
+    "TechnologicalAdvancements": {
+      "type": "string",
+      "description": "Technological advancements in the world.",
+      "maxLength": 200
+    },
+    "CreationMyths": {
+      "type": "string",
+      "description": "Myths and legends about the creation of the world.",
+      "maxLength": 200
+    },
+    "MajorEvents": {
+      "type": "string",
+      "description": "Significant historical events in the world.",
+      "maxLength": 200
+    },
+    "SourceOfMagic": {
+      "type": "string",
+      "description": "The source of magical power in the world.",
+      "maxLength": 200
+    },
+    "TypesOfMagic": {
+      "type": "string",
+      "description": "Different types of magic practiced in the world.",
+      "maxLength": 200
+    },
+    "MagicLimitations": {
+      "type": "string",
+      "description": "Limitations and constraints of magic in the world.",
+      "maxLength": 200
+    },
+    "Governance": {
+      "type": "string",
+      "description": "The governing system in place in the world.",
+      "maxLength": 200
+    },
+    "Conflicts": {
+      "type": "string",
+      "description": "Ongoing conflicts and disputes in the world.",
+      "maxLength": 200
+    },
+    "Resources": {
+      "type": "string",
+      "description": "Natural resources available in the world.",
+      "maxLength": 200
+    },
+    "TradeRoutes": {
+      "type": "string",
+      "description": "Major trade routes connecting different regions.",
+      "maxLength": 200
+    },
+    "Languages": {
+      "type": "string",
+      "description": "Languages spoken by the inhabitants."
+    }
+  },
+  "required": [
+    "WorldName",
+    "WorldDescription",
+    "Landmasses",
+    "Landmarks",
+    "ClimateZones",
+    "Societies",
+    "Beliefs",
+    "TechnologicalAdvancements",
+    "CreationMyths",
+    "MajorEvents",
+    "SourceOfMagic",
+    "TypesOfMagic",
+    "MagicLimitations",
+    "Governance",
+    "Conflicts",
+    "Resources",
+    "TradeRoutes",
+    "Languages"
+  ]
+}

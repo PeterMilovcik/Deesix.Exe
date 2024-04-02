@@ -7,4 +7,14 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Spectre.Console" Version="0.48.0" />
+    <PackageReference Include="Spectre.Console.ImageSharp" Version="0.48.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Deesix.AI\Deesix.AI.csproj" />
+    <ProjectReference Include="..\Deesix.Core\Deesix.Core.csproj" />
+  </ItemGroup>
+
 </Project>

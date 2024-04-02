@@ -1,0 +1,11 @@
+﻿using Deesix.Core;
+
+namespace Deesix.Exe.Core;
+
+public class World
+{
+    public required string Name { get; set; }
+    public required string Description { get; set; }
+    public required WorldSettings WorldSettings { get; set; }
+    public required List<Realm> Realms { get; set; }
+}
