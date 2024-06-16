@@ -3,11 +3,22 @@ using System.Text.Json;
 
 namespace Deesix.Exe;
 
-internal class ApiKey
+internal class OpenAIApiKey
 {
-    private static readonly string OpenAiFileName = "deesix.openai";
+    private const string OpenAiFileName = "deesix.openai";
+    private readonly string baseDirectory;
 
-    public static string? GetOpenAiApiKey(string baseDirectory)
+    public OpenAIApiKey(string baseDirectory)
+    {
+        if (string.IsNullOrWhiteSpace(baseDirectory))
+        {
+            throw new ArgumentException($"'{nameof(baseDirectory)}' cannot be null or whitespace.", nameof(baseDirectory));
+        }
+
+        this.baseDirectory = baseDirectory;
+    }
+
+    public string? GetOpenAiApiKey()
     {
         var openAiFilePath = Path.Combine(baseDirectory, OpenAiFileName);
         return !File.Exists(openAiFilePath) 
