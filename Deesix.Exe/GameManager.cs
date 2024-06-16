@@ -3,23 +3,29 @@ using System.Text.Json;
 using Deesix.Exe.Core;
 
 namespace Deesix.Exe;
+
 internal class GameManager
 {
     private const string FileName = "games.json";
+    private readonly GameFactory gameFactory;
 
-    public GameManager(string baseDirectory)
+    public GameManager(GameFactory gameFactory)
     {
-        if (string.IsNullOrWhiteSpace(baseDirectory))
-        {
-            throw new ArgumentException($"'{nameof(baseDirectory)}' cannot be null or whitespace.", nameof(baseDirectory));
-        }
-
-        BaseDirectory = baseDirectory;
-        FilePath = Path.Combine(baseDirectory, FileName);
+        this.gameFactory = gameFactory ?? throw new ArgumentNullException(nameof(gameFactory));
+        BaseDirectory = AppContext.BaseDirectory;
+        FilePath = Path.Combine(BaseDirectory, FileName);
     }
 
     private string BaseDirectory { get; }
     private string FilePath { get; }
+
+    internal async Task<Game> CreateGameAsync()
+    {
+        var game = await gameFactory.CreateGameAsync();
+        if (game is null) throw new Exception("Game not created.");
+        Save(game);
+        return game;
+    }
 
     internal Game? Load(GameFile gameFile)
     {
