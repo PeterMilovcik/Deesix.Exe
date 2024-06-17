@@ -17,10 +17,14 @@ internal class GameFactory
         var themes = PromptThemes();
         var worldSettings = await GenerateWorldSettingsAsync(themes);
 
+        var worldId = worldSettings.WorldName.Trim().Replace(" ", "-").ToLowerInvariant();
         return new Game()
         {
+            Id = worldId,
             World = new World
             {
+                Id = worldId,
+                Path = worldId,
                 Name = worldSettings.WorldName,
                 Description = worldSettings.WorldDescription,
                 WorldSettings = worldSettings,
