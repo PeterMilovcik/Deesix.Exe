@@ -67,13 +67,14 @@ public class AI
         var messages = new List<ChatMessage>
         {
             new SystemChatMessage(
-                $"You are a fictional writer."),
+                $"You are a fictional writer tasked with creating a realm within a world."),
             new UserChatMessage(
-                $"Write a vivid description of RPG realm in the world. " +
-                $"Ensure the description is engaging yet concise, limited to {maxCharacterLength} characters. " +
-                "Don't write anything in bold. " +
-                "Don't add 'RPG' in the description. " +
-                "Don't write anything else."),
+                $"Imagine a realm within the world of '{world.Name}', which is described as '{world.Description}' " + 
+                $"and has the following settings: '{world.WorldSettings}'. " +
+                $"Write a vivid and engaging description of this realm, capturing its unique characteristics and atmosphere. " +
+                $"Ensure the description is concise, limited to {maxCharacterLength} characters. " +
+                "Avoid using bold formatting or the term 'RPG' in the description. " +
+                "Focus solely on the realm's description.")
         };
         return await GenerateAsync(messages);
     }
@@ -95,19 +96,20 @@ public class AI
         return await GenerateAsync(messages);
     }
 
-    public async Task<string?> GenerateRegionDescriptionAsync(World world, Realm realm)
+    public async Task<string?> GenerateRegionDescriptionAsync(Realm realm)
     {
         var maxCharacterLength = 300;
         var messages = new List<ChatMessage>
         {
             new SystemChatMessage(
-                $"You are a fictional writer."),
+                $"You are a fictional writer tasked with creating a region within a realm."),
             new UserChatMessage(
-                $"Write a vivid description of RPG region. " +
-                $"Ensure the description is engaging yet concise, limited to {maxCharacterLength} characters. " +
-                "Don't write anything in bold. " +
-                "Don't add 'RPG' in the description. " +
-                "Don't write anything else."),
+                $"Imagine a region within the realm of '{realm.Name}', which is part of the world '{realm.World.Name}' with settings '{realm.World.WorldSettings}'. " +
+                $"The realm is described as '{realm.Description}'. " +
+                $"Write a vivid and engaging description of this region, capturing its unique characteristics and atmosphere. " +
+                $"Ensure the description is concise, limited to {maxCharacterLength} characters. " +
+                "Avoid using bold formatting or the term 'RPG' in the description. " +
+                "Focus solely on the region's description.")
         };
         return await GenerateAsync(messages);
     }
@@ -129,19 +131,19 @@ public class AI
         return await GenerateAsync(messages);
     }
 
-    public async Task<string?> GenerateLocationDescriptionAsync(World world, Realm realm, Region region)
+    public async Task<string?> GenerateLocationDescriptionAsync(Region region)
     {
         var maxCharacterLength = 300;
         var messages = new List<ChatMessage>
         {
             new SystemChatMessage(
-                $"You are a fictional writer."),
+                $"You are a fictional writer tasked with creating a location within a region."),
             new UserChatMessage(
-                $"Write a vivid description of RPG location. " +
+                $"Imagine a location within the region of '{region.Name}', which is part of the realm '{region.Realm.Name}' in the world of '{region.Realm.World.Name}' with settings '{region.Realm.World.WorldSettings}'. " +
+                $"Write a vivid and engaging description of this location, capturing its unique characteristics and atmosphere. " +
                 $"Ensure the description is engaging yet concise, limited to {maxCharacterLength} characters. " +
-                "Don't write anything in bold. " +
-                "Don't add 'RPG' in the description. " +
-                "Don't write anything else."),
+                "Avoid using bold formatting or the term 'RPG' in the description. " +
+                "Focus solely on the location's description.")
         };
         return await GenerateAsync(messages);
     }

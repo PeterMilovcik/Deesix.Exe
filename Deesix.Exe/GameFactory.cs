@@ -1,38 +1,101 @@
 ﻿using Deesix.AI.OpenAI;
 using Deesix.Core;
+using Deesix.Exe;
 using Deesix.Exe.Core;
 using Spectre.Console;
+using Region = Deesix.Exe.Core.Region;
 
 internal class GameFactory
 {
-    public GameFactory(AI ai)
+    public GameFactory(AI ai, UI ui)
     {
         AI = ai ?? throw new ArgumentNullException(nameof(ai));
+        UI = ui ?? throw new ArgumentNullException(nameof(ui));
     }
 
     public AI AI { get; }
+    public UI UI { get; }
 
     internal async Task<Game> CreateGameAsync()
     {
         var themes = PromptThemes();
-        var worldSettings = await GenerateWorldSettingsAsync(themes);
+        var worldSettings = await GenerateWorldSettingsAsync(themes);        
 
         var worldId = worldSettings.WorldName.Trim().Replace(" ", "-").ToLowerInvariant();
+        var newWorld = new World
+        {
+            Id = worldId,
+            Path = worldId,
+            Name = worldSettings.WorldName,
+            Description = worldSettings.WorldDescription,
+            WorldSettings = worldSettings,
+        };
+
+        var realmId = Guid.NewGuid().ToString();
+        string? realmDescription = "A realm of mystery and wonder.";
+        string? realmName = "Realm of the Unknown";
+
+        await UI.ShowProgressAsync("Generating realm...", async ctx =>
+            {
+                realmDescription = await AI.GenerateRealmDescriptionAsync(newWorld);
+                realmName = await AI.GenerateRealmNameAsync(newWorld, realmDescription);
+            });
+            
+        var newRealm = new Realm
+        {
+            Id = realmId,
+            Path = $"{worldId}/{realmId}",
+            Name = realmName,
+            Description = realmDescription,
+            World = newWorld
+        };
+        var regionId = Guid.NewGuid().ToString();
+
+        var regionDescription = "A region of mystery and wonder.";
+        var regionName = "Region of the Unknown";
+
+        await UI.ShowProgressAsync("Generating region...", async ctx =>
+            {
+                regionDescription = await AI.GenerateRegionDescriptionAsync(newWorld, newRealm);
+                regionName = await AI.GenerateRegionNameAsync(newWorld, newRealm, regionDescription);
+            });
+
+        var newRegion = new Region
+        {
+            Id = regionId,
+            Path = $"{worldId}/{realmId}/{regionId}",
+            Name = regionName,
+            Description = regionDescription,
+            Realm = newRealm
+        };
+        var locationId = Guid.NewGuid().ToString();
+
+        var locationDescription = "A location of mystery and wonder.";
+        var locationName = "Location of the Unknown";
+
+        await UI.ShowProgressAsync("Generating location...", async ctx =>
+            {
+                locationDescription = await AI.GenerateLocationDescriptionAsync(newWorld, newRealm, newRegion);
+                locationName = await AI.GenerateLocationNameAsync(newWorld, newRealm, newRegion, locationDescription);
+            });
+
+        var newLocation = new Location
+        {
+            Id = locationId,
+            Path = $"{worldId}/{realmId}/{regionId}/{locationId}",
+            Name = locationName,
+            Description = locationDescription,
+            Region = newRegion
+        };
+
         return new Game()
         {
             Id = worldId,
-            World = new World
-            {
-                Id = worldId,
-                Path = worldId,
-                Name = worldSettings.WorldName,
-                Description = worldSettings.WorldDescription,
-                WorldSettings = worldSettings,
-                Realms = new List<Realm>()
-            },
+            World = newWorld,
             Character = new Character
             {
-                Name = PromptCharacterName()
+                Name = PromptCharacterName(),
+                CurrentLocation = newLocation
             }
         };
     }

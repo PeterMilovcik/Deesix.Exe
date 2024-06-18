@@ -3,7 +3,7 @@ using Spectre.Console;
 
 namespace Deesix.Exe;
 
-public class UserInterface
+public class UI
 {
     public readonly string NewGameOption = "Create new game";
 
@@ -39,17 +39,21 @@ public class UserInterface
             .Expand();
 
         var topLayout = new Layout("Top", topPanel);
-        var worldPanel = new Panel(game.World.Description);
-        worldPanel.Header = new PanelHeader(game.World.Name, Justify.Left);
-        worldPanel.Expand();
-        worldPanel.BorderColor(Color.Green);
-        var worldLayout = new Layout("World", worldPanel);
+
+        var location = game.Character.CurrentLocation;
+        var region = location.Region;
+        var realm = region.Realm;
+        var world = realm.World;
+        Layout worldLayout = CreateLayout("World", world.Name, world.Description);
+        Layout realmLayout = CreateLayout("Realm", realm.Name, realm.Description);
+        Layout regionLayout = CreateLayout("Region", region.Name, region.Description);
+        Layout locationLayout = CreateLayout("Location", location.Name, location.Description);
+
         topLayout.SplitColumns(
-            new Layout("Character"),
-            new Layout("Inventory"),
-            new Layout("Skills"),
-            worldLayout
-            );
+            locationLayout,
+            regionLayout,
+            realmLayout,
+            worldLayout);
         topLayout.Size = 10;
 
         var middleLayout = new Layout("Middle");
@@ -61,7 +65,20 @@ public class UserInterface
         AnsiConsole.Write(layout);
     }
 
+    private static Layout CreateLayout(string name, string header, string content)
+    {
+        var worldPanel = new Panel(content);
+        worldPanel.Header = new PanelHeader($"{name}: {header}", Justify.Left);
+        worldPanel.Expand();
+        worldPanel.BorderColor(Color.Green);
+        var worldLayout = new Layout(name, worldPanel);
+        return worldLayout;
+    }
+
     public void ErrorMessage(string message) => AnsiConsole.MarkupLine($"[red]Error: {message}[/]");
 
     public void Clear() => AnsiConsole.Clear();
+
+    internal async Task ShowProgressAsync(string progressText, Func<object, Task> task) =>
+        await AnsiConsole.Status().StartAsync(progressText, async ctx => await task(ctx));
 }

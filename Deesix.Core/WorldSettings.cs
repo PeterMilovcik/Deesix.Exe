@@ -20,4 +20,11 @@ public class WorldSettings
     public required string Resources { get; set; }
     public required string TradeRoutes { get; set; }
     public required string Languages { get; set; }
+
+    public override string ToString() => 
+        $"Landmasses: {Landmasses}, Landmarks: {Landmarks}, ClimateZones: {ClimateZones}, " + 
+        $"Societies: {Societies}, Beliefs: {Beliefs}, TechnologicalAdvancements: {TechnologicalAdvancements}, " + 
+        $"CreationMyths: {CreationMyths}, MajorEvents: {MajorEvents}, SourceOfMagic: {SourceOfMagic}, " + 
+        $"TypesOfMagic: {TypesOfMagic}, MagicLimitations: {MagicLimitations}, Governance: {Governance}, " + 
+        $"Conflicts: {Conflicts}, Resources: {Resources}, TradeRoutes: {TradeRoutes}, Languages: {Languages}";
 }

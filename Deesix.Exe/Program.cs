@@ -18,7 +18,7 @@ internal class Program
         try
         {
             var gameManager = services.GetRequiredService<GameManager>();
-            var ui = services.GetRequiredService<UserInterface>();
+            var ui = services.GetRequiredService<UI>();
 
             ui.DisplayGameTitleAndDescription();
 
@@ -84,7 +84,7 @@ internal class Program
             .ConfigureServices((hostContext, services) =>
             {
                 services.AddLogging(configure => configure.AddConsole());
-                services.AddSingleton<UserInterface>();
+                services.AddSingleton<UI>();
                 services.AddSingleton(serviceProvider => new OpenAIApiKey(GetBaseDirectory()));
                 services.AddSingleton(serviceProvider =>
                 {
