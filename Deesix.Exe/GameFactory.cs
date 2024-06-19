@@ -79,12 +79,14 @@ internal class GameFactory
                 locationName = await AI.GenerateLocationNameAsync(newWorld, newRealm, newRegion, locationDescription);
             });
 
+        var random = new Random();
         var newLocation = new Location
         {
             Id = locationId,
             Path = $"{worldId}/{realmId}/{regionId}/{locationId}",
             Name = locationName,
             Description = locationDescription,
+            Size = random.Next(10, 101),
             Region = newRegion
         };
 

@@ -192,4 +192,23 @@ public class AI
         if (string.IsNullOrEmpty(result)) return null;
         return JsonSerializer.Deserialize<WorldSettings>(result);
     }
+
+    public async Task<string?> GenerateExplorationDescriptionAsync(Location location, int explored)
+    {
+        if (location is null) throw new ArgumentNullException(nameof(location), "Location cannot be null.");
+        if (explored <= 0) throw new ArgumentOutOfRangeException(nameof(explored), "Exploration amount must be greater than zero.");
+
+        var messages = new List<ChatMessage>
+        {
+            new SystemChatMessage(
+                $"You are an explorer."),
+            new UserChatMessage(
+                $"Describe your exploration of a location named '{location.Name}' " +
+                $"described as '{location.Description}'. " +
+                $"You have explored {Math.Round((double)explored / location.Size * 100, 0)}% of the location." +
+                "You can choose from the following list of possible explored objects: a new route, item(s) or resource(s), creature(s). " +
+                "Don't write anything else."),
+        };
+        return await GenerateAsync(messages);
+    }
 }

@@ -1,4 +1,5 @@
 ﻿
+
 namespace Deesix.Exe.Core;
 
 /// <summary>
@@ -58,6 +59,15 @@ public class Character
         {
             MoveTo(CurrentRoute.To);
         }
+    }
+
+    public void ExploreCurrentLocation()
+    {
+        if (CurrentLocation == null) return;
+        var explored = 1; 
+        // TODO: Implement exploration mechanics.
+        // TODO: Implement time mechanics.
+        CurrentLocation.ExploreLocation(explored);
     }
 
     private void SetLocation(Location location)
