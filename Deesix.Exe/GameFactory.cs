@@ -13,8 +13,8 @@ internal class GameFactory
         UI = ui ?? throw new ArgumentNullException(nameof(ui));
     }
 
-    public AI AI { get; }
-    public UI UI { get; }
+    private AI AI { get; }
+    private UI UI { get; }
 
     internal async Task<Game> CreateGameAsync()
     {
@@ -56,7 +56,7 @@ internal class GameFactory
 
         await UI.ShowProgressAsync("Generating region...", async ctx =>
             {
-                regionDescription = await AI.GenerateRegionDescriptionAsync(newWorld, newRealm);
+                regionDescription = await AI.GenerateRegionDescriptionAsync(newRealm);
                 regionName = await AI.GenerateRegionNameAsync(newWorld, newRealm, regionDescription);
             });
 
@@ -75,7 +75,7 @@ internal class GameFactory
 
         await UI.ShowProgressAsync("Generating location...", async ctx =>
             {
-                locationDescription = await AI.GenerateLocationDescriptionAsync(newWorld, newRealm, newRegion);
+                locationDescription = await AI.GenerateLocationDescriptionAsync(newRegion);
                 locationName = await AI.GenerateLocationNameAsync(newWorld, newRealm, newRegion, locationDescription);
             });
 
