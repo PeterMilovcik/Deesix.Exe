@@ -2,6 +2,7 @@
 using Deesix.Exe;
 using Deesix.Exe.Core;
 using Deesix.Exe.Core.Exceptions;
+using Deesix.Exe.Factories;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -18,7 +19,7 @@ internal class Program
         try
         {
             var gameManager = services.GetRequiredService<GameManager>();
-            var ui = services.GetRequiredService<UI>();
+            var ui = services.GetRequiredService<UserInterface>();
 
             ui.DisplayGameTitleAndDescription();
 
@@ -70,7 +71,6 @@ internal class Program
                     ui.WriteLayout(game);
                 }
             }
-        
         }
         catch (Exception ex)
         {
@@ -84,13 +84,14 @@ internal class Program
             .ConfigureServices((hostContext, services) =>
             {
                 services.AddLogging(configure => configure.AddConsole());
-                services.AddSingleton<UI>();
+                services.AddSingleton<UserInterface>();
                 services.AddSingleton(serviceProvider => new OpenAIApiKey(GetBaseDirectory()));
                 services.AddSingleton(serviceProvider =>
                 {
                     string? openAiApiKey = serviceProvider.GetRequiredService<OpenAIApiKey>().GetOpenAiApiKey();
                     if (string.IsNullOrEmpty(openAiApiKey)) throw new OpenAIApiKeyNotFoundException();
-                    return new AI(openAiApiKey);
+                    var openAIGenerator = new OpenAIGenerator("gpt-3.5-turbo", openAiApiKey);
+                    return new Generators(openAIGenerator);
                 });
                 services.AddSingleton<GameManager>();
                 services.AddSingleton<GameFactory>();

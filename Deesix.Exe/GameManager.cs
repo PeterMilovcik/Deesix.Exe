@@ -1,10 +1,11 @@
 ﻿using Spectre.Console;
 using System.Text.Json;
 using Deesix.Exe.Core;
+using Deesix.Exe.Factories;
 
 namespace Deesix.Exe;
 
-internal class GameManager
+public class GameManager
 {
     private const string FileName = "games.json";
     private readonly GameFactory gameFactory;
