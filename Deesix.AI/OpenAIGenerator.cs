@@ -1,7 +1,7 @@
 using OpenAI.Chat;
-using Deesix.AI.Core;
+using FluentResults;
 
-namespace Deesix.AI.OpenAI;
+namespace Deesix.AI;
 
 public class OpenAIGenerator : IBasicAIGenerator
 {
@@ -24,6 +24,6 @@ public class OpenAIGenerator : IBasicAIGenerator
         };
         var chatCompletion = await client.CompleteChatAsync(messages);
         var result = chatCompletion.Value.ToString().Replace("```json", "").Replace("```", "").Trim();
-        return new Result<string>(true, result, string.Empty);
+        return Result.Ok(result);
     }
 }

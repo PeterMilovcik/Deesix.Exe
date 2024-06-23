@@ -1,4 +1,4 @@
-namespace Deesix.Exe.Core.Exceptions;
+namespace Deesix.Core.Exceptions;
 
 [Serializable]
 public class OpenAIApiKeyNotFoundException : Exception

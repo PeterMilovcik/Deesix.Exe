@@ -1,7 +1,7 @@
-using Deesix.AI.Core;
-using Deesix.Exe.Core;
+using Deesix.Core;
+using FluentResults;
 
-namespace Deesix.AI.OpenAI;
+namespace Deesix.AI;
 
 public class RegionGenerator(OpenAIGenerator openAIGenerator)
 {

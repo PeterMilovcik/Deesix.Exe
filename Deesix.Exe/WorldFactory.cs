@@ -1,33 +1,59 @@
-using Deesix.AI.OpenAI;
+using FluentResults;
+using Deesix.AI;
 using Deesix.Core;
-using Deesix.Exe;
-using Deesix.Exe.Core;
-using Spectre.Console;
 
-public class WorldFactory
+namespace Deesix.Exe.Factories;
+
+public class WorldFactory(UserInterface ui, Generators generators)
 {
-    private UserInterface UI { get; }
-    private Generators AI { get; }
+    private UserInterface ui = ui ?? throw new ArgumentNullException(nameof(ui));
+    private Generators generators = generators ?? throw new ArgumentNullException(nameof(generators));
 
-    public WorldFactory(UserInterface ui, Generators ai)
+    public async Task<Result<World>> CreateWorldAsync()
     {
-        UI = ui;
-        AI = ai;
-    }
-
-    public async Task<World> CreateWorldAsync()
-    {
-        var themes = UI.PromptThemes();
+        var themes = ui.PromptThemes();
         var worldSettings = await GenerateWorldSettingsAsync(themes);
-        var worldId = worldSettings.WorldName.Trim().Replace(" ", "-").ToLowerInvariant();
-        return new World
+        var worldId = Guid.NewGuid().ToString();
+        string? worldDescription = null;
+        await ui.ShowProgressAsync("Generating world description ...", async ctx =>
         {
-            Id = worldId,
-            Path = worldId,
-            Name = worldSettings.WorldName,
-            Description = worldSettings.WorldDescription,
-            WorldSettings = worldSettings,
-        };
+            var worldDescriptionResult = await generators.World.GenerateWorldDescriptionAsync(worldSettings);
+            if (worldDescriptionResult.IsSuccess)
+            {
+                worldDescription = worldDescriptionResult.Value;
+            }
+        });
+        if (worldDescription is not null)
+        {
+            List<string> worldNames = new List<string>();
+            await ui.ShowProgressAsync("Generating world names...", async ctx =>
+            {
+                worldNames = await generators.World.GenerateWorldNamesAsync(worldDescription, 10);
+            });
+            if (worldNames.Any())
+            {
+                var worldName = ui.SelectFromOptions("Select world name", worldNames);
+                
+                var world = new World
+                {
+                    Id = worldId,
+                    Path = worldId,
+                    Name = worldName,
+                    Description = worldDescription,
+                    WorldSettings = worldSettings,
+                };
+                return Result.Ok(world);
+            }
+            else
+            {
+                ui.ErrorMessage("No world names generated.");
+            }
+        }
+        else
+        {
+            ui.ErrorMessage("Failed to generate world description.");
+        }
+        return Result.Fail("World not created.");
     }
 
     private async Task<WorldSettings> GenerateWorldSettingsAsync(List<string> themes)
@@ -37,22 +63,23 @@ public class WorldFactory
         WorldSettings? worldSettings = null;
         do
         {
-            await AnsiConsole.Status()
-                .StartAsync("Generating world settings...", async ctx =>
+            await ui.ShowProgressAsync("Generating world settings...", async ctx =>
                 {
-                    (await AI.World.GenerateWorldSettingsAsync(themes, worldSettingsJson))
-                        .OnSuccess(settings => 
-                        {
-                            worldSettings = settings;
-                            UI.DisplayWorldSettings(worldSettings);
-                        })
-                        .OnFailure(error => UI.ErrorMessage(error));
+                    worldSettings = await generators.World.GenerateWorldSettingsAsync(themes, worldSettingsJson);
+                    if (worldSettings is not null)
+                    {
+                        ui.DisplayWorldSettings(worldSettings);
+                    }
+                    else
+                    {
+                        ui.ErrorMessage("Failed to generate world settings.");
+                    }
                 });
-        } while (!AnsiConsole.Confirm("Are you satisfied with the generated world settings?"));
+        } while (!ui.Confirm("Are you satisfied with the generated world settings?"));
 
         if (worldSettings is null)
         {
-            AnsiConsole.MarkupLine("[red]Error: World settings not found.[/]");
+            ui.ErrorMessage("Failed to generate world settings.");
             throw new InvalidOperationException("Failed to create world settings.");
         }
 

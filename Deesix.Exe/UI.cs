@@ -1,5 +1,5 @@
 ﻿using Deesix.Core;
-using Deesix.Exe.Core;
+using FluentResults;
 using Spectre.Console;
 
 namespace Deesix.Exe;
@@ -31,6 +31,14 @@ public class UserInterface
                 .AddChoices(options));
         return selectedOption;
     }
+
+    public string SelectFromOptions(string title, List<string> options) =>
+        AnsiConsole.Prompt(
+            new SelectionPrompt<string>()
+                .Title(title)
+                .PageSize(10)
+                .MoreChoicesText("[grey](Move up and down to reveal more options)[/]")
+                .AddChoices(options));
 
     public void WriteLayout(Game game)
     {
@@ -89,8 +97,6 @@ public class UserInterface
             return;
         }
 
-        AnsiConsole.Write(new Rule($"[green]World:{worldSettings.WorldName}[/]").Justify(Justify.Left));
-        AnsiConsole.MarkupLine(worldSettings.WorldDescription);
         AnsiConsole.Write(new Rule());
 
         int maxLength = 19; // Length of the longest string
@@ -155,8 +161,16 @@ public class UserInterface
 
     public void ErrorMessage(string message) => AnsiConsole.MarkupLine($"[red]Error: {message}[/]");
 
+    public void ErrorMessages(List<IError> errors) => errors.ForEach(error => ErrorMessage(error.Message));
+
+    public void GrayMessage(string message) => AnsiConsole.MarkupLine($"[gray]{message}[/]");
+
+    public void GreenMessage(string message) => AnsiConsole.MarkupLine($"[green]{message}[/]");
+
     public void Clear() => AnsiConsole.Clear();
 
     internal async Task ShowProgressAsync(string progressText, Func<object, Task> task) =>
         await AnsiConsole.Status().StartAsync(progressText, async ctx => await task(ctx));
+
+    internal bool Confirm(string question) => AnsiConsole.Confirm(question);
 }

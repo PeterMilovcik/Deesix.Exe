@@ -1,4 +1,4 @@
-﻿namespace Deesix.AI.OpenAI;
+﻿namespace Deesix.AI;
 
 public class Generators
 {

@@ -1,4 +1,4 @@
-namespace Deesix.Exe.Core;
+namespace Deesix.Core;
 
 public class Route
 {

@@ -1,7 +1,7 @@
-﻿using Spectre.Console;
-using System.Text.Json;
-using Deesix.Exe.Core;
+﻿using System.Text.Json;
+using Deesix.Core;
 using Deesix.Exe.Factories;
+using FluentResults;
 
 namespace Deesix.Exe;
 
@@ -9,10 +9,12 @@ public class GameManager
 {
     private const string FileName = "games.json";
     private readonly GameFactory gameFactory;
+    private readonly UserInterface ui;
 
-    public GameManager(GameFactory gameFactory)
+    public GameManager(GameFactory gameFactory, UserInterface ui)
     {
         this.gameFactory = gameFactory ?? throw new ArgumentNullException(nameof(gameFactory));
+        this.ui = ui ?? throw new ArgumentNullException(nameof(ui));
         BaseDirectory = AppContext.BaseDirectory;
         FilePath = Path.Combine(BaseDirectory, FileName);
     }
@@ -20,19 +22,26 @@ public class GameManager
     private string BaseDirectory { get; }
     private string FilePath { get; }
 
-    internal async Task<Game> CreateGameAsync()
+    internal async Task<Result<Game>> CreateGameAsync()
     {
         var game = await gameFactory.CreateGameAsync();
-        if (game is null) throw new Exception("Game not created.");
-        Save(game);
-        return game;
+        if (game.IsSuccess)
+        {    
+            Save(game.Value!);
+            return Result.Ok(game.Value!);
+        }
+        else
+        {
+            ui.ErrorMessages(game.Errors);
+            return Result.Fail("Game not created.");
+        }
     }
 
     internal Game? Load(GameFile gameFile)
     {
         if (!File.Exists(gameFile.FilePath))
         {
-            AnsiConsole.MarkupLine($"[red]Error: '{FileName}' file not found.[/]");
+            ui.ErrorMessage($"'{FileName}' file not found.");
             return null;
         }
         var gameJson = File.ReadAllText(gameFile.FilePath);
@@ -44,8 +53,8 @@ public class GameManager
     {
         var result = new List<GameFile>();
         if (!File.Exists(FilePath))
-        {
-            AnsiConsole.MarkupLine($"[gray]'{FileName}' file not found.[/]");
+        {            
+            ui.GrayMessage($"'{FileName}' file not found.");
             return result;
         }
 
@@ -54,7 +63,7 @@ public class GameManager
 
         if (gameFiles == null)
         {
-            AnsiConsole.MarkupLine($"[red]Error reading '{FileName}' file.[/]");
+            ui.ErrorMessage($"Error reading '{FileName}' file.");
             return result;
         }
         result.AddRange(gameFiles);
@@ -70,10 +79,8 @@ public class GameManager
 
         string gameJson = JsonSerializer.Serialize(game, new JsonSerializerOptions { WriteIndented = true });
         File.WriteAllText(gameFilePath, gameJson);
-        AnsiConsole.MarkupLine($"[gray]Created: '{gameFilePath}'[/]");
-
-        AnsiConsole.MarkupLine("[green]New game created successfully.[/]");
-        AnsiConsole.MarkupLine($"[gray]Created: '{gameFilePath}'[/]");
+        ui.GreenMessage("New game created successfully.");
+        ui.GrayMessage($"Created: '{gameFilePath}'");
 
         var gameFile = new GameFile
         {
@@ -90,6 +97,6 @@ public class GameManager
     {
         string gamesJson = JsonSerializer.Serialize(gameFiles, new JsonSerializerOptions { WriteIndented = true });
         File.WriteAllText(FilePath, gamesJson);
-        AnsiConsole.MarkupLine($"[gray]Updated: '{FilePath}'[/]");
+        ui.GrayMessage($"Updated: '{FilePath}'");
     }
 }

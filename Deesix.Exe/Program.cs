@@ -1,7 +1,7 @@
-﻿using Deesix.AI.OpenAI;
+﻿using Deesix.AI;
 using Deesix.Exe;
-using Deesix.Exe.Core;
-using Deesix.Exe.Core.Exceptions;
+using Deesix.Core;
+using Deesix.Core.Exceptions;
 using Deesix.Exe.Factories;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -28,7 +28,7 @@ internal class Program
 
             if (!gameFiles.Any())
             {
-                game = await gameManager.CreateGameAsync();
+                game = await CreateGameAsync(gameManager);
             }
             else
             {
@@ -36,7 +36,7 @@ internal class Program
                 
                 if (selectedOption == ui.NewGameOption)            
                 {
-                    game = await gameManager.CreateGameAsync();
+                    game = await CreateGameAsync(gameManager);
                 }
                 else
                 {
@@ -77,6 +77,12 @@ internal class Program
             var logger = services.GetRequiredService<ILogger<Program>>();
             logger.LogError(ex, "An error occurred creating the DB.");
         }
+    }
+
+    private static async Task<Game?> CreateGameAsync(GameManager gameManager)
+    {
+        var result = await gameManager.CreateGameAsync();
+        return result.IsSuccess ? result.Value : null;
     }
 
     public static IHostBuilder CreateHostBuilder(string[] args) =>

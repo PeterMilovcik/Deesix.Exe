@@ -1,5 +1,6 @@
-﻿using Deesix.AI.OpenAI;
-using Deesix.Exe.Core;
+﻿using FluentResults;
+using Deesix.Core;
+using Deesix.AI;
 
 namespace Deesix.Exe.Factories;
 
@@ -20,22 +21,54 @@ public class GameFactory
     private RegionFactory RegionFactory { get; }
     private LocationFactory LocationFactory { get; }
 
-    public async Task<Game> CreateGameAsync()
+    public async Task<Result<Game>> CreateGameAsync()
     {
+        Game? game = null;
         var world = await WorldFactory.CreateWorldAsync();
-        var realm = await RealmFactory.CreateRealmAsync(world);
-        var region = await RegionFactory.CreateRegionAsync(realm);
-        var location = await LocationFactory.CreateLocationAsync(region);
-
-        return new Game()
+        if (world.IsSuccess)
         {
-            Id = world.Id,
-            World = world,
-            Character = new Character
+            var realm = await RealmFactory.CreateRealmAsync(world.Value!);
+            if (realm.IsSuccess)
             {
-                Name = UI.PromptCharacterName(),
-                CurrentLocation = location
+                var region = await RegionFactory.CreateRegionAsync(realm.Value!);
+                if (region.IsSuccess)
+                {
+                    var location = await LocationFactory.CreateLocationAsync(region.Value!);
+                    if (location.IsSuccess)
+                    {
+                        game = new Game()
+                        {
+                            Id = world.Value!.Id,
+                            World = world.Value!,
+                            Character = new Character
+                            {
+                                Name = UI.PromptCharacterName(),
+                                CurrentLocation = location.Value!
+                            }
+                        };
+                    }
+                    else
+                    {
+                        UI.ErrorMessages(location.Errors);
+                    }
+                }
+                else
+                {
+                    UI.ErrorMessages(region.Errors);
+                }
+                
             }
-        };
+            else
+            {
+                UI.ErrorMessages(realm.Errors);
+            }
+        }
+        else
+        {
+            UI.ErrorMessages(world.Errors);
+        }
+        return game is null 
+            ? Result.Fail("Game not created.") 
+            : Result.Ok(game);
     }
 }

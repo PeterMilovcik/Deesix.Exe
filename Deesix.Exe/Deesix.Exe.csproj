@@ -11,6 +11,7 @@
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
     <PackageReference Include="Spectre.Console" Version="0.48.0" />
     <PackageReference Include="Spectre.Console.ImageSharp" Version="0.48.0" />
+    <PackageReference Include="FluentResults" Version="3.15.2" />
   </ItemGroup>
 
   <ItemGroup>

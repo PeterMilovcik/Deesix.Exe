@@ -2,8 +2,6 @@
 
 public class WorldSettings
 {
-    public required string WorldName { get; set; }
-    public required string WorldDescription { get; set; }
     public required string Landmasses { get; set; }
     public required string Landmarks { get; set; }
     public required string ClimateZones { get; set; }

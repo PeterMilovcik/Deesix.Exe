@@ -1,6 +1,6 @@
-using Deesix.AI.Core;
+using FluentResults;
 
-namespace Deesix.AI.OpenAI;
+namespace Deesix.AI;
 
 public interface IBasicAIGenerator
 {

@@ -1,14 +1,14 @@
 using System.Text.Json;
-using Deesix.AI.Core;
 using Deesix.Core;
+using FluentResults;
 
-namespace Deesix.AI.OpenAI;
+namespace Deesix.AI;
 
 public class WorldGenerator(OpenAIGenerator openAIGenerator)
 {
     private readonly OpenAIGenerator openAIGenerator = openAIGenerator ?? throw new ArgumentNullException(nameof(openAIGenerator));
 
-    public async Task<Result<List<string>>> GenerateWorldNamesAsync(string worldDescription, int count)
+    public async Task<List<string>> GenerateWorldNamesAsync(string worldDescription, int count)
     {
         var maxCharacterLength = 30;
         var result = await openAIGenerator.GenerateAsync($"Write a list of {count} suitable names for a RPG world based on the provided world description. \n" +
@@ -19,20 +19,23 @@ public class WorldGenerator(OpenAIGenerator openAIGenerator)
                 $"Generate {count} names for a RPG world based on the following description: '{worldDescription}'. \n" +
                 $"Remember, the maximum length for each world name should be {maxCharacterLength} characters. ");
         List<string> names = new List<string>();
-        result.OnSuccess(generatedText => names.AddRange(generatedText.Split(",").Select(name => name.Trim()).ToList()));
-        return new Result<List<string>>(result.Success, names, result.ErrorMessage);
+        if (result.IsSuccess)
+        {
+            names.AddRange(result.Value!.Split(",").Select(name => name.Trim()).ToList());
+        }
+        return names;
     }
 
-    public async Task<Result<string>> GenerateWorldDescriptionAsync(List<string> themes) =>
+    public async Task<Result<string>> GenerateWorldDescriptionAsync(WorldSettings worldSettings) =>
          await openAIGenerator.GenerateAsync(
             "You are a fictional writer.",
-            $"Write a description for a RPG world based on the following theme(s): {string.Join(", ", themes)}. " +
+            $"Write a description for a RPG world based on the following world settings: {worldSettings}. " +
             "Don't mention world name in the description. " +
             "Don't write anything in bold." +
             "Don't add 'RPG' in the description. " +
             $"Remember, the maximum length for the world description should be {300} characters.");
 
-    public async Task<Result<WorldSettings>> GenerateWorldSettingsAsync(List<string> themes, string jsonWorldSettingsScheme)
+    public async Task<WorldSettings?> GenerateWorldSettingsAsync(List<string> themes, string jsonWorldSettingsScheme)
     {
         var result = await openAIGenerator.GenerateAsync(
             $"You are a fictional world builder.",
@@ -44,10 +47,10 @@ public class WorldGenerator(OpenAIGenerator openAIGenerator)
             "Don't write anything in bold. " +
             "Don't write anything else. " +
             "Remember, I want you to generate JSON object, not a JSON schema. ");
-        return result.Success
+        return result.IsSuccess
             ? JsonSerializer.Deserialize<WorldSettings>(result.Value!) is { } worldSettings
-                ? new Result<WorldSettings>(true, worldSettings, string.Empty)
-                : new Result<WorldSettings>(false, null, "Failed to deserialize the generated world settings.")
-            : new Result<WorldSettings>(false, null, result.ErrorMessage);
+                ? worldSettings
+                : null
+            : null;
     }
 }
