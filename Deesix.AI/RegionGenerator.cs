@@ -8,21 +8,22 @@ public class RegionGenerator(OpenAIGenerator openAIGenerator)
     private readonly OpenAIGenerator openAIGenerator = openAIGenerator ?? throw new ArgumentNullException(nameof(openAIGenerator));
 
     public async Task<Result<string>> GenerateRegionDescriptionAsync(Realm realm) =>
-        await openAIGenerator.GenerateAsync(
-            $"You are a fictional writer tasked with creating a region within a realm.",
-            $"Imagine a region within the realm of '{realm.Name}', which is part of the world '{realm.World.Name}' with settings '{realm.World.WorldSettings}'. " +
-            $"The realm is described as '{realm.Description}'. " +
-            $"Write a vivid and engaging description of this region, capturing its unique characteristics and atmosphere. " +
-            $"Ensure the description is concise, limited to {300} characters. " +
-            "Avoid using bold formatting or the term 'RPG' in the description. " +
-            "Focus solely on the region's description.");
+        await openAIGenerator.GenerateAsync(            
+            "Create a concise, detailed, and engaging description of a region within a specific realm.",            
+            $"Describe a region within the '{realm.Name}' realm of the '{realm.World.Name}' world. " +
+            "This description should delve into the region's geography, climate, flora, fauna, and cultural or historical significance within the realm. " +
+            "Highlight what makes this region unique, such as its legendary landmarks, mythical creatures, or pivotal historical events. " +
+            "Craft a narrative that is both rich and immersive, painting a vivid picture of the region and evoking its atmosphere. " +
+            "Use sensory details to bring the region to life, creating a sense of wonder and making it an alluring destination for adventurers. " +
+            "The description should be a blend of informative and captivating, merging factual content with imaginative storytelling to fully engage the reader. " +
+            $"Ensure the final description is concise, aiming for a maximum of {300} characters.");
 
     public async Task<Result<string>> GenerateRegionNameAsync(string regionDescription) =>
         await openAIGenerator.GenerateAsync(
-            $"You are a fictional writer.",
-            $"Write a captivating name of RPG region described as '{regionDescription}'. " +
-            $"Ensure the name is limited to {30} characters. " +
-            "Don't write anything in bold. " +
-            "Don't add 'RPG' in the name. " +
-            "Don't write anything else.");
+            "Generate a unique and evocative name for a region based on its description: \n",
+            $"'{regionDescription}'\n\n" +
+            "Craft a name that captures the essence and atmosphere of the region. " +
+            "The name should be memorable, easy to pronounce, and encapsulate the region's unique characteristics, hinting at its mysteries, beauty, or danger. " +
+            $"Ensure the name fits within a maximum of {30} characters, making it suitable for maps, guides, and narrative references. " +
+            "Avoid common or generic names, aiming for something that sparks curiosity and invites exploration.");
 }
