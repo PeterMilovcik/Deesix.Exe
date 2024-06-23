@@ -1,5 +1,4 @@
 ﻿using Deesix.Core;
-using FluentResults;
 using Spectre.Console;
 
 namespace Deesix.Exe;
@@ -161,7 +160,7 @@ public class UserInterface
 
     public void ErrorMessage(string message) => AnsiConsole.MarkupLine($"[red]Error: {message}[/]");
 
-    public void ErrorMessages(List<IError> errors) => errors.ForEach(error => ErrorMessage(error.Message));
+    public void ErrorMessages(List<string> errors) => errors.ForEach(ErrorMessage);
 
     public void GrayMessage(string message) => AnsiConsole.MarkupLine($"[gray]{message}[/]");
 

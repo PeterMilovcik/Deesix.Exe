@@ -1,4 +1,4 @@
-using FluentResults;
+using CSharpFunctionalExtensions;
 
 namespace Deesix.AI;
 

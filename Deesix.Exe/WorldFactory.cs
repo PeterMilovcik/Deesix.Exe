@@ -1,4 +1,4 @@
-using FluentResults;
+using CSharpFunctionalExtensions;
 using Deesix.AI;
 using Deesix.Core;
 
@@ -42,7 +42,7 @@ public class WorldFactory(UserInterface ui, Generators generators)
                     Description = worldDescription,
                     WorldSettings = worldSettings,
                 };
-                return Result.Ok(world);
+                return Result.Success(world);
             }
             else
             {
@@ -53,7 +53,7 @@ public class WorldFactory(UserInterface ui, Generators generators)
         {
             ui.ErrorMessage("Failed to generate world description.");
         }
-        return Result.Fail("World not created.");
+        return Result.Failure<World>("World not created.");
     }
 
     private async Task<WorldSettings> GenerateWorldSettingsAsync(List<string> themes)

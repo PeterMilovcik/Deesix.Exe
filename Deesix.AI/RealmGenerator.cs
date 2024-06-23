@@ -1,5 +1,5 @@
+using CSharpFunctionalExtensions;
 using Deesix.Core;
-using FluentResults;
 
 namespace Deesix.AI;
 

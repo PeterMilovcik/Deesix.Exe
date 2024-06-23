@@ -1,6 +1,6 @@
+using CSharpFunctionalExtensions;
 using Deesix.AI;
 using Deesix.Core;
-using FluentResults;
 
 namespace Deesix.Exe.Factories;
 
@@ -36,16 +36,16 @@ public class RegionFactory(UserInterface ui, Generators generators)
                 }
                 else
                 {
-                    ui.ErrorMessages(regionNameResult.Errors);
+                    ui.ErrorMessage("Failed to generate region name.");
                 }
             }
             else
             {
-                ui.ErrorMessages(regionDescriptionResult.Errors);
+                ui.ErrorMessage("Failed to generate region description.");
             }
         });
         return region is null 
-            ? Result.Fail("Region not created.") 
-            : Result.Ok(region);
+            ? Result.Failure<Region>("Region not created.") 
+            : Result.Success(region);
     }
 }

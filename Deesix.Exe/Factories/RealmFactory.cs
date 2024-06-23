@@ -1,6 +1,6 @@
+using CSharpFunctionalExtensions;
 using Deesix.AI;
 using Deesix.Core;
-using FluentResults;
 
 namespace Deesix.Exe.Factories;
 
@@ -39,16 +39,16 @@ public class RealmFactory(UserInterface ui, Generators generators)
                 }
                 else
                 {
-                    ui.ErrorMessages(realmNameResult.Errors);
+                    ui.ErrorMessage(realmNameResult.Error);
                 }
             }
             else
             {
-                ui.ErrorMessages(realmDescriptionResult.Errors);
+                ui.ErrorMessage(realmDescriptionResult.Error);
             }
         });
         return realm is null 
-            ? Result.Fail("Realm not created.") 
-            : Result.Ok(realm);
+            ? Result.Failure<Realm>("Realm not created.") 
+            : Result.Success(realm);
     }
 }

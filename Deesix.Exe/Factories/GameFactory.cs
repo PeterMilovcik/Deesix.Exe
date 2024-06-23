@@ -1,6 +1,6 @@
-﻿using FluentResults;
-using Deesix.Core;
+﻿using Deesix.Core;
 using Deesix.AI;
+using CSharpFunctionalExtensions;
 
 namespace Deesix.Exe.Factories;
 
@@ -49,26 +49,25 @@ public class GameFactory
                     }
                     else
                     {
-                        UI.ErrorMessages(location.Errors);
+                        UI.ErrorMessage(location.Error);
                     }
                 }
                 else
                 {
-                    UI.ErrorMessages(region.Errors);
-                }
-                
+                    UI.ErrorMessage(region.Error);
+                }                
             }
             else
             {
-                UI.ErrorMessages(realm.Errors);
+                UI.ErrorMessage(realm.Error);
             }
         }
         else
         {
-            UI.ErrorMessages(world.Errors);
+            UI.ErrorMessage(world.Error);
         }
         return game is null 
-            ? Result.Fail("Game not created.") 
-            : Result.Ok(game);
+            ? Result.Failure<Game>("Game not created.")
+            : Result.Success(game);
     }
 }

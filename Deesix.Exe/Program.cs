@@ -6,6 +6,7 @@ using Deesix.Exe.Factories;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using CSharpFunctionalExtensions;
 
 internal class Program
 {
@@ -18,6 +19,9 @@ internal class Program
 
         try
         {
+            // Result.Setup(cfg => cfg.Logger = new AnsiConsoleResultLogger());
+            // Result.Setup(cfg => cfg.DefaultTryCatchHandler = exception => new Error(exception.Message));
+
             var gameManager = services.GetRequiredService<GameManager>();
             var ui = services.GetRequiredService<UserInterface>();
 

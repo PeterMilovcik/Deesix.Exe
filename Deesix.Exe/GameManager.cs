@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
+using CSharpFunctionalExtensions;
 using Deesix.Core;
 using Deesix.Exe.Factories;
-using FluentResults;
 
 namespace Deesix.Exe;
 
@@ -28,12 +28,12 @@ public class GameManager
         if (game.IsSuccess)
         {    
             Save(game.Value!);
-            return Result.Ok(game.Value!);
+            return Result.Success(game.Value!);
         }
         else
         {
-            ui.ErrorMessages(game.Errors);
-            return Result.Fail("Game not created.");
+            ui.ErrorMessage("Game not created.");
+            return Result.Failure<Game>("Game not created.");
         }
     }
 

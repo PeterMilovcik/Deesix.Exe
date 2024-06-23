@@ -1,6 +1,6 @@
+using CSharpFunctionalExtensions;
 using Deesix.AI;
 using Deesix.Core;
-using FluentResults;
 
 namespace Deesix.Exe.Factories;
 
@@ -48,16 +48,16 @@ public class LocationFactory
                 }
                 else
                 {
-                    ui.ErrorMessages(locationNameResult.Errors);
+                    ui.ErrorMessage(locationNameResult.Error);
                 }
             }
             else
             {
-                ui.ErrorMessages(locationDescriptionResult.Errors);
+                ui.ErrorMessage(locationDescriptionResult.Error);
             }
         });
         return location is null
-            ? Result.Fail("Location not created.")
-            : Result.Ok(location);
+            ? Result.Failure<Location>("Location not created.")
+            : Result.Success(location);
     }
 }
