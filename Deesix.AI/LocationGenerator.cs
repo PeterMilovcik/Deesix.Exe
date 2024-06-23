@@ -7,10 +7,10 @@ public class LocationGenerator(OpenAIGenerator openAIGenerator)
 {
     private readonly OpenAIGenerator openAIGenerator = openAIGenerator ?? throw new ArgumentNullException(nameof(openAIGenerator));
 
-    public async Task<Result<string>> GenerateLocationDescriptionAsync(Region region) =>
-        await openAIGenerator.GenerateAsync(            
-            "Create a captivating and immersive location description.",            
-            $"Envision a place within '{region.Name}', nestled in the '{region.Realm.Name}' realm of the '{region.Realm.World.Name}' world. " + 
+    public async Task<Result<string>> GenerateLocationDescriptionAsync(Region region)
+    {
+        var systemPrompt = "Create a captivating and immersive location description.";
+        var userPrompt = $"Envision a place within '{region.Name}', nestled in the '{region.Realm.Name}' realm of the '{region.Realm.World.Name}' world. " +
             $"This world abides by the following world settings: '{region.Realm.World.WorldSettings}'. " +
             "Craft a narrative that brings this location to life, highlighting its essence, ambiance, and the emotions it evokes. " +
             "Your description should be rich with sensory details and vivid imagery to transport the reader directly into this setting. " +
@@ -18,8 +18,20 @@ public class LocationGenerator(OpenAIGenerator openAIGenerator)
             "Please exclude any use of bold formatting and refrain from mentioning 'RPG'. " +
             "Let the focus be on painting a picture of this location's unique charm and allure. " +
             "Avoid including any additional information beyond the location description. " +
-            "Remember, the goal is to create a compelling and evocative narrative. " + 
-            "Don't write anything else. ");
+            "Remember, the goal is to create a compelling and evocative narrative. " +
+            "Don't write anything else. ";
+        var result = await openAIGenerator.GenerateAsync(systemPrompt, userPrompt);
+        if (result.IsSuccess)
+        {
+            var description = result.Value;
+            description = description.Replace("**", ""); // remove potential bold formatting
+            return Result.Success(description);
+        }
+        else
+        {
+            return Result.Failure<string>(result.Error);
+        }
+    }
 
     public async Task<Result<string>> GenerateLocationNameAsync(string locationDescription) =>
         await openAIGenerator.GenerateAsync(            
