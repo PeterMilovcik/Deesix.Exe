@@ -7,15 +7,19 @@ public class RealmGenerator(OpenAIGenerator openAIGenerator)
 {
     private readonly OpenAIGenerator openAIGenerator = openAIGenerator ?? throw new ArgumentNullException(nameof(openAIGenerator));
 
-    public async Task<Result<string>> GenerateRealmDescriptionAsync(World world) => 
-        await openAIGenerator.GenerateAsync(
-            $"You are a fictional writer tasked with creating a realm within a world.",
-            $"Imagine a realm within the world of '{world.Name}', which is described as '{world.Description}' " +
-            $"and has the following settings: '{world.WorldSettings}'. " +
-            $"Write a vivid and engaging description of this realm, capturing its unique characteristics and atmosphere. " +
-            $"Ensure the description is concise, limited to {300} characters. " +
-            "Avoid using bold formatting or the term 'RPG' in the description. " +
-            "Focus solely on the realm's description.");
+    public async Task<Result<string>> GenerateRealmDescriptionAsync(World world)
+    {
+        var systemPrompt = $"You are a fictional writer tasked with creating a vivid and immersive realm within a world.";
+        
+        var userPrompt = $"Envision a realm within a world described as '{world.Description}' " + 
+            $"and shaped by these settings: '{world.WorldSettings}'. " +
+            $"Craft a concise, yet engaging description of this realm, emphasizing its unique features and atmosphere. " +
+            $"The description should be limited to {300} characters. " + 
+            "Avoid mentioning the realm name and refrain from using bold markdown. " + 
+            "Focus entirely on bringing the realm to life.";                    
+
+        return await openAIGenerator.GenerateAsync(systemPrompt, userPrompt);
+    }
 
     public async Task<Result<string>> GenerateRealmNameAsync(string realmDescription) =>
         await openAIGenerator.GenerateAsync(

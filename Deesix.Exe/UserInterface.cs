@@ -67,7 +67,7 @@ public class UserInterface
             regionLayout,
             realmLayout,
             worldLayout);
-        topLayout.Size = 10;
+        topLayout.Size = 12;
 
         var middleLayout = new Layout("Middle");
         var bottomLayout = new Layout("Bottom");

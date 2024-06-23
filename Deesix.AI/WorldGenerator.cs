@@ -11,15 +11,18 @@ public class WorldGenerator(OpenAIGenerator openAIGenerator)
     public async Task<List<string>> GenerateWorldNamesAsync(string worldDescription, int count)
     {
         var maxCharacterLength = 30;
-        var systemPrompt = $"Generate {count} unique and captivating world names that reflect the essence and atmosphere of described world. These names should be memorable, inspire curiosity or a sense of adventure, and each should be within {maxCharacterLength} characters. The output must be a single, comma-separated list of names.";        
-        var userPrompt = $"Using the following description: '{worldDescription}', create evocative and unique names for a world. Ensure each name is within the character limit, and aim for a diverse range that isn't confined to a specific theme. The names should be presented in a comma-separated format. Example: Name1, Name2, Name3.";
+        var systemPrompt = $"Generate {count} unique and captivating world names that reflect the essence and atmosphere of the described world. These names should be memorable, inspire curiosity or a sense of adventure, and each should be within {maxCharacterLength} characters. The output must be a bullet point list of names.";
+        var userPrompt = $"Using the following description: '{worldDescription}', create evocative and unique names for a world. Ensure each name is within the character limit, and aim for a diverse range. The names should be presented in a bullet point list format. Example:\n- Name1\n- Name2\n- Name3";
 
         var result = await openAIGenerator.GenerateAsync(systemPrompt, userPrompt);
         
         List<string> names = new List<string>();
         if (result.IsSuccess)
         {
-            names.AddRange(result.Value!.Split(",").Select(name => name.Trim()).ToList());
+            names.AddRange(result.Value!
+                                .Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries)
+                                .Select(name => name.TrimStart('-').Trim())
+                                .ToList());
         }
         return names;
     }
