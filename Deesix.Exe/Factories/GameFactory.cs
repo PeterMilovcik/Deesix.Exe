@@ -23,51 +23,60 @@ public class GameFactory
 
     public async Task<Result<Game>> CreateGameAsync()
     {
-        Game? game = null;
-        var world = await WorldFactory.CreateWorldAsync();
-        if (world.IsSuccess)
+        try
         {
-            var realm = await RealmFactory.CreateRealmAsync(world.Value!);
-            if (realm.IsSuccess)
+            var world = await WorldFactory.CreateWorldAsync();
+            if (world.IsFailure) return Result.Failure<Game>(world.Error);
+
+            var realm = await RealmFactory.CreateRealmAsync(world.Value);
+            if (realm.IsFailure) return Result.Failure<Game>(realm.Error);
+
+            var region = await RegionFactory.CreateRegionAsync(realm.Value);
+            if (region.IsFailure) return Result.Failure<Game>(realm.Error);
+
+            var location = await LocationFactory.CreateLocationAsync(region.Value);
+            if (location.IsFailure) return Result.Failure<Game>(location.Error);
+
+            var game = new Game
             {
-                var region = await RegionFactory.CreateRegionAsync(realm.Value!);
-                if (region.IsSuccess)
+                Id = world.Value.Id,
+                World = world.Value,
+                Character = new Character
                 {
-                    var location = await LocationFactory.CreateLocationAsync(region.Value!);
-                    if (location.IsSuccess)
-                    {
-                        game = new Game()
-                        {
-                            Id = world.Value!.Id,
-                            World = world.Value!,
-                            Character = new Character
-                            {
-                                Name = UI.PromptCharacterName(),
-                                CurrentLocation = location.Value!
-                            }
-                        };
-                    }
-                    else
-                    {
-                        UI.ErrorMessage(location.Error);
-                    }
+                    Name = UI.PromptCharacterName(),
+                    CurrentLocation = location.Value
                 }
-                else
-                {
-                    UI.ErrorMessage(region.Error);
-                }                
-            }
-            else
-            {
-                UI.ErrorMessage(realm.Error);
-            }
+            };
+
+            return Result.Success(game);
         }
-        else
+        catch (Exception ex)
         {
-            UI.ErrorMessage(world.Error);
+            return Result.Failure<Game>($"An error occurred while creating the game: {ex.Message}");
         }
-        return game is null 
-            ? Result.Failure<Game>("Game not created.")
-            : Result.Success(game);
+    }
+    
+    private string LocationNotCreated(string error)
+    {
+        UI.ErrorMessage(error);
+        return error;
+    }
+
+    private string RegionNotCreated(string error)
+    {
+        UI.ErrorMessage(error);
+        return error;
+    }
+
+    private string RealmNotCreated(string error)
+    {
+        UI.ErrorMessage(error);
+        return error;
+    }
+
+    private string WorldNotCreated(string error)
+    {
+        UI.ErrorMessage(error);
+        return error;
     }
 }
