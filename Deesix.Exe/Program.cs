@@ -6,6 +6,7 @@ using Deesix.Exe.Factories;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using static System.Net.Mime.MediaTypeNames;
 
 internal class Program
 {
@@ -20,30 +21,30 @@ internal class Program
         {
             var gameManager = services.GetRequiredService<GameManager>();
             var ui = services.GetRequiredService<UserInterface>();
+            var mainMenu = services.GetRequiredService<MainMenu>();
 
             ui.DisplayGameTitleAndDescription();
 
-            var gameFiles = gameManager.LoadGameFiles();
             Game? game = null;
 
-            if (!gameFiles.Any())
+            var result = mainMenu.Show();
+            switch (result)
             {
-                game = await CreateGameAsync(gameManager);
-            }
-            else
-            {
-                var selectedOption = ui.PromptUserToSelectGameOption(gameFiles);
-                
-                if (selectedOption == ui.NewGameOption)            
-                {
+                case MainMenu.NewGame:
                     game = await CreateGameAsync(gameManager);
-                }
-                else
-                {
+                    break;
+                case MainMenu.LoadGame:
+                    var gameFiles = gameManager.LoadGameFiles();                    
+                    var selectedOption = ui.PromptUserToSelectGameOption(gameFiles);
                     var gameFile = gameFiles.First(gameFile => gameFile.Folder == selectedOption);
                     game = gameManager.Load(gameFile);
-                }
+                    break;
+                case MainMenu.Exit:
+                    ui.Clear();
+                    return;
             }
+
+            if (result == MainMenu.Exit) return;
 
             if (game == null)
             {
@@ -103,6 +104,7 @@ internal class Program
                 });
                 services.AddSingleton<GameManager>();
                 services.AddSingleton<GameFactory>();
+                services.AddSingleton<MainMenu>();
             });
 
     private static string GetBaseDirectory() => AppContext.BaseDirectory;

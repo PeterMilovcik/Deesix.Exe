@@ -20,7 +20,6 @@ public class UserInterface
     {
         var options = new List<string>();
         options.AddRange(gameFiles.Select(gameFile => gameFile.Folder));
-        options.Add(NewGameOption);
 
         var selectedOption = AnsiConsole.Prompt(
             new SelectionPrompt<string>()
