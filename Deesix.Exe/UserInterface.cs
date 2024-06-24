@@ -39,6 +39,15 @@ public class UserInterface
                 .MoreChoicesText("[grey](Move up and down to reveal more options)[/]")
                 .AddChoices(options));
 
+    public void ShowMap(Game game)
+    {
+        var world = new Tree($"[green]{game.Character.CurrentLocation.Region.Realm.World.Name}[/]");
+        var realm = world.AddNode($"[green]{game.Character.CurrentLocation.Region.Realm.Name}[/]");
+        var region = realm.AddNode($"[green]{game.Character.CurrentLocation.Region.Name}[/]");
+        var location = region.AddNode($"[green]{game.Character.CurrentLocation.Name}[/]");
+        AnsiConsole.Write(world);
+    }
+
     public void WriteLayout(Game game)
     {
         var topPanel = new Panel("Deesix.exe")
@@ -70,11 +79,12 @@ public class UserInterface
         topLayout.Size = 12;
 
         var middleLayout = new Layout("Middle");
+        middleLayout.Size = 8;
         var bottomLayout = new Layout("Bottom");
+        bottomLayout.Size = 8;
 
         var layout = new Layout("Root")
             .SplitRows(topLayout, middleLayout, bottomLayout);
-
         AnsiConsole.Write(layout);
     }
 
@@ -168,8 +178,15 @@ public class UserInterface
 
     public void Clear() => AnsiConsole.Clear();
 
-    internal async Task ShowProgressAsync(string progressText, Func<object, Task> task) =>
+    public async Task ShowProgressAsync(string progressText, Func<object, Task> task) =>
         await AnsiConsole.Status().StartAsync(progressText, async ctx => await task(ctx));
 
-    internal bool Confirm(string question) => AnsiConsole.Confirm(question);
+    public bool Confirm(string question) => AnsiConsole.Confirm(question);
+
+    public IAction PromptUserForAction(Game game)
+    {
+        var actions = new List<IAction> { new ExploreAction() };
+        var selectedAction = SelectFromOptions("What do you do?", actions.Select(a => a.Name.Value).ToList());
+        return actions.First(a => a.Name.Value == selectedAction);
+    }
 }

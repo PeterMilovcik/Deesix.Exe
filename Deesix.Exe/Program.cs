@@ -6,7 +6,6 @@ using Deesix.Exe.Factories;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using CSharpFunctionalExtensions;
 
 internal class Program
 {
@@ -55,31 +54,54 @@ internal class Program
                 return;
             }
 
-            ui.Clear();
+            //ui.Clear();
 
-            ui.WriteLayout(game);
+            //ui.WriteLayout(game);
 
-            var currentWidth = Console.WindowWidth;
-            var currentHeight = Console.WindowHeight;
-
-            while (true)
+            
+            if (game != null)
             {
-                Console.ReadKey(true);
-                if (Console.WindowWidth != currentWidth || Console.WindowHeight != currentHeight)
-                {
-                    // Update current dimensions
-                    currentWidth = Console.WindowWidth;
-                    currentHeight = Console.WindowHeight;
-
-                    ui.Clear();
-                    ui.WriteLayout(game);
-                }
+                await GameLoop(gameManager, ui, game);
             }
+
+            // var currentWidth = Console.WindowWidth;
+            // var currentHeight = Console.WindowHeight;
+
+            // while (true)
+            // {
+            //     Console.ReadKey(true);
+            //     if (Console.WindowWidth != currentWidth || Console.WindowHeight != currentHeight)
+            //     {
+            //         // Update current dimensions
+            //         currentWidth = Console.WindowWidth;
+            //         currentHeight = Console.WindowHeight;
+
+            //         ui.Clear();
+            //         ui.WriteLayout(game);
+            //     }
+            // }
         }
         catch (Exception ex)
         {
             var logger = services.GetRequiredService<ILogger<Program>>();
             logger.LogError(ex, "An error occurred creating the DB.");
+        }
+    }
+
+    private static async Task GameLoop(GameManager gameManager, UserInterface ui, Game game)
+    {
+        while (true)
+        {
+            ui.Clear();
+            ui.ShowMap(game);
+            //ui.WriteLayout(game);
+            var action = ui.PromptUserForAction(game);
+            var result = await game.ProcessActionAsync(action);
+    
+            if (result.IsFailure)
+            {
+                ui.ErrorMessage(result.Error);
+            }
         }
     }
 
@@ -101,6 +123,7 @@ internal class Program
                     string? openAiApiKey = serviceProvider.GetRequiredService<OpenAIApiKey>().GetOpenAiApiKey();
                     if (string.IsNullOrEmpty(openAiApiKey)) throw new OpenAIApiKeyNotFoundException();
                     var openAIGenerator = new OpenAIGenerator("gpt-3.5-turbo", openAiApiKey);
+                    //var openAIGenerator = new OpenAIGenerator("text-embedding-3-small", openAiApiKey);
                     return new Generators(openAIGenerator);
                 });
                 services.AddSingleton<GameManager>();
