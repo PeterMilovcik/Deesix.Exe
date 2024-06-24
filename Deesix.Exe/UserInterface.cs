@@ -185,7 +185,7 @@ public class UserInterface
 
     public IAction PromptUserForAction(Game game)
     {
-        var actions = new List<IAction> { new ExploreAction() };
+        var actions = game.GetAvailableActions();
         var selectedAction = SelectFromOptions("What do you do?", actions.Select(a => a.Name.Value).ToList());
         return actions.First(a => a.Name.Value == selectedAction);
     }
