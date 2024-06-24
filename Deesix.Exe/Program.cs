@@ -18,9 +18,6 @@ internal class Program
 
         try
         {
-            // Result.Setup(cfg => cfg.Logger = new AnsiConsoleResultLogger());
-            // Result.Setup(cfg => cfg.DefaultTryCatchHandler = exception => new Error(exception.Message));
-
             var gameManager = services.GetRequiredService<GameManager>();
             var ui = services.GetRequiredService<UserInterface>();
 
@@ -54,32 +51,10 @@ internal class Program
                 return;
             }
 
-            //ui.Clear();
-
-            //ui.WriteLayout(game);
-
-            
             if (game != null)
             {
                 await GameLoop(gameManager, ui, game);
             }
-
-            // var currentWidth = Console.WindowWidth;
-            // var currentHeight = Console.WindowHeight;
-
-            // while (true)
-            // {
-            //     Console.ReadKey(true);
-            //     if (Console.WindowWidth != currentWidth || Console.WindowHeight != currentHeight)
-            //     {
-            //         // Update current dimensions
-            //         currentWidth = Console.WindowWidth;
-            //         currentHeight = Console.WindowHeight;
-
-            //         ui.Clear();
-            //         ui.WriteLayout(game);
-            //     }
-            // }
         }
         catch (Exception ex)
         {
