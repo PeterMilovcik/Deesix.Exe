@@ -1,6 +1,8 @@
 using CSharpFunctionalExtensions;
 using Deesix.AI;
 using Deesix.Core;
+using Deesix.Core.Settings;
+using Spectre.Console;
 
 namespace Deesix.Exe.Factories;
 
@@ -58,31 +60,31 @@ public class WorldFactory(UserInterface ui, Generators generators)
 
     private async Task<WorldSettings> GenerateWorldSettingsAsync(List<string> themes)
     {
-        var worldSettingsJson = File.ReadAllText("Schemas/worldsettings.json");
-
-        WorldSettings? worldSettings = null;
+        Result<WorldSettings> worldSettings = default;
         do
         {
-            await ui.ShowProgressAsync("Generating world settings...", async ctx =>
+            worldSettings = await AnsiConsole.Status().StartAsync("Generating world settings...", async ctx =>
+            {
+                worldSettings = await generators.World.GenerateWorldSettingsAsync(themes);
+                Console.WriteLine($"Result: {worldSettings}");
+                if (worldSettings.IsSuccess)
                 {
-                    worldSettings = await generators.World.GenerateWorldSettingsAsync(themes, worldSettingsJson);
-                    if (worldSettings is not null)
-                    {
-                        ui.DisplayWorldSettings(worldSettings);
-                    }
-                    else
-                    {
-                        ui.ErrorMessage("Failed to generate world settings.");
-                    }
-                });
+                    ui.DisplayWorldSettings(worldSettings.Value);
+                }
+                else
+                {
+                    ui.ErrorMessage(worldSettings.Error);
+                }
+                return worldSettings;
+            });
         } while (!ui.Confirm("Are you satisfied with the generated world settings?"));
 
-        if (worldSettings is null)
+        if (worldSettings.IsFailure)
         {
-            ui.ErrorMessage("Failed to generate world settings.");
+            ui.ErrorMessage($"Failed to generate world settings: {worldSettings.Error}");
             throw new InvalidOperationException("Failed to create world settings.");
         }
 
-        return worldSettings;
+        return worldSettings.Value;
     }
 }

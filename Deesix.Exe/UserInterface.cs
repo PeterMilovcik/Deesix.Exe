@@ -1,4 +1,5 @@
 ﻿using Deesix.Core;
+using Deesix.Core.Settings;
 using Spectre.Console;
 
 namespace Deesix.Exe;
@@ -102,34 +103,10 @@ public class UserInterface
         return worldLayout;
     }
 
-    public void DisplayWorldSettings(WorldSettings? worldSettings)
+    public void DisplayWorldSettings(WorldSettings worldSettings)
     {
-        if (worldSettings == null)
-        {
-            AnsiConsole.MarkupLine("[red]Error: World settings not found.[/]");
-            return;
-        }
-
         AnsiConsole.Write(new Rule());
-
-        int maxLength = 19; // Length of the longest string
-
-        AnsiConsole.MarkupLine($"[green]{"Landmasses".PadRight(maxLength)}[/]: {worldSettings.Landmasses}");
-        AnsiConsole.MarkupLine($"[green]{"Landmarks".PadRight(maxLength)}[/]: {worldSettings.Landmarks}");
-        AnsiConsole.MarkupLine($"[green]{"Climate Zones".PadRight(maxLength)}[/]: {worldSettings.ClimateZones}");
-        AnsiConsole.MarkupLine($"[green]{"Societies".PadRight(maxLength)}[/]: {worldSettings.Societies}");
-        AnsiConsole.MarkupLine($"[green]{"Beliefs".PadRight(maxLength)}[/]: {worldSettings.Beliefs}");
-        AnsiConsole.MarkupLine($"[green]{"Tech. Advancements".PadRight(maxLength)}[/]: {worldSettings.TechnologicalAdvancements}");
-        AnsiConsole.MarkupLine($"[green]{"Creation Myths".PadRight(maxLength)}[/]: {worldSettings.CreationMyths}");
-        AnsiConsole.MarkupLine($"[green]{"Major Events".PadRight(maxLength)}[/]: {worldSettings.MajorEvents}");
-        AnsiConsole.MarkupLine($"[green]{"Source Of Magic".PadRight(maxLength)}[/]: {worldSettings.SourceOfMagic}");
-        AnsiConsole.MarkupLine($"[green]{"Types Of Magic".PadRight(maxLength)}[/]: {worldSettings.TypesOfMagic}");
-        AnsiConsole.MarkupLine($"[green]{"Magic Limitations".PadRight(maxLength)}[/]: {worldSettings.MagicLimitations}");
-        AnsiConsole.MarkupLine($"[green]{"Governance".PadRight(maxLength)}[/]: {worldSettings.Governance}");
-        AnsiConsole.MarkupLine($"[green]{"Conflicts".PadRight(maxLength)}[/]: {worldSettings.Conflicts}");
-        AnsiConsole.MarkupLine($"[green]{"Resources".PadRight(maxLength)}[/]: {worldSettings.Resources}");
-        AnsiConsole.MarkupLine($"[green]{"Trade Routes".PadRight(maxLength)}[/]: {worldSettings.TradeRoutes}");
-        AnsiConsole.MarkupLine($"[green]{"Languages".PadRight(maxLength)}[/]: {worldSettings.Languages}");
+        AnsiConsole.MarkupLine(worldSettings.ToString());
     }
 
     public string PromptCharacterName() =>
@@ -184,6 +161,9 @@ public class UserInterface
 
     public async Task ShowProgressAsync(string progressText, Func<object, Task> task) =>
         await AnsiConsole.Status().StartAsync(progressText, async ctx => await task(ctx));
+
+    public async Task ShowProgressAsync<T>(string progressText, Func<object, Task<T>> task) =>
+        await AnsiConsole.Status().StartAsync<T>(progressText, async ctx => await task(ctx));
 
     public bool Confirm(string question) => AnsiConsole.Confirm(question);
 

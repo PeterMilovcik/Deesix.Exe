@@ -1,4 +1,6 @@
-﻿namespace Deesix.Core;
+﻿using Deesix.Core.Settings;
+
+namespace Deesix.Core;
 
 public class World
 {
