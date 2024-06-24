@@ -53,7 +53,7 @@ internal class Program
 
             if (game != null)
             {
-                await GameLoop(gameManager, ui, game);
+                await GameLoop(ui, game);
             }
         }
         catch (Exception ex)
@@ -63,7 +63,7 @@ internal class Program
         }
     }
 
-    private static async Task GameLoop(GameManager gameManager, UserInterface ui, Game game)
+    private static async Task GameLoop(UserInterface ui, Game game)
     {
         while (true)
         {

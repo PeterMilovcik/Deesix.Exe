@@ -41,6 +41,11 @@ public class UserInterface
 
     public void ShowMap(Game game)
     {
+        if (game.Character.CurrentLocation is null)
+        {
+            AnsiConsole.MarkupLine("[red]Error: Character location not found.[/]");
+            return;
+        }
         var world = new Tree($"[green]{game.Character.CurrentLocation.Region.Realm.World.Name}[/]");
         var realm = world.AddNode($"[green]{game.Character.CurrentLocation.Region.Realm.Name}[/]");
         var region = realm.AddNode($"[green]{game.Character.CurrentLocation.Region.Name}[/]");
