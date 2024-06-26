@@ -41,6 +41,7 @@ public class UserInterface
 
     public void ShowMap(Game game)
     {
+        AnsiConsole.Write(new Rule());
         if (game.Character.CurrentLocation is null)
         {
             AnsiConsole.MarkupLine("[red]Error: Character location not found.[/]");
