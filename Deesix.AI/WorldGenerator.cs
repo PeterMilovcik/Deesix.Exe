@@ -111,16 +111,12 @@ public class WorldGenerator(OpenAIGenerator openAIGenerator)
 
         result = await openAIGenerator.GenerateAsync(systemPrompt, $"Generate Magic Settings - Schools");
         if (result.IsSuccess) worldSettings.Magic.Schools = result.Value;
-
         result = await openAIGenerator.GenerateAsync(systemPrompt, $"Generate Magic Settings - Spells");
         if (result.IsSuccess) worldSettings.Magic.Spells = result.Value;
-
         result = await openAIGenerator.GenerateAsync(systemPrompt, $"Generate Magic Settings - Artifacts");
         if (result.IsSuccess) worldSettings.Magic.Artifacts = result.Value;
-
         result = await openAIGenerator.GenerateAsync(systemPrompt, $"Generate Magic Settings - Creatures");
         if (result.IsSuccess) worldSettings.Magic.Creatures = result.Value;
-
         result = await openAIGenerator.GenerateAsync(systemPrompt, $"Generate Magic Settings - Intensity");
         if (result.IsSuccess) worldSettings.Magic.Intensity = result.Value;
 

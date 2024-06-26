@@ -66,7 +66,6 @@ public class WorldFactory(UserInterface ui, Generators generators)
             worldSettings = await AnsiConsole.Status().StartAsync("Generating world settings...", async ctx =>
             {
                 worldSettings = await generators.World.GenerateWorldSettingsAsync(themes);
-                Console.WriteLine($"Result: {worldSettings}");
                 if (worldSettings.IsSuccess)
                 {
                     ui.DisplayWorldSettings(worldSettings.Value);

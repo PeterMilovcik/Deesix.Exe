@@ -55,28 +55,4 @@ public class GameFactory
             return Result.Failure<Game>($"An error occurred while creating the game: {ex.Message}");
         }
     }
-    
-    private string LocationNotCreated(string error)
-    {
-        UI.ErrorMessage(error);
-        return error;
-    }
-
-    private string RegionNotCreated(string error)
-    {
-        UI.ErrorMessage(error);
-        return error;
-    }
-
-    private string RealmNotCreated(string error)
-    {
-        UI.ErrorMessage(error);
-        return error;
-    }
-
-    private string WorldNotCreated(string error)
-    {
-        UI.ErrorMessage(error);
-        return error;
-    }
 }
