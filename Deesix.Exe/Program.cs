@@ -34,7 +34,7 @@ internal class Program
                     game = await CreateGameAsync(gameManager);
                     break;
                 case MainMenu.LoadGame:
-                    var gameFiles = gameManager.LoadGameFiles();                    
+                    var gameFiles = gameManager.LoadGameFiles();
                     var selectedOption = ui.PromptUserToSelectGameOption(gameFiles);
                     var gameFile = gameFiles.First(gameFile => gameFile.Folder == selectedOption);
                     game = gameManager.Load(gameFile);

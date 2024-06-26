@@ -111,8 +111,10 @@ public class UserInterface
         AnsiConsole.MarkupLine(worldSettings.ToString());
     }
 
-    public string PromptCharacterName() =>
-        AnsiConsole.Prompt(
+    public string PromptCharacterName()
+    {
+        AnsiConsole.Write(new Rule());
+        return AnsiConsole.Prompt(
             new TextPrompt<string>("What is your [yellow]character name[/]?")
                 .PromptStyle("green")
                 .ValidationErrorMessage("[red]That's not a valid character name[/]")
@@ -132,9 +134,11 @@ public class UserInterface
                     }
                     return ValidationResult.Success();
                 }));
+    }
 
     public List<string> PromptThemes()
     {
+        AnsiConsole.Write(new Rule());
         var themes = AnsiConsole.Prompt(new MultiSelectionPrompt<string>()
             .Title("What [green]game world would you like to create[/]?")
             .PageSize(10)
@@ -171,6 +175,7 @@ public class UserInterface
 
     public IAction PromptUserForAction(Game game)
     {
+        AnsiConsole.Write(new Rule());
         var actions = game.GetAvailableActions();
         var selectedAction = SelectFromOptions("What do you do?", actions.Select(a => a.Name.Value).ToList());
         return actions.First(a => a.Name.Value == selectedAction);
