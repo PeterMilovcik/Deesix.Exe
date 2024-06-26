@@ -11,15 +11,16 @@ public class Location
     public required Region Region { get; init; }
     public List<Route> Routes { get; set; } = new List<Route>();
 
-    public int ExploreLocation(int explore)
+    public int Explore(int explored)
     {
-        int remaining = Size - Explored;
-        int explorationAmount = Math.Min(explore, remaining);
-        if (explorationAmount > 0)
+        if (explored < 0)
         {
-            Explored += explorationAmount;
-            
+            throw new ArgumentOutOfRangeException(nameof(explored), "Cannot explore a negative amount.");
         }
-        return explorationAmount;
+        
+        int result = Math.Min(explored, Size - Explored);
+        Explored += result;
+        
+        return result;
     }
 }

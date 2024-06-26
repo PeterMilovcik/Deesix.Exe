@@ -6,6 +6,7 @@ public class Character
     public Location? CurrentLocation { get; set; }
     public Route? CurrentRoute { get; set; }
     public double CurrentRoutePosition { get; set; }
+    public required Skills Skills { get; init; }
 
     public void MoveTo(Location location)
     {
@@ -27,15 +28,6 @@ public class Character
         {
             MoveTo(CurrentRoute.To);
         }
-    }
-
-    public void ExploreCurrentLocation()
-    {
-        if (CurrentLocation == null) return;
-        var explored = 1; 
-        // TODO: Implement exploration mechanics.
-        // TODO: Implement time mechanics.
-        CurrentLocation.ExploreLocation(explored);
     }
 
     private void SetLocation(Location location)

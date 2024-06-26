@@ -44,7 +44,11 @@ public class GameFactory
                 Character = new Character
                 {
                     Name = UI.PromptCharacterName(),
-                    CurrentLocation = location.Value
+                    CurrentLocation = location.Value,
+                    Skills = new Skills
+                    {
+                        Exploration = Skill.Create("Exploration", 1),
+                    }
                 }
             };
 

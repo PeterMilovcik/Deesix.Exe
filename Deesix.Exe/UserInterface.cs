@@ -122,7 +122,6 @@ public class UserInterface
 
     public List<string> PromptThemes()
     {
-        AnsiConsole.Write(new Rule());
         var themes = AnsiConsole.Prompt(new MultiSelectionPrompt<string>()
             .Title("What [green]game world would you like to create[/]?")
             .PageSize(10)
@@ -192,6 +191,16 @@ public class UserInterface
             AnsiConsole.Write(rule);
             AnsiConsole.MarkupLine(game.Character.CurrentLocation.Description);
             AnsiConsole.WriteLine();
+        }
+    }
+
+    internal void ShowActionResult(string actionResult)
+    {
+        if (actionResult is not null)
+        {
+            var rule = new Rule();
+            AnsiConsole.Write(rule);
+            AnsiConsole.MarkupLine(actionResult);
         }
     }
 }

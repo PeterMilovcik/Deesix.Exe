@@ -8,6 +8,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using static System.Net.Mime.MediaTypeNames;
 using Spectre.Console;
+using CSharpFunctionalExtensions;
 
 internal class Program
 {
@@ -67,19 +68,19 @@ internal class Program
 
     private static async Task GameLoop(UserInterface ui, Game game)
     {
+        string actionResult = string.Empty;
         while (true)
         {
             ui.Clear();
             ui.ShowMap(game);
             ui.ShowCurrentLocation(game);
+            ui.ShowActionResult(actionResult);
             var action = ui.PromptUserForAction(game);
             var result = await AnsiConsole.Status().StartAsync(action.ProgressName.ToString(), async ctx => 
                 await game.ProcessActionAsync(action));
-    
-            if (result.IsFailure)
-            {
-                ui.ErrorMessage(result.Error);
-            }
+            actionResult = result.IsSuccess 
+                ? result.Value
+                : result.Error;
         }
     }
 

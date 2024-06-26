@@ -1,4 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
+using Spectre.Console;
 
 namespace Deesix.Core;
 
@@ -15,16 +16,11 @@ public class Game
         return actionFactory.GetAvailableActions(this);
     }
 
-    public async Task<Result> ProcessActionAsync(IAction action)
+    public async Task<Result<string>> ProcessActionAsync(IAction action)
     {
         var result = await action.ExecuteAsync(this);
-
-        if (result.IsSuccess)
-        {
-            CurrentTime = CurrentTime.Add(action.Duration);
-            return Result.Success();
-        }
-
+        AnsiConsole.MarkupLine(result.ToString());
+        CurrentTime = CurrentTime.Add(action.Duration);
         return result;
     }
 }
