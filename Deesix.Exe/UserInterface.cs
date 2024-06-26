@@ -19,7 +19,6 @@ public class UserInterface
 
     public string PromptUserToSelectGameOption(List<GameFile> gameFiles)
     {
-        AnsiConsole.Write(new Rule());
         var options = new List<string>();
         options.AddRange(gameFiles.Select(gameFile => gameFile.Folder));
 
@@ -39,21 +38,6 @@ public class UserInterface
                 .PageSize(10)
                 .MoreChoicesText("[grey](Move up and down to reveal more options)[/]")
                 .AddChoices(options));
-
-    public void ShowMap(Game game)
-    {
-        AnsiConsole.Write(new Rule());
-        if (game.Character.CurrentLocation is null)
-        {
-            AnsiConsole.MarkupLine("[red]Error: Character location not found.[/]");
-            return;
-        }
-        var world = new Tree($"[green]{game.Character.CurrentLocation.Region.Realm.World.Name}[/]");
-        var realm = world.AddNode($"[green]{game.Character.CurrentLocation.Region.Realm.Name}[/]");
-        var region = realm.AddNode($"[green]{game.Character.CurrentLocation.Region.Name}[/]");
-        var location = region.AddNode($"[green]{game.Character.CurrentLocation.Name}[/]");
-        AnsiConsole.Write(world);
-    }
 
     public void WriteLayout(Game game)
     {
@@ -179,5 +163,35 @@ public class UserInterface
         var actions = game.GetAvailableActions();
         var selectedAction = SelectFromOptions("What do you do?", actions.Select(a => a.Name.Value).ToList());
         return actions.First(a => a.Name.Value == selectedAction);
+    }    
+
+    public void ShowMap(Game game)
+    {
+        var rule = new Rule($"[green]Map[/]");
+        rule.Justification = Justify.Left;
+        AnsiConsole.Write(rule);
+        if (game.Character.CurrentLocation is null)
+        {
+            AnsiConsole.MarkupLine("[red]Error: Character location not found.[/]");
+            return;
+        }
+        var world = new Tree($"[green]{game.Character.CurrentLocation.Region.Realm.World.Name}[/]");
+        var realm = world.AddNode($"[green]{game.Character.CurrentLocation.Region.Realm.Name}[/]");
+        var region = realm.AddNode($"[green]{game.Character.CurrentLocation.Region.Name}[/]");
+        var location = region.AddNode($"[green]{game.Character.CurrentLocation.Name}[/]");
+        AnsiConsole.Write(world);
+        AnsiConsole.WriteLine();
+    }
+
+    internal void ShowCurrentLocation(Game game)
+    {
+        if (game.Character.CurrentLocation is not null)
+        {
+            var rule = new Rule($"[green]Location[/]");
+            rule.Justification = Justify.Left;
+            AnsiConsole.Write(rule);
+            AnsiConsole.MarkupLine(game.Character.CurrentLocation.Description);
+            AnsiConsole.WriteLine();
+        }
     }
 }

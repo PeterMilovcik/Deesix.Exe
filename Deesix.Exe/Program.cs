@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using static System.Net.Mime.MediaTypeNames;
+using Spectre.Console;
 
 internal class Program
 {
@@ -70,9 +71,10 @@ internal class Program
         {
             ui.Clear();
             ui.ShowMap(game);
-            //ui.WriteLayout(game);
+            ui.ShowCurrentLocation(game);
             var action = ui.PromptUserForAction(game);
-            var result = await game.ProcessActionAsync(action);
+            var result = await AnsiConsole.Status().StartAsync(action.ProgressName.ToString(), async ctx => 
+                await game.ProcessActionAsync(action));
     
             if (result.IsFailure)
             {

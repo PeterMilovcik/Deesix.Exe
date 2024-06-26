@@ -5,6 +5,7 @@ namespace Deesix.Core;
 public class ExploreAction : IAction
 {
     public ActionName Name => ActionName.Create("Explore");
+    public ActionName ProgressName => ActionName.Create("Exploring...");
     public TimeSpan Duration => TimeSpan.FromSeconds(3);
 
     public bool CanExecute(Game game) => 
@@ -12,8 +13,9 @@ public class ExploreAction : IAction
             ? game.Character.CurrentLocation.Explored < game.Character.CurrentLocation.Size
             : false;
 
-    public Task<Result> ExecuteAsync(Game game)
+    public async Task<Result> ExecuteAsync(Game game)
     {
-        return Task.FromResult(Result.Success());
+        await Task.Delay(Duration);
+        return Result.Success();
     }
 }
