@@ -19,6 +19,7 @@ public class UserInterface
 
     public string PromptUserToSelectGameOption(List<GameFile> gameFiles)
     {
+        AnsiConsole.Write(new Rule());
         var options = new List<string>();
         options.AddRange(gameFiles.Select(gameFile => gameFile.Folder));
 
