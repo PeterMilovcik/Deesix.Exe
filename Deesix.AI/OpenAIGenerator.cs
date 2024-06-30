@@ -26,4 +26,17 @@ public class OpenAIGenerator : IBasicAIGenerator
         var result = chatCompletion.Value.ToString().Replace("```json", "").Replace("```", "").Trim();
         return Result.Success(result);
     }
+
+    public async Task<Result<string>> GenerateJsonAsync(string systemPrompt, string userPrompt)
+    {
+        ChatClient client = new(Model, ApiKey);
+        var messages = new List<ChatMessage>
+        {
+            new SystemChatMessage(systemPrompt),
+            new UserChatMessage(userPrompt)
+        };
+        var chatCompletion = await client.CompleteChatAsync(messages, new ChatCompletionOptions { ResponseFormat = ChatResponseFormat.JsonObject });
+        var result = chatCompletion.Value.ToString();
+        return Result.Success(result);
+    }
 }

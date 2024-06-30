@@ -2,13 +2,13 @@
 
 public class WorldSettings
 {
-    public required GeographySettings Geography { get; init; }
-    public required CultureSettings Culture { get; init; }
-    public required EconomySettings Economy { get; init; }
-    public required GovernanceSettings Government { get; init; }
-    public required ReligionSettings Religion { get; init; }
-    public required TechnologySettings Technology { get; init; }
-    public required MagicSettings Magic { get; init; }
+    public required GeographySettings Geography { get; set; }
+    public required CultureSettings Culture { get; set; }
+    public required EconomySettings Economy { get; set; }
+    public required GovernanceSettings Government { get; set; }
+    public required ReligionSettings Religion { get; set; }
+    public required TechnologySettings Technology { get; set; }
+    public required MagicSettings Magic { get; set; }
 
     public override string ToString() => 
         $"\n" + 
