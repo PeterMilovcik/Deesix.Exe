@@ -39,46 +39,6 @@ public class UserInterface
                 .MoreChoicesText("[grey](Move up and down to reveal more options)[/]")
                 .AddChoices(options));
 
-    public void WriteLayout(Game game)
-    {
-        var topPanel = new Panel("Deesix.exe")
-            .Header("[green] Deesix.exe [/]")
-            .HeaderAlignment(Justify.Center)
-            .Expand();
-
-        var topLayout = new Layout("Top", topPanel);
-
-        if (game.Character.CurrentLocation == null)
-        {
-            AnsiConsole.MarkupLine("[red]Error: Character location not found.[/]");
-            return;
-        }
-        var location = game.Character.CurrentLocation;
-        var region = location.Region;
-        var realm = region.Realm;
-        var world = realm.World;
-        Layout worldLayout = CreateLayout("World", world.Name, world.Description);
-        Layout realmLayout = CreateLayout("Realm", realm.Name, realm.Description);
-        Layout regionLayout = CreateLayout("Region", region.Name, region.Description);
-        Layout locationLayout = CreateLayout("Location", location.Name, location.Description);
-
-        topLayout.SplitColumns(
-            locationLayout,
-            regionLayout,
-            realmLayout,
-            worldLayout);
-        topLayout.Size = 12;
-
-        var middleLayout = new Layout("Middle");
-        middleLayout.Size = 8;
-        var bottomLayout = new Layout("Bottom");
-        bottomLayout.Size = 8;
-
-        var layout = new Layout("Root")
-            .SplitRows(topLayout, middleLayout, bottomLayout);
-        AnsiConsole.Write(layout);
-    }
-
     private static Layout CreateLayout(string name, string header, string content)
     {
         var worldPanel = new Panel(content);
@@ -184,12 +144,17 @@ public class UserInterface
 
     internal void ShowCurrentLocation(Game game)
     {
-        if (game.Character.CurrentLocation is not null)
+        var location = game.Character.CurrentLocation;
+        if (location is not null)
         {
-            var rule = new Rule($"[green]Location[/]");
+            var rule = new Rule($"[white]Location[/]");
             rule.Justification = Justify.Left;
             AnsiConsole.Write(rule);
-            AnsiConsole.MarkupLine(game.Character.CurrentLocation.Description);
+            AnsiConsole.MarkupLine($"[yellow]{location.VisualDescription}[/]");
+            AnsiConsole.MarkupLine($"[blue]{location.SoundDescription}[/]");
+            AnsiConsole.MarkupLine($"[green]{location.SmellDescription}[/]");
+            AnsiConsole.MarkupLine($"Terrain: [purple]{location.Terrain}[/]");
+            AnsiConsole.MarkupLine($"Climate: [teal]{location.Climate}[/]");
             AnsiConsole.WriteLine();
         }
     }

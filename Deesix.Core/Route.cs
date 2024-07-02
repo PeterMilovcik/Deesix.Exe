@@ -1,3 +1,5 @@
+using Deesix.Core.Entities;
+
 namespace Deesix.Core;
 
 public class Route

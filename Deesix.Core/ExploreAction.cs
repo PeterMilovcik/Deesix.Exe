@@ -4,8 +4,8 @@ namespace Deesix.Core;
 
 public class ExploreAction : IAction
 {
-    public ActionName Name => ActionName.Create("Explore");
-    public ActionName ProgressName => ActionName.Create("Exploring...");
+    public ActionName Name => ActionName.Create("Explore location");
+    public ActionName ProgressName => ActionName.Create("Exploring location...");
     public TimeSpan Duration => TimeSpan.FromSeconds(3);
 
     public bool CanExecute(Game game) => 

@@ -1,6 +1,7 @@
 using CSharpFunctionalExtensions;
 using Deesix.AI;
-using Deesix.Core;
+using Deesix.Core.Entities;
+using Spectre.Console;
 
 namespace Deesix.Exe.Factories;
 
@@ -15,46 +16,40 @@ public class LocationFactory
         this.generators = generators ?? throw new ArgumentNullException(nameof(generators));
     }
 
-    public async Task<Result<Location>> CreateLocationAsync(Region region)
+    public async Task<Result<Location>> CreateLocationAsync(Core.Region region)
     {
         Location? location = null;
         var locationId = Guid.NewGuid().ToString();
-        var locationDescription = "A location full of mystery and adventure.";
-        var locationName = "Location of Wonders";
 
         await ui.ShowProgressAsync("Generating location...", async ctx =>
         {
-            var locationDescriptionResult = await generators.Location.GenerateLocationDescriptionAsync(region);
-            if (locationDescriptionResult.IsSuccess)
-            {
-                locationDescription = locationDescriptionResult.Value!;
-                var locationNameResult = await generators.Location.GenerateLocationNameAsync(locationDescription);
-                if (locationNameResult.IsSuccess)
-                {
-                    locationName = locationNameResult.Value!;
+            var loc = await generators.Location.GenerateLocationAsync(region);
 
-                    var realm = region.Realm;
-                    var world = realm.World;
-                    
-                    location = new Location
-                    {
-                        Id = locationId,
-                        Path = $"{world.Id}/{realm.Id}/{region.Id}/{locationId}",
-                        Name = locationName,
-                        Description = locationDescription,
-                        Region = region,
-                        Size = 100 // Default size for the location
-                    };
-                }
-                else
+            if (loc.IsSuccess)
+            {
+                var realm = region.Realm;
+                var world = realm.World;
+                
+                location = new Location
                 {
-                    ui.ErrorMessage(locationNameResult.Error);
-                }
+                    Id = locationId,
+                    Path = $"{world.Id}/{realm.Id}/{region.Id}/{locationId}",
+                    Name = loc.Value.Name,
+                    Terrain = loc.Value.Terrain,
+                    Climate = loc.Value.Climate,
+                    VisualDescription = loc.Value.VisualDescription,
+                    SoundDescription = loc.Value.SoundDescription,
+                    SmellDescription = loc.Value.SmellDescription,
+                    Region = region,
+                    Size = 100 // Default size for the location
+                };
             }
             else
             {
-                ui.ErrorMessage(locationDescriptionResult.Error);
+                AnsiConsole.MarkupLine($"[bold red]Failed to generate location: {loc.Error}[/]");
             }
+
+                    
         });
         return location is null
             ? Result.Failure<Location>("Location not created.")
