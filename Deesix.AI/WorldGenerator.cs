@@ -1,7 +1,7 @@
 using System.Reflection;
 using System.Text.Json;
 using CSharpFunctionalExtensions;
-using Deesix.Core.Settings;
+using Deesix.Domain.Entities;
 
 namespace Deesix.AI;
 

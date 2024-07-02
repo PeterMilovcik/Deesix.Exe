@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Deesix.Core\Deesix.Core.csproj" />
+    <ProjectReference Include="..\Deesix.Domain\Deesix.Domain.csproj" />
   </ItemGroup>
 
   <ItemGroup>

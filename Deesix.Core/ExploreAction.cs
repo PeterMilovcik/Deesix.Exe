@@ -1,4 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
+using Deesix.Domain.Entities;
+using Deesix.Domain.Interfaces;
 
 namespace Deesix.Core;
 

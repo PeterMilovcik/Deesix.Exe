@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using static System.Net.Mime.MediaTypeNames;
 using Spectre.Console;
 using CSharpFunctionalExtensions;
+using Deesix.Domain.Entities;
 
 internal class Program
 {
@@ -76,11 +77,13 @@ internal class Program
             ui.ShowCurrentLocation(game);
             ui.ShowActionResult(actionResult);
             var action = ui.PromptUserForAction(game);
-            var result = await AnsiConsole.Status().StartAsync(action.ProgressName.ToString(), async ctx => 
-                await game.ProcessActionAsync(action));
-            actionResult = result.IsSuccess 
-                ? result.Value
-                : result.Error;
+            // var result = await AnsiConsole.Status().StartAsync(action.ProgressName.ToString(), async ctx => 
+            //     "TODO: Process action here.");
+            //     // await game.ProcessActionAsync(action));
+            // actionResult = result.IsSuccess 
+            //     ? result.Value
+            //     : result.Error;
+            await Task.Delay(1000);
         }
     }
 

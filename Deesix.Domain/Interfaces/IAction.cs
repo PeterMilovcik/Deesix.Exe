@@ -1,6 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
+using Deesix.Domain.Entities;
 
-namespace Deesix.Core;
+namespace Deesix.Domain.Interfaces;
 
 public interface IAction
 {

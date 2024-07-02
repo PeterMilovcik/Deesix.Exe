@@ -1,6 +1,6 @@
 using CSharpFunctionalExtensions;
 using Deesix.AI;
-using Deesix.Core;
+using Deesix.Domain.Entities;
 
 namespace Deesix.Exe.Factories;
 

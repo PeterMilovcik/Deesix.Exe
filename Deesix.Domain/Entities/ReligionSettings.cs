@@ -1,4 +1,4 @@
-namespace Deesix.Core.Settings;
+namespace Deesix.Domain.Entities;
 
 public class ReligionSettings
 {
@@ -18,4 +18,3 @@ public class ReligionSettings
         $"- Rituals: {Rituals}\n" + 
         $"- Temples: {Temples}";
 }
-

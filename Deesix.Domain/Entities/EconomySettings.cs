@@ -1,4 +1,4 @@
-namespace Deesix.Core.Settings;
+namespace Deesix.Domain.Entities;
 
 public class EconomySettings
 {
@@ -18,4 +18,3 @@ public class EconomySettings
         $"- Resources: {Resources}\n" + 
         $"- Labor: {Labor}";
 }
-

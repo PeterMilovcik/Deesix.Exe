@@ -1,4 +1,4 @@
-using Deesix.Core.Settings;
+using Deesix.Domain.Entities;
 
 namespace Deesix.AI.Entities;
 

@@ -1,4 +1,4 @@
-namespace Deesix.Core.Settings;
+namespace Deesix.Domain.Entities;
 
 public class GovernanceSettings
 {
@@ -18,4 +18,3 @@ public class GovernanceSettings
         $"- Military: {Military}\n" + 
         $"- Diplomacy: {Diplomacy}";
 }
-

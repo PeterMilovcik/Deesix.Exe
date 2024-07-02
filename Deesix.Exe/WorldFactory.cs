@@ -1,7 +1,6 @@
 using CSharpFunctionalExtensions;
 using Deesix.AI;
-using Deesix.Core;
-using Deesix.Core.Settings;
+using Deesix.Domain.Entities;
 using Spectre.Console;
 
 namespace Deesix.Exe.Factories;

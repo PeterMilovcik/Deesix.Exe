@@ -1,4 +1,4 @@
-namespace Deesix.Core.Settings;
+namespace Deesix.Domain.Entities;
 
 public class TechnologySettings
 {
@@ -15,4 +15,3 @@ public class TechnologySettings
         $"- Weapons: {Weapons}\n" + 
         $"- Armors: {Armors}";
 }
-

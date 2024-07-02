@@ -1,6 +1,7 @@
 ﻿using System.Text.Json;
 using CSharpFunctionalExtensions;
 using Deesix.Core;
+using Deesix.Domain.Entities;
 using Deesix.Exe.Factories;
 
 namespace Deesix.Exe;

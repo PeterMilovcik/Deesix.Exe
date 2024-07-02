@@ -1,5 +1,6 @@
 ﻿using Deesix.Core;
-using Deesix.Core.Settings;
+using Deesix.Domain.Entities;
+using Deesix.Domain.Interfaces;
 using Spectre.Console;
 
 namespace Deesix.Exe;
@@ -119,9 +120,11 @@ public class UserInterface
     public IAction PromptUserForAction(Game game)
     {
         AnsiConsole.Write(new Rule());
-        var actions = game.GetAvailableActions();
-        var selectedAction = SelectFromOptions("What do you do?", actions.Select(a => a.Name.Value).ToList());
-        return actions.First(a => a.Name.Value == selectedAction);
+        AnsiConsole.MarkupLine("[green]TODO Actions[/]");
+        // var actions = game.GetAvailableActions();
+        // var selectedAction = SelectFromOptions("What do you do?", actions.Select(a => a.Name.Value).ToList());
+        // return actions.First(a => a.Name.Value == selectedAction);
+        return new ExploreAction();
     }    
 
     public void ShowMap(Game game)

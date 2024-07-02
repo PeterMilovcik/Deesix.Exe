@@ -1,9 +1,7 @@
 using System.Reflection;
 using System.Text.Json;
 using CSharpFunctionalExtensions;
-using Deesix.AI.Entities;
-using Deesix.Core;
-using Deesix.Core.Settings;
+using Deesix.Domain.Entities;
 using Location = Deesix.AI.Entities.Location;
 
 namespace Deesix.AI;

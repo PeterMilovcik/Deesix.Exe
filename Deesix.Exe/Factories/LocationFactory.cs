@@ -1,6 +1,6 @@
 using CSharpFunctionalExtensions;
 using Deesix.AI;
-using Deesix.Core.Entities;
+using Deesix.AI.Entities;
 using Spectre.Console;
 
 namespace Deesix.Exe.Factories;
@@ -16,9 +16,9 @@ public class LocationFactory
         this.generators = generators ?? throw new ArgumentNullException(nameof(generators));
     }
 
-    public async Task<Result<Location>> CreateLocationAsync(Core.Region region)
+    public async Task<Result<Deesix.Domain.Entities.Location>> CreateLocationAsync(Deesix.Domain.Entities.Region region)
     {
-        Location? location = null;
+        Deesix.Domain.Entities.Location? location = null;
         var locationId = Guid.NewGuid().ToString();
 
         await ui.ShowProgressAsync("Generating location...", async ctx =>
@@ -30,10 +30,9 @@ public class LocationFactory
                 var realm = region.Realm;
                 var world = realm.World;
                 
-                location = new Location
+                location = new Deesix.Domain.Entities.Location
                 {
                     Id = locationId,
-                    Path = $"{world.Id}/{realm.Id}/{region.Id}/{locationId}",
                     Name = loc.Value.Name,
                     Terrain = loc.Value.Terrain,
                     Climate = loc.Value.Climate,
@@ -52,7 +51,7 @@ public class LocationFactory
                     
         });
         return location is null
-            ? Result.Failure<Location>("Location not created.")
+            ? Result.Failure<Deesix.Domain.Entities.Location>("Location not created.")
             : Result.Success(location);
     }
 }

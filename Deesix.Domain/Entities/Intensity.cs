@@ -1,4 +1,4 @@
-namespace Deesix.Core;
+namespace Deesix.Domain.Entities;
 
 public class Intensity
 {
