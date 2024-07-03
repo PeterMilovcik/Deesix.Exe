@@ -3,4 +3,5 @@
 public interface IGenerator
 {
     IWorldGenerator World { get; }
+    IRealmGenerator Realm { get; }
 }
