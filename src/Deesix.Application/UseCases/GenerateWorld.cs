@@ -4,7 +4,7 @@ using Deesix.Domain.Entities;
 
 namespace Deesix.Application;
 
-public sealed class GenerateWorldDescription(IGenerator generator)
+public sealed class GenerateWorld(IGenerator generator)
 {
     private readonly IGenerator generator = generator ?? throw new ArgumentNullException(nameof(generator));
 
@@ -15,11 +15,11 @@ public sealed class GenerateWorldDescription(IGenerator generator)
 
     public sealed class Response
     {
-        public required Result<string> WorldDescription { get; init; }
+        public required Result<World> World { get; init; }
     }
 
     public async Task<Response> ExecuteAsync(Request request) => new Response
     {
-        WorldDescription = await generator.World.GenerateWorldDescriptionAsync(request.WorldSettings)
+        World = await generator.World.GenerateWorldAsync(request.WorldSettings)
     };
 }
