@@ -7,9 +7,7 @@
   <ItemGroup>
     <Folder Include="DTOs\" />
     <Folder Include="Exceptions\" />
-    <Folder Include="Interfaces\" />
     <Folder Include="Mappers\" />
-    <Folder Include="UseCases\" />
     <Folder Include="Validators\" />
   </ItemGroup>
 

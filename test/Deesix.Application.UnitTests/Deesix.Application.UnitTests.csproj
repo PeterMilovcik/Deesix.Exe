@@ -29,4 +29,9 @@
     <ProjectReference Include="..\..\src\Deesix.Domain\Deesix.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="UseCases\" />
+    <Folder Include="UseCases\CreateWorldSettingsTests\" />
+  </ItemGroup>
+
 </Project>
