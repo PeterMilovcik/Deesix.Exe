@@ -40,4 +40,8 @@ public class UserInterface
     }
     
     public void Clear() => AnsiConsole.Clear();
+
+    public void ErrorMessage(string message) => AnsiConsole.MarkupLine($"[red]{message}[/]");
+
+    public void SuccessMessage(string message) => AnsiConsole.MarkupLine($"[green]{message}[/]");
 }

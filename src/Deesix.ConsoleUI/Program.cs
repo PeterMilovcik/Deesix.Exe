@@ -25,6 +25,7 @@ internal class Program
             var generateWorldSettings = services.GetRequiredService<GenerateWorldSettings>();
             var generateWorldDescription = services.GetRequiredService<GenerateWorldDescription>();
             var generateWorldNames = services.GetRequiredService<GenerateWorldNames>();
+            var createWorld = services.GetRequiredService<CreateWorld>();
 
             ui.DisplayGameTitleAndDescription();
 
@@ -41,27 +42,33 @@ internal class Program
                     var worldSettings = await GenerateWorldSettingsAsync(generateWorldSettings, worldThemes);
                     if (worldSettings.IsFailure)
                     {
-                        AnsiConsole.MarkupLine("[red]Failed to generate world settings[/]");
+                        ui.ErrorMessage("Failed to generate world settings");
                         return;
                     }
-                    AnsiConsole.MarkupLine("World settings: [green]{0}[/]", worldSettings.Value);
+                    ui.SuccessMessage($"World settings: {worldSettings.Value}");
 
                     var worldDescription = await GenerateWorldDescriptionAsync(generateWorldDescription, worldSettings.Value);
                     if (worldDescription.IsFailure)
                     {
-                        AnsiConsole.MarkupLine("[red]Failed to generate world description[/]");
+                        ui.ErrorMessage("Failed to generate world description");
                         return;
                     }
-                    AnsiConsole.MarkupLine("[green]World description: [/]{0}", worldDescription.Value);
+                    ui.SuccessMessage($"World description: {worldDescription.Value}");
 
                     var worldNames = await GenerateWorldNamesAsync(generateWorldNames, worldDescription.Value, 10);
                     if (worldNames.IsFailure)
                     {
-                        AnsiConsole.MarkupLine("[red]Failed to generate world names[/]");
+                        ui.ErrorMessage("Failed to generate world names");
                         return;
                     }
                     var worldName = ui.SelectFromOptions("[green]Select a world name[/]", worldNames.Value);
 
+                    var world = await createWorld.ExecuteAsync(new CreateWorld.Request
+                    {
+                        WorldName = worldName,
+                        WorldDescription = worldDescription.Value,
+                        WorldSettings = worldSettings.Value
+                    });
                     break;
                 case loadGameOption:
                     // Load game
@@ -122,6 +129,7 @@ internal class Program
                 services.AddSingleton<GenerateWorldSettings>();
                 services.AddSingleton<GenerateWorldDescription>();
                 services.AddSingleton<GenerateWorldNames>();
+                services.AddSingleton<CreateWorld>();
                 services.AddSingleton<IGenerator, Generator>();
                 services.AddSingleton<IWorldGenerator, WorldGenerator>();
                 services.AddSingleton<IRealmGenerator, RealmGenerator>();

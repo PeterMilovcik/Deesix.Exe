@@ -36,8 +36,7 @@ public class WorldGenerator(IOpenAIGenerator openAIGenerator) : IWorldGenerator
             "Don't mention world name in the description. " +
             "Don't write anything in bold." +
             "Don't add 'RPG' in the description. " +
-            $"Remember, the maximum length for the world description should be {500} characters.");
-
+            $"Remember, the maximum length for the world description should be {600} characters.");
 
     public async Task<Result<WorldSettings>> GenerateWorldSettingsAsync(List<string> worldThemes)
     {
