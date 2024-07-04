@@ -1,4 +1,5 @@
-﻿using Deesix.Domain.Entities;
+﻿using CSharpFunctionalExtensions;
+using Deesix.Domain.Entities;
 
 namespace Deesix.Application;
 
@@ -13,7 +14,7 @@ public sealed class CreateWorld
 
     public sealed class Response
     {
-        public required World World { get; init; }
+        public required Result<World> World { get; init; }
     }
 
     public Task<Response> ExecuteAsync(Request request)
@@ -25,6 +26,6 @@ public sealed class CreateWorld
             WorldSettings = request.WorldSettings,
         };
 
-        return Task.FromResult(new Response { World = world });
+        return Task.FromResult(new Response { World = Result.Success(world) });
     }
 }

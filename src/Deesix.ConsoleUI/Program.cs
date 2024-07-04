@@ -26,6 +26,7 @@ internal class Program
             var generateWorldDescription = services.GetRequiredService<GenerateWorldDescription>();
             var generateWorldNames = services.GetRequiredService<GenerateWorldNames>();
             var createWorld = services.GetRequiredService<CreateWorld>();
+            var generateRealm = services.GetRequiredService<GenerateRealm>();
 
             ui.DisplayGameTitleAndDescription();
 
@@ -42,7 +43,7 @@ internal class Program
                     var worldSettings = await GenerateWorldSettingsAsync(generateWorldSettings, worldThemes);
                     if (worldSettings.IsFailure)
                     {
-                        ui.ErrorMessage("Failed to generate world settings");
+                        ui.ErrorMessage($"Failed to generate world settings: {worldSettings.Error}");
                         return;
                     }
                     ui.SuccessMessage($"World settings: {worldSettings.Value}");
@@ -50,7 +51,7 @@ internal class Program
                     var worldDescription = await GenerateWorldDescriptionAsync(generateWorldDescription, worldSettings.Value);
                     if (worldDescription.IsFailure)
                     {
-                        ui.ErrorMessage("Failed to generate world description");
+                        ui.ErrorMessage($"Failed to generate world description: {worldDescription.Error}");
                         return;
                     }
                     ui.SuccessMessage($"World description: {worldDescription.Value}");
@@ -58,17 +59,24 @@ internal class Program
                     var worldNames = await GenerateWorldNamesAsync(generateWorldNames, worldDescription.Value, 10);
                     if (worldNames.IsFailure)
                     {
-                        ui.ErrorMessage("Failed to generate world names");
+                        ui.ErrorMessage($"Failed to generate world names: {worldNames.Error}");
                         return;
                     }
                     var worldName = ui.SelectFromOptions("[green]Select a world name[/]", worldNames.Value);
-
-                    var world = await createWorld.ExecuteAsync(new CreateWorld.Request
+                    var world = await CreateWorldAsync(createWorld, worldSettings.Value, worldDescription.Value, worldName);
+                    if (world.IsFailure)
                     {
-                        WorldName = worldName,
-                        WorldDescription = worldDescription.Value,
-                        WorldSettings = worldSettings.Value
-                    });
+                        ui.ErrorMessage($"Failed to create world: {world.Error}");
+                        return;
+                    }
+
+                    var realm = await GenerateRealmAsync(generateRealm, world.Value);
+                    if (realm.IsFailure)
+                    {
+                        ui.ErrorMessage($"Failed to generate realm: {realm.Error}");
+                        return;
+                    }
+
                     break;
                 case loadGameOption:
                     // Load game
@@ -85,11 +93,23 @@ internal class Program
         }
     }
 
+    private static async Task<Result<World>> CreateWorldAsync(
+        CreateWorld createWorld, WorldSettings worldSettings, string worldDescription, string worldName)
+    {
+        var response = await createWorld.ExecuteAsync(new CreateWorld.Request
+        {
+            WorldName = worldName,
+            WorldDescription = worldDescription,
+            WorldSettings = worldSettings
+        });
+        return response.World;
+    }
+
     private static async Task<Result<WorldSettings>> GenerateWorldSettingsAsync(
         GenerateWorldSettings generateWorldSettings, List<string> worldThemes)
     {
         var response = await AnsiConsole.Status().StartAsync(
-            "Generate world settings...",
+            "Generating world settings...",
             async (ctx) => await generateWorldSettings.ExecuteAsync(
                 new GenerateWorldSettings.Request { WorldThemes = worldThemes }));
         return response.WorldSettings;
@@ -99,7 +119,7 @@ internal class Program
         GenerateWorldDescription generateWorldDescription, WorldSettings worldSettings)
     {
         var response = await AnsiConsole.Status().StartAsync(
-            "Generate world description...",
+            "Generating world description...",
             async (ctx) => await generateWorldDescription.ExecuteAsync(
                 new GenerateWorldDescription.Request { WorldSettings = worldSettings}));
         return response.WorldDescription;
@@ -109,7 +129,7 @@ internal class Program
         GenerateWorldNames generateWorldNames, string worldDescription, int count)
     {
         var response = await AnsiConsole.Status().StartAsync(
-            "Generate world names...",
+            "Generating world names...",
             async (ctx) => await generateWorldNames.ExecuteAsync(
                 new GenerateWorldNames.Request 
                 { 
@@ -118,6 +138,16 @@ internal class Program
                 }));
 
         return response.WorldNames;
+    }
+
+    private static async Task<Result<Realm>> GenerateRealmAsync(
+        GenerateRealm generateRealm, World world)
+    {
+        var response = await AnsiConsole.Status().StartAsync(
+            "Generating realm...",
+            async (ctx) => await generateRealm.ExecuteAsync(
+                new GenerateRealm.Request { World = world }));
+        return response.Realm;
     }
 
     public static IHostBuilder CreateHostBuilder(string[] args) =>
@@ -130,6 +160,7 @@ internal class Program
                 services.AddSingleton<GenerateWorldDescription>();
                 services.AddSingleton<GenerateWorldNames>();
                 services.AddSingleton<CreateWorld>();
+                services.AddSingleton<GenerateRealm>();
                 services.AddSingleton<IGenerator, Generator>();
                 services.AddSingleton<IWorldGenerator, WorldGenerator>();
                 services.AddSingleton<IRealmGenerator, RealmGenerator>();
