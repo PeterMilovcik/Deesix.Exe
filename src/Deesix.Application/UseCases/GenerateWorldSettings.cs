@@ -22,4 +22,9 @@ public sealed class GenerateWorldSettings(IGenerator generator)
     {
         WorldSettings = await generator.World.GenerateWorldSettingsAsync(request.WorldThemes)
     };
+
+    public object Execute(Request request)
+    {
+        throw new NotImplementedException();
+    }
 }

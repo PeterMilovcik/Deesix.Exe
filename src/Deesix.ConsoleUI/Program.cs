@@ -1,6 +1,8 @@
-﻿using Deesix.Application;
+﻿using CSharpFunctionalExtensions;
+using Deesix.Application;
 using Deesix.Application.Interfaces;
 using Deesix.ConsoleUI;
+using Deesix.Domain.Entities;
 using Deesix.Infrastructure;
 using Deesix.Infrastructure.Generators;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,6 +23,8 @@ internal class Program
         {
             var ui = services.GetRequiredService<UserInterface>();
             var generateWorldSettings = services.GetRequiredService<GenerateWorldSettings>();
+            var generateWorldDescription = services.GetRequiredService<GenerateWorldDescription>();
+            var generateWorldNames = services.GetRequiredService<GenerateWorldNames>();
 
             ui.DisplayGameTitleAndDescription();
 
@@ -32,15 +36,32 @@ internal class Program
             switch (menu)
             {
                 case newGameOption:
+                    // New game
                     var worldThemes = ui.PromptThemes();
-                    var worldSettings = await generateWorldSettings.ExecuteAsync(
-                        new GenerateWorldSettings.Request { WorldThemes = worldThemes });
-                    if (worldSettings.WorldSettings.IsFailure)
+                    var worldSettings = await GenerateWorldSettingsAsync(generateWorldSettings, worldThemes);
+                    if (worldSettings.IsFailure)
                     {
                         AnsiConsole.MarkupLine("[red]Failed to generate world settings[/]");
                         return;
                     }
-                    AnsiConsole.MarkupLine("World settings: [green]{0}[/]", worldSettings.WorldSettings.Value);
+                    AnsiConsole.MarkupLine("World settings: [green]{0}[/]", worldSettings.Value);
+
+                    var worldDescription = await GenerateWorldDescriptionAsync(generateWorldDescription, worldSettings.Value);
+                    if (worldDescription.IsFailure)
+                    {
+                        AnsiConsole.MarkupLine("[red]Failed to generate world description[/]");
+                        return;
+                    }
+                    AnsiConsole.MarkupLine("[green]World description: [/]{0}", worldDescription.Value);
+
+                    var worldNames = await GenerateWorldNamesAsync(generateWorldNames, worldDescription.Value, 10);
+                    if (worldNames.IsFailure)
+                    {
+                        AnsiConsole.MarkupLine("[red]Failed to generate world names[/]");
+                        return;
+                    }
+                    var worldName = ui.SelectFromOptions("[green]Select a world name[/]", worldNames.Value);
+
                     break;
                 case loadGameOption:
                     // Load game
@@ -57,6 +78,41 @@ internal class Program
         }
     }
 
+    private static async Task<Result<WorldSettings>> GenerateWorldSettingsAsync(
+        GenerateWorldSettings generateWorldSettings, List<string> worldThemes)
+    {
+        var response = await AnsiConsole.Status().StartAsync(
+            "Generate world settings...",
+            async (ctx) => await generateWorldSettings.ExecuteAsync(
+                new GenerateWorldSettings.Request { WorldThemes = worldThemes }));
+        return response.WorldSettings;
+    }
+
+    private static async Task<Result<string>> GenerateWorldDescriptionAsync(
+        GenerateWorldDescription generateWorldDescription, WorldSettings worldSettings)
+    {
+        var response = await AnsiConsole.Status().StartAsync(
+            "Generate world description...",
+            async (ctx) => await generateWorldDescription.ExecuteAsync(
+                new GenerateWorldDescription.Request { WorldSettings = worldSettings}));
+        return response.WorldDescription;
+    }
+
+    private static async Task<Result<List<string>>> GenerateWorldNamesAsync(
+        GenerateWorldNames generateWorldNames, string worldDescription, int count)
+    {
+        var response = await AnsiConsole.Status().StartAsync(
+            "Generate world names...",
+            async (ctx) => await generateWorldNames.ExecuteAsync(
+                new GenerateWorldNames.Request 
+                { 
+                    WorldDescription = worldDescription, 
+                    Count = count
+                }));
+
+        return response.WorldNames;
+    }
+
     public static IHostBuilder CreateHostBuilder(string[] args) =>
         Host.CreateDefaultBuilder(args)
             .ConfigureServices((hostContext, services) =>
@@ -64,6 +120,8 @@ internal class Program
                 services.AddLogging(configure => configure.AddConsole());
                 services.AddSingleton<UserInterface>();
                 services.AddSingleton<GenerateWorldSettings>();
+                services.AddSingleton<GenerateWorldDescription>();
+                services.AddSingleton<GenerateWorldNames>();
                 services.AddSingleton<IGenerator, Generator>();
                 services.AddSingleton<IWorldGenerator, WorldGenerator>();
                 services.AddSingleton<IRealmGenerator, RealmGenerator>();
