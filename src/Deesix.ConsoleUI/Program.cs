@@ -189,5 +189,6 @@ internal class Program
                 services.AddSingleton<IOpenAIGenerator, OpenAIGenerator>();
                 services.AddSingleton<IOpenAIApiKey, OpenAIApiKey>();
                 services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite("Data Source=database.db"));
+                services.AddScoped<IRepository<World>, GenericRepository<World>>();
             });
 }

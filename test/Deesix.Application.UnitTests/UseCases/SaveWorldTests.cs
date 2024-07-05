@@ -1,5 +1,4 @@
-﻿using NUnit.Framework;
-using Moq;
+﻿using Moq;
 using Deesix.Application.Interfaces;
 using Deesix.Domain.Entities;
 using Deesix.Application.UseCases;
@@ -7,7 +6,6 @@ using Deesix.Application.UnitTests.TestDoubles;
 
 namespace Deesix.Application.UnitTests;
 
-[TestFixture]
 public class SaveWorldTests
 {
     private Mock<IRepository<World>> mockRepository;
@@ -31,20 +29,16 @@ public class SaveWorldTests
             WorldSettings = new SomeWorldSettings()
         };
         var request = new SaveWorld.Request { World = world };
-        mockRepository.Setup(x => x.InsertAsync(world)).ReturnsAsync(world);
+        mockRepository.Setup(x => x.Add(It.IsAny<World>())).Returns(world);
 
         // Act
         var response = await saveWorld.ExecuteAsync(request);
 
         // Assert
         Assert.That(response.World.IsSuccess, 
-            "Expected the result to be successful");
-        Assert.That(response.World.Value, Is.Not.Null, 
-            "Expected the saved world to not be null");
-        Assert.That(response.World.Value.Name, Is.EqualTo(world.Name), 
-            "Expected the saved world to have the same name as the input world");
-        Assert.That(response.World.Value.Description, Is.EqualTo(world.Description), 
-            "Expected the saved world to have the same description as the input world");
+            $"Expected the result to be successful.");
+        Assert.That(response.World.Value, Is.EqualTo(world), 
+            $"Expected the saved world to be the same as the input world.");
     }
 
 }

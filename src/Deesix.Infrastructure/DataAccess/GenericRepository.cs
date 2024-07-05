@@ -1,51 +1,67 @@
 ﻿using System.Linq.Expressions;
-using Deesix.Application;
+using Deesix.Application.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace Deesix.Infrastructure.DataAccess;
 
-public class GenericRepository<TEntity> : IRepository<TEntity> where TEntity : class
+public sealed class GenericRepository<TEntity>(ApplicationDbContext applicationDbContext) : IRepository<TEntity> where TEntity : class
 {
-    private readonly ApplicationDbContext context;
-    private DbSet<TEntity> dbSet;
+    private readonly ApplicationDbContext context = applicationDbContext;
 
-    public GenericRepository(ApplicationDbContext context)
+    public TEntity Add(TEntity model)
     {
-        this.context = context ?? throw new ArgumentNullException(nameof(context));
-        dbSet = context.Set<TEntity>();
+        var entry = context.Set<TEntity>().Add(model);
+        context.SaveChanges();
+        return entry.Entity;
     }
 
-    public Task<TEntity> GetByIdAsync(int id)
+    public void AddRange(IEnumerable<TEntity> model)
     {
-        throw new NotImplementedException();
+        context.Set<TEntity>().AddRange(model);
+        context.SaveChanges();
     }
 
-    public Task<IEnumerable<TEntity>> GetAsync(
-        Expression<Func<TEntity, bool>>? filter = null, 
-        Func<IQueryable<TEntity>, 
-        IOrderedQueryable<TEntity>>? orderBy = null, 
-        string includeProperties = "")
+    public TEntity? GetId(int id) => 
+        context.Set<TEntity>().Find(id);
+
+    public async Task<TEntity?> GetIdAsync(int id) => 
+        await context.Set<TEntity>().FindAsync(id);
+
+    public TEntity? Get(Expression<Func<TEntity, bool>> predicate) => 
+        context.Set<TEntity>().FirstOrDefault(predicate);
+
+    public async Task<TEntity?> GetAsync(Expression<Func<TEntity, bool>> predicate) => 
+        await context.Set<TEntity>().FirstOrDefaultAsync(predicate);
+
+    public IEnumerable<TEntity> GetList(Expression<Func<TEntity, bool>> predicate) => 
+        context.Set<TEntity>().Where<TEntity>(predicate).ToList();
+
+    public async Task<IEnumerable<TEntity>> GetListAsync(Expression<Func<TEntity, bool>> predicate) => 
+        await Task.Run(() => context.Set<TEntity>().Where<TEntity>(predicate));
+
+    public IEnumerable<TEntity> GetAll() => 
+        context.Set<TEntity>().ToList();
+
+    public async Task<IEnumerable<TEntity>> GetAllAsync() => 
+        await Task.Run(() => context.Set<TEntity>());
+
+    public int Count() => 
+        context.Set<TEntity>().Count();
+
+    public async Task<int> CountAsync() => 
+        await context.Set<TEntity>().CountAsync();
+
+    public void Update(TEntity entity)
     {
-        throw new NotImplementedException();
+        context.Entry(entity).State = EntityState.Modified;
+        context.SaveChanges();
     }
 
-    public Task<TEntity> InsertAsync(TEntity entity)
+    public void Remove(TEntity entity)
     {
-        throw new NotImplementedException();
+        context.Set<TEntity>().Remove(entity);
+        context.SaveChanges();
     }
 
-    public Task Update(TEntity entityToUpdate)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task Delete(TEntity entityToDelete)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task DeleteAsync(int id)
-    {
-        throw new NotImplementedException();
-    }
+    public void Dispose() => context.Dispose();
 }
