@@ -3,7 +3,7 @@ using Deesix.Domain.Entities;
 
 namespace Deesix.Application.UnitTests.TestDoubles;
 
-internal sealed class SomeWorldSettings : WorldSettings
+public sealed class SomeWorldSettings : WorldSettings
 {
     [SetsRequiredMembers]
     public SomeWorldSettings()

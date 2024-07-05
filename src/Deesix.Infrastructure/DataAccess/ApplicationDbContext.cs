@@ -10,5 +10,10 @@ public class ApplicationDbContext : DbContext
     {
     }
 
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<World>().Property(b => b.WorldSettingsJson);
+    }
+
     public DbSet<World> Worlds { get; set; }
 }
