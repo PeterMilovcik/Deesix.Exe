@@ -1,10 +1,13 @@
 ﻿using CSharpFunctionalExtensions;
 using Deesix.Application;
 using Deesix.Application.Interfaces;
+using Deesix.Application.UseCases;
 using Deesix.ConsoleUI;
 using Deesix.Domain.Entities;
 using Deesix.Infrastructure;
+using Deesix.Infrastructure.DataAccess;
 using Deesix.Infrastructure.Generators;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -27,6 +30,7 @@ internal class Program
             var generateWorldNames = services.GetRequiredService<GenerateWorldNames>();
             var createWorld = services.GetRequiredService<CreateWorld>();
             var generateRealm = services.GetRequiredService<GenerateRealm>();
+            var saveWorld = services.GetRequiredService<SaveWorld>();
 
             ui.DisplayGameTitleAndDescription();
 
@@ -70,6 +74,13 @@ internal class Program
                         return;
                     }
 
+                    world = await SaveWorldAsync(saveWorld, world.Value);
+                    if (world.IsFailure)
+                    {
+                        ui.ErrorMessage($"Failed to save world: {world.Error}");
+                        return;
+                    }
+
                     var realm = await GenerateRealmAsync(generateRealm, world.Value);
                     if (realm.IsFailure)
                     {
@@ -91,18 +102,6 @@ internal class Program
             var logger = services.GetRequiredService<ILogger<Program>>();
             logger.LogError(ex, "An error occurred.");
         }
-    }
-
-    private static async Task<Result<World>> CreateWorldAsync(
-        CreateWorld createWorld, WorldSettings worldSettings, string worldDescription, string worldName)
-    {
-        var response = await createWorld.ExecuteAsync(new CreateWorld.Request
-        {
-            WorldName = worldName,
-            WorldDescription = worldDescription,
-            WorldSettings = worldSettings
-        });
-        return response.World;
     }
 
     private static async Task<Result<WorldSettings>> GenerateWorldSettingsAsync(
@@ -150,6 +149,26 @@ internal class Program
         return response.Realm;
     }
 
+    private static async Task<Result<World>> CreateWorldAsync(
+        CreateWorld createWorld, WorldSettings worldSettings, string worldDescription, string worldName)
+    {
+        var response = await createWorld.ExecuteAsync(new CreateWorld.Request
+        {
+            WorldName = worldName,
+            WorldDescription = worldDescription,
+            WorldSettings = worldSettings
+        });
+        return response.World;
+    }
+
+    private static async Task<Result<World>> SaveWorldAsync(SaveWorld saveWorld, World world)
+    {
+        var response = await AnsiConsole.Status().StartAsync(
+            "Saving world...",
+            async (ctx) => await saveWorld.ExecuteAsync(new SaveWorld.Request { World = world }));
+        return response.World;
+    }
+
     public static IHostBuilder CreateHostBuilder(string[] args) =>
         Host.CreateDefaultBuilder(args)
             .ConfigureServices((hostContext, services) =>
@@ -160,6 +179,7 @@ internal class Program
                 services.AddSingleton<GenerateWorldDescription>();
                 services.AddSingleton<GenerateWorldNames>();
                 services.AddSingleton<CreateWorld>();
+                services.AddSingleton<SaveWorld>();
                 services.AddSingleton<GenerateRealm>();
                 services.AddSingleton<IGenerator, Generator>();
                 services.AddSingleton<IWorldGenerator, WorldGenerator>();
@@ -168,5 +188,6 @@ internal class Program
                 services.AddSingleton<ILocationGenerator, LocationGenerator>();
                 services.AddSingleton<IOpenAIGenerator, OpenAIGenerator>();
                 services.AddSingleton<IOpenAIApiKey, OpenAIApiKey>();
+                services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite("Data Source=database.db"));
             });
 }
