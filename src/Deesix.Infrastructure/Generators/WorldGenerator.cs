@@ -1,8 +1,7 @@
-﻿using System.Reflection;
-using System.Text.Json;
-using CSharpFunctionalExtensions;
+﻿using CSharpFunctionalExtensions;
 using Deesix.Application.Interfaces;
 using Deesix.Domain.Entities;
+using Deesix.Domain.Extensions;
 
 namespace Deesix.Infrastructure.Generators;
 
@@ -13,8 +12,13 @@ public class WorldGenerator(IOpenAIGenerator openAIGenerator) : IWorldGenerator
         public async Task<List<string>> GenerateWorldNamesAsync(string worldDescription, int count)
     {
         var maxCharacterLength = 30;
-        var systemPrompt = $"Generate {count} unique and captivating world names that reflect the essence and atmosphere of the described world. These names should be memorable, inspire curiosity or a sense of adventure, and each should be within {maxCharacterLength} characters. The output must be a bullet point list of names.";
-        var userPrompt = $"Using the following description: '{worldDescription}', create evocative and unique names for a world. Ensure each name is within the character limit, and aim for a diverse range. The names should be presented in a bullet point list format. Example:\n- Name1\n- Name2\n- Name3";
+        var systemPrompt = $"Generate {count} unique and captivating world names that reflect " + 
+            $"the essence and atmosphere of the described world. These names should be memorable, " + 
+            $"inspire curiosity or a sense of adventure, and each should be within {maxCharacterLength} characters. " + 
+            $"The output must be a bullet point list of names.";
+        var userPrompt = $"Using the following description: '{worldDescription}', create evocative and " + 
+            "unique names for a world. Ensure each name is within the character limit, and aim for a diverse range. " + 
+            "The names should be presented in a bullet point list format. Example:\n- Name1\n- Name2\n- Name3";
 
         var result = await openAIGenerator.GenerateTextAsync(systemPrompt, userPrompt);
         
@@ -75,51 +79,18 @@ public class WorldGenerator(IOpenAIGenerator openAIGenerator) : IWorldGenerator
         return Result.Success(worldSettings);
     }    
 
-    public async Task<Result<T>> GenerateSettingsAsync<T>(List<string> themes)
+    public async Task<Result<T>> GenerateSettingsAsync<T>(List<string> themes) where T : class
     {
-        var systemPrompt = ConstructSystemPrompt<T>();
-        string userPrompt = $"Generate {typeof(T).Name} for a game world based on the world themes: {string.Join(", ", themes.Select(theme => theme.ToLower()))}. \n";
-
-        var result = await openAIGenerator.GenerateJsonAsync(systemPrompt, userPrompt);
-
-        if (result.IsSuccess)
-        {
-            var settings = JsonSerializer.Deserialize<T>(result.Value);
-            return settings == null
-                ? Result.Failure<T>($"Failed to deserialize {typeof(T).Name}: {result.Value} to JSON object.")
-                : Result.Success(settings);
-        }
-        else
-        {
-            return Result.Failure<T>(result.Error);
-        }
-    }
-    
-    private string ConstructSystemPrompt<T>()
-    {
-        var properties = typeof(T).GetProperties();
-        var schema = new Dictionary<string, object>();
-
-        foreach (var property in properties)
-        {
-            var metadataAttribute = property.GetCustomAttribute<JsonPropertyMetadataAttribute>();
-            if (metadataAttribute != null)
-            {
-                schema[property.Name] = new
-                {
-                    type = metadataAttribute.Type,
-                    description = metadataAttribute.Description
-                };
-            }
-        }
-
-        var jsonSchema = JsonSerializer.Serialize(schema);
-
-        return "You are a fictional world builder. " +
+        var jsonSchema = typeof(T).GetJsonPropertyMetadataSchema();
+        var systemPrompt = "You are a fictional world builder. " +
             $"Create {typeof(T).Name} based on the provided world themes. " +
             "I ask you for specific settings, and you will generate them in JSON object format. " +
             "Don't mention any world theme in the settings. \n" +
             "Use simple, clear, specific, and concise English language. \n\n" +
             $"Json Schema: \n{jsonSchema}";
+        var userPrompt = $"Generate {typeof(T).Name} for a game world based on " + 
+            $"the world themes: {string.Join(", ", themes.Select(theme => theme.ToLower()))}. \n";
+
+        return await openAIGenerator.GenerateJsonObjectAsync<T>(systemPrompt, userPrompt);
     }
 }

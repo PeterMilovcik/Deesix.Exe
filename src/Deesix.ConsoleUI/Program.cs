@@ -140,7 +140,7 @@ internal class Program
         return response.WorldNames;
     }
 
-    private static async Task<Result<Realm>> GenerateRealmAsync(
+    private static async Task<Result<GenerateRealm.Response.GeneratedRealm>> GenerateRealmAsync(
         GenerateRealm generateRealm, World world)
     {
         var response = await AnsiConsole.Status().StartAsync(

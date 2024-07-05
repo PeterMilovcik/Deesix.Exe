@@ -1,3 +1,5 @@
+using Deesix.Domain.Utilities;
+
 namespace Deesix.Domain.Entities;
 
 public class CultureSettings

@@ -39,22 +39,7 @@ public class LocationGenerator(OpenAIGenerator openAIGenerator)
 
     private string ConstructSystemPrompt<T>()
     {
-        var properties = typeof(T).GetProperties();
-        var schema = new Dictionary<string, object>();
-
-        foreach (var property in properties)
-        {
-            var metadataAttribute = property.GetCustomAttribute<JsonPropertyMetadataAttribute>();
-            if (metadataAttribute != null)
-            {
-                schema[property.Name] = new
-                {
-                    type = metadataAttribute.Type,
-                    description = metadataAttribute.Description
-                };
-            }
-        }
-
+        var schema = typeof(T).GetJsonPropertyMetadataSchema();
         var jsonSchema = JsonSerializer.Serialize(schema);
 
         return 

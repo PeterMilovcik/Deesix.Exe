@@ -1,4 +1,4 @@
-namespace Deesix.Domain.Entities;
+namespace Deesix.Domain.Utilities;
 
 [AttributeUsage(AttributeTargets.Property)]
 public class JsonPropertyMetadataAttribute : Attribute

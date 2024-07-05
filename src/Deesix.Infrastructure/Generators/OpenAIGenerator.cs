@@ -1,4 +1,5 @@
-﻿using CSharpFunctionalExtensions;
+﻿using System.Text.Json;
+using CSharpFunctionalExtensions;
 using OpenAI.Chat;
 
 namespace Deesix.Infrastructure.Generators;
@@ -37,6 +38,22 @@ public class OpenAIGenerator(IOpenAIApiKey openAIApiKey) : IOpenAIGenerator
         catch (Exception exception)
         {
             return Result.Failure<string>("Error generating json: " + exception.Message);
+        }
+    }
+
+    public async Task<Result<T>> GenerateJsonObjectAsync<T>(string systemPrompt, string userPrompt) where T : class
+    {
+        var result = await GenerateJsonAsync(systemPrompt, userPrompt);
+        if (result.IsSuccess)
+        {
+            var obj = JsonSerializer.Deserialize<T>(result.Value);
+            return obj == null
+                ? Result.Failure<T>($"Failed to deserialize {typeof(T).Name}: {result.Value} to JSON object.")
+                : Result.Success(obj);
+        }
+        else
+        {
+            return Result.Failure<T>(result.Error);
         }
     }
 }
