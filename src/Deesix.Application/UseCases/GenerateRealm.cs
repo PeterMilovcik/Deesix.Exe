@@ -20,7 +20,7 @@ public sealed class GenerateRealm(IGenerator generator)
 
         public class GeneratedRealm
         {
-            [JsonPropertyMetadata("string", "Short, memorable name of the realm. Max. 30 characters.")]
+            [JsonPropertyMetadata("string", "Short memorable name of the realm. Max. 30 characters.")]
             public required string Name { get; init; }
             [JsonPropertyMetadata("string", "Concise description of the realm. Max. 300 characters.")]
             public required string Description { get; init; }

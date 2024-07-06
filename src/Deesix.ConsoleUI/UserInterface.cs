@@ -1,8 +1,9 @@
-﻿using Spectre.Console;
+﻿using Deesix.Application;
+using Spectre.Console;
 
 namespace Deesix.ConsoleUI;
 
-public class UserInterface
+public class UserInterface : IUserInterface
 {
     public void DisplayGameTitleAndDescription()
     {
@@ -44,4 +45,7 @@ public class UserInterface
     public void ErrorMessage(string message) => AnsiConsole.MarkupLine($"[red]{message}[/]");
 
     public void SuccessMessage(string message) => AnsiConsole.MarkupLine($"[green]{message}[/]");
+
+    public async Task<T> ShowProgressAsync<T>(string message, Func<Task<T>> func) =>
+        await AnsiConsole.Status().StartAsync(message, async ctx => await func());
 }

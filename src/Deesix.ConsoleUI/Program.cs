@@ -24,14 +24,16 @@ internal class Program
 
         try
         {
-            var ui = services.GetRequiredService<UserInterface>();
+            var ui = services.GetRequiredService<IUserInterface>();
             var openAiApiKey = services.GetRequiredService<IOpenAIApiKey>();
             var generateWorldSettings = services.GetRequiredService<GenerateWorldSettings>();
             var generateWorldDescription = services.GetRequiredService<GenerateWorldDescription>();
             var generateWorldNames = services.GetRequiredService<GenerateWorldNames>();
             var createWorld = services.GetRequiredService<CreateWorld>();
+            var createRealm = services.GetRequiredService<CreateRealm>();
             var generateRealm = services.GetRequiredService<GenerateRealm>();
             var saveWorld = services.GetRequiredService<SaveWorld>();
+            var saveRealm = services.GetRequiredService<SaveRealm>();
 
             ui.DisplayGameTitleAndDescription();
 
@@ -47,7 +49,7 @@ internal class Program
                 case newGameOption:
                     // New game
                     var worldThemes = ui.PromptThemes();
-                    var worldSettings = await GenerateWorldSettingsAsync(generateWorldSettings, worldThemes);
+                    var worldSettings = await generateWorldSettings.ExecuteAsync(worldThemes);
                     if (worldSettings.IsFailure)
                     {
                         ui.ErrorMessage($"Failed to generate world settings: {worldSettings.Error}");
@@ -77,17 +79,37 @@ internal class Program
                         return;
                     }
 
+                    var generatedRealm = await GenerateRealmAsync(generateRealm, world.Value);
+                    if (generatedRealm.IsFailure)
+                    {
+                        ui.ErrorMessage($"Failed to generate realm: {generatedRealm.Error}");
+                        return;
+                    }
+
+                    var createdRealm = createRealm.Execute(new CreateRealm.Request
+                    {
+                        WorldId = world.Value.WorldId,
+                        GeneratedRealm = generatedRealm.Value
+                    });
+                    if (createdRealm.Realm.IsFailure)
+                    {
+                        ui.ErrorMessage($"Failed to create realm: {createdRealm.Realm.Error}");
+                        return;
+                    }
+
+                    var savedRealm = await SaveRealmAsync(saveRealm, createdRealm.Realm.Value);
+                    if (savedRealm.IsFailure)
+                    {
+                        ui.ErrorMessage($"Failed to save realm: {savedRealm.Error}");
+                        return;
+                    }
+
+                    world.Value.Realms.Add(savedRealm.Value);
+
                     world = await SaveWorldAsync(saveWorld, world.Value);
                     if (world.IsFailure)
                     {
                         ui.ErrorMessage($"Failed to save world: {world.Error}");
-                        return;
-                    }
-
-                    var realm = await GenerateRealmAsync(generateRealm, world.Value);
-                    if (realm.IsFailure)
-                    {
-                        ui.ErrorMessage($"Failed to generate realm: {realm.Error}");
                         return;
                     }
 
@@ -105,16 +127,6 @@ internal class Program
             var logger = services.GetRequiredService<ILogger<Program>>();
             logger.LogError(ex, "An error occurred.");
         }
-    }
-
-    private static async Task<Result<WorldSettings>> GenerateWorldSettingsAsync(
-        GenerateWorldSettings generateWorldSettings, List<string> worldThemes)
-    {
-        var response = await AnsiConsole.Status().StartAsync(
-            "Generating world settings...",
-            async (ctx) => await generateWorldSettings.ExecuteAsync(
-                new GenerateWorldSettings.Request { WorldThemes = worldThemes }));
-        return response.WorldSettings;
     }
 
     private static async Task<Result<string>> GenerateWorldDescriptionAsync(
@@ -172,6 +184,14 @@ internal class Program
         return response.World;
     }
 
+    private static async Task<Result<Realm>> SaveRealmAsync(SaveRealm saveRealm, Realm realm)
+    {
+        var response = await AnsiConsole.Status().StartAsync(
+            "Saving realm...",
+            async (ctx) => await saveRealm.ExecuteAsync(new SaveRealm.Request { Realm = realm }));
+        return response.Realm;
+    }
+
     public static IHostBuilder CreateHostBuilder(string[] args)
     {
         var basePath = AppDomain.CurrentDomain.BaseDirectory;
@@ -187,12 +207,14 @@ internal class Program
                     configure.SetMinimumLevel(LogLevel.Warning); // Set the minimum log level to Warning
                     configure.AddFilter("Microsoft.EntityFrameworkCore.Database.Command", LogLevel.Warning);
                 });
-                services.AddSingleton<UserInterface>();
+                services.AddSingleton<IUserInterface, UserInterface>();
                 services.AddSingleton<GenerateWorldSettings>();
                 services.AddSingleton<GenerateWorldDescription>();
                 services.AddSingleton<GenerateWorldNames>();
                 services.AddSingleton<CreateWorld>();
+                services.AddSingleton<CreateRealm>();
                 services.AddSingleton<SaveWorld>();
+                services.AddSingleton<SaveRealm>();
                 services.AddSingleton<GenerateRealm>();
                 services.AddSingleton<IGenerator, Generator>();
                 services.AddSingleton<IWorldGenerator, WorldGenerator>();
@@ -203,6 +225,7 @@ internal class Program
                 services.AddSingleton<IOpenAIApiKey, OpenAIApiKey>();
                 services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite($"Data Source={dbPath}"));
                 services.AddScoped<IRepository<World>, GenericRepository<World>>();
+                services.AddScoped<IRepository<Realm>, GenericRepository<Realm>>();
             });
     }
 }

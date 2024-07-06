@@ -4,27 +4,12 @@ using Deesix.Domain.Entities;
 
 namespace Deesix.Application;
 
-public sealed class GenerateWorldSettings(IGenerator generator)
+public sealed class GenerateWorldSettings(IGenerator generator, IUserInterface userInterface)
 {
     private readonly IGenerator generator = generator ?? throw new ArgumentNullException(nameof(generator));
-
-    public sealed class Request
-    {
-        public required List<string> WorldThemes { get; init; }
-    }
     
-    public sealed class Response
-    {
-        public required Result<WorldSettings> WorldSettings { get; init; }
-    }
-    
-    public async Task<Response> ExecuteAsync(Request request) => new Response
-    {
-        WorldSettings = await generator.World.GenerateWorldSettingsAsync(request.WorldThemes)
-    };
-
-    public object Execute(Request request)
-    {
-        throw new NotImplementedException();
-    }
+    public async Task<Result<WorldSettings>> ExecuteAsync(List<string> worldThemes) => 
+        await userInterface.ShowProgressAsync(
+            "Generating world settings...", 
+            async () => await generator.World.GenerateWorldSettingsAsync(worldThemes));
 }
