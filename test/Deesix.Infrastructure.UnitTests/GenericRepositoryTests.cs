@@ -4,9 +4,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Deesix.Infrastructure.UnitTests;
 
-public class GenericRepositoryTests
+public class WorldRepositoryTests
 {
     private ApplicationDbContext context;
+    private GenericRepository<World> repository;
 
     [SetUp]
     public void Setup()
@@ -16,6 +17,7 @@ public class GenericRepositoryTests
             .Options;
         context = new ApplicationDbContext(options);
         context.Database.EnsureCreated();
+        repository = new GenericRepository<World>(context);
     }
     
     [TearDown]
@@ -29,7 +31,6 @@ public class GenericRepositoryTests
     public void AddWorldTest()
     {
         // Arrange
-        var repository = new GenericRepository<World>(context);
         var entity = new SomeWorld();        
         // Act
         var savedEntity = repository.Add(entity);

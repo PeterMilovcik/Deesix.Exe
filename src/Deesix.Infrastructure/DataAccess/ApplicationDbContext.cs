@@ -13,6 +13,11 @@ public class ApplicationDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<World>().Property(b => b.WorldSettingsJson);
+
+        modelBuilder.Entity<Realm>()
+            .HasOne<World>()
+            .WithMany(w => w.Realms)
+            .HasForeignKey(r => r.WorldId);
     }
 
     public DbSet<World> Worlds { get; set; }
