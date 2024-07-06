@@ -46,10 +46,17 @@ public class OpenAIGenerator(IOpenAIApiKey openAIApiKey) : IOpenAIGenerator
         var result = await GenerateJsonAsync(systemPrompt, userPrompt);
         if (result.IsSuccess)
         {
-            var obj = JsonSerializer.Deserialize<T>(result.Value);
-            return obj == null
-                ? Result.Failure<T>($"Failed to deserialize {typeof(T).Name}: {result.Value} to JSON object.")
-                : Result.Success(obj);
+            try
+            {
+                var obj = JsonSerializer.Deserialize<T>(result.Value);
+                return obj == null
+                    ? Result.Failure<T>($"Failed to deserialize {typeof(T).Name}: {result.Value} to JSON object. Deserialized object is null.")
+                    : Result.Success(obj);
+            }
+            catch (JsonException exception)
+            {
+                return Result.Failure<T>($"Failed to deserialize  {typeof(T).Name}: {result.Value} to JSON object. Error: {exception.Message}");
+            }
         }
         else
         {

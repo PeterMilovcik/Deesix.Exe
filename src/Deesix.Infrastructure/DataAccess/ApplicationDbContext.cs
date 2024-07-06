@@ -16,4 +16,5 @@ public class ApplicationDbContext : DbContext
     }
 
     public DbSet<World> Worlds { get; set; }
+    public DbSet<Realm> Realms { get; set; }
 }
