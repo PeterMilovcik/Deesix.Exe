@@ -57,7 +57,7 @@ internal class Program
                     }
                     ui.SuccessMessage($"World settings: {worldSettings.Value}");
 
-                    var worldDescription = await GenerateWorldDescriptionAsync(generateWorldDescription, worldSettings.Value);
+                    var worldDescription = await generateWorldDescription.ExecuteAsync(worldSettings.Value);
                     if (worldDescription.IsFailure)
                     {
                         ui.ErrorMessage($"Failed to generate world description: {worldDescription.Error}");
@@ -65,7 +65,7 @@ internal class Program
                     }
                     ui.SuccessMessage($"World description: {worldDescription.Value}");
 
-                    var worldNames = await GenerateWorldNamesAsync(generateWorldNames, worldDescription.Value, 10);
+                    var worldNames = await generateWorldNames.ExecuteAsync(worldDescription.Value, 10);
                     if (worldNames.IsFailure)
                     {
                         ui.ErrorMessage($"Failed to generate world names: {worldNames.Error}");
@@ -127,31 +127,6 @@ internal class Program
             var logger = services.GetRequiredService<ILogger<Program>>();
             logger.LogError(ex, "An error occurred.");
         }
-    }
-
-    private static async Task<Result<string>> GenerateWorldDescriptionAsync(
-        GenerateWorldDescription generateWorldDescription, WorldSettings worldSettings)
-    {
-        var response = await AnsiConsole.Status().StartAsync(
-            "Generating world description...",
-            async (ctx) => await generateWorldDescription.ExecuteAsync(
-                new GenerateWorldDescription.Request { WorldSettings = worldSettings}));
-        return response.WorldDescription;
-    }
-
-    private static async Task<Result<List<string>>> GenerateWorldNamesAsync(
-        GenerateWorldNames generateWorldNames, string worldDescription, int count)
-    {
-        var response = await AnsiConsole.Status().StartAsync(
-            "Generating world names...",
-            async (ctx) => await generateWorldNames.ExecuteAsync(
-                new GenerateWorldNames.Request 
-                { 
-                    WorldDescription = worldDescription, 
-                    Count = count
-                }));
-
-        return response.WorldNames;
     }
 
     private static async Task<Result<GenerateRealm.Response.GeneratedRealm>> GenerateRealmAsync(
