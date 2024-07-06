@@ -29,8 +29,6 @@ internal class Program
             var generateWorldSettings = services.GetRequiredService<GenerateWorldSettings>();
             var generateWorldDescription = services.GetRequiredService<GenerateWorldDescription>();
             var generateWorldNames = services.GetRequiredService<GenerateWorldNames>();
-            var createWorld = services.GetRequiredService<CreateWorld>();
-            var createRealm = services.GetRequiredService<CreateRealm>();
             var generateRealm = services.GetRequiredService<GenerateRealm>();
             var saveWorld = services.GetRequiredService<SaveWorld>();
             var saveRealm = services.GetRequiredService<SaveRealm>();
@@ -79,25 +77,21 @@ internal class Program
                         WorldSettings = worldSettings.Value,
                     };
 
-                    var generatedRealm = await GenerateRealmAsync(generateRealm, world);
+                    var generatedRealm = await generateRealm.ExecuteAsync(world);
                     if (generatedRealm.IsFailure)
                     {
                         ui.ErrorMessage($"Failed to generate realm: {generatedRealm.Error}");
                         return;
                     }
 
-                    var createdRealm = createRealm.Execute(new CreateRealm.Request
+                    var createdRealm = new Realm
                     {
                         WorldId = world.WorldId,
-                        GeneratedRealm = generatedRealm.Value
-                    });
-                    if (createdRealm.Realm.IsFailure)
-                    {
-                        ui.ErrorMessage($"Failed to create realm: {createdRealm.Realm.Error}");
-                        return;
-                    }
+                        Name = generatedRealm.Value.Name,
+                        Description = generatedRealm.Value.Description,
+                    };
 
-                    var savedRealm = await SaveRealmAsync(saveRealm, createdRealm.Realm.Value);
+                    var savedRealm = await saveRealm.ExecuteAsync(createdRealm);
                     if (savedRealm.IsFailure)
                     {
                         ui.ErrorMessage($"Failed to save realm: {savedRealm.Error}");
@@ -106,7 +100,7 @@ internal class Program
 
                     world.Realms.Add(savedRealm.Value);
 
-                    var savedWorld = await SaveWorldAsync(saveWorld, world);
+                    var savedWorld = await saveWorld.ExecuteAsync(world);
                     if (savedWorld.IsFailure)
                     {
                         ui.ErrorMessage($"Failed to save world: {savedWorld.Error}");
@@ -129,32 +123,6 @@ internal class Program
         }
     }
 
-    private static async Task<Result<GenerateRealm.Response.GeneratedRealm>> GenerateRealmAsync(
-        GenerateRealm generateRealm, World world)
-    {
-        var response = await AnsiConsole.Status().StartAsync(
-            "Generating realm...",
-            async (ctx) => await generateRealm.ExecuteAsync(
-                new GenerateRealm.Request { World = world }));
-        return response.Realm;
-    }
-
-    private static async Task<Result<World>> SaveWorldAsync(SaveWorld saveWorld, World world)
-    {
-        var response = await AnsiConsole.Status().StartAsync(
-            "Saving world...",
-            async (ctx) => await saveWorld.ExecuteAsync(new SaveWorld.Request { World = world }));
-        return response.World;
-    }
-
-    private static async Task<Result<Realm>> SaveRealmAsync(SaveRealm saveRealm, Realm realm)
-    {
-        var response = await AnsiConsole.Status().StartAsync(
-            "Saving realm...",
-            async (ctx) => await saveRealm.ExecuteAsync(new SaveRealm.Request { Realm = realm }));
-        return response.Realm;
-    }
-
     public static IHostBuilder CreateHostBuilder(string[] args)
     {
         var basePath = AppDomain.CurrentDomain.BaseDirectory;
@@ -174,8 +142,6 @@ internal class Program
                 services.AddSingleton<GenerateWorldSettings>();
                 services.AddSingleton<GenerateWorldDescription>();
                 services.AddSingleton<GenerateWorldNames>();
-                services.AddSingleton<CreateWorld>();
-                services.AddSingleton<CreateRealm>();
                 services.AddSingleton<SaveWorld>();
                 services.AddSingleton<SaveRealm>();
                 services.AddSingleton<GenerateRealm>();

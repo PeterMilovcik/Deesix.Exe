@@ -4,32 +4,23 @@ using Deesix.Domain.Entities;
 
 namespace Deesix.Application.UseCases;
 
-public sealed class SaveWorld(IRepository<World> repository)
+public sealed class SaveWorld(IRepository<World> repository, IUserInterface userInterface)
 {
     private readonly IRepository<World> repository = repository;
-
-    public sealed class Request
-    {
-        public required World World { get; init; }
-    }
-
-    public sealed class Response
-    {
-        public required Result<World> World { get; init; }
-    }
-
-    public Task<Response> ExecuteAsync(Request request)
+    private readonly IUserInterface userInterface = userInterface;
+    
+    public Task<Result<World>> ExecuteAsync(World world)
     {
         try
         {
-            var savedWorld = repository.Add(request.World);
+            var savedWorld = repository.Add(world);
             return Task.FromResult(savedWorld is not null
-                ? new Response { World = Result.Success(savedWorld) }
-                : new Response { World = Result.Failure<World>("Error saving world") });
+                ? Result.Success(savedWorld)
+                : Result.Failure<World>("Error saving world"));
         }
         catch (Exception exception)
         {
-            return Task.FromResult(new Response { World = Result.Failure<World>($"Error saving world: {exception.Message}") });
+            return Task.FromResult(Result.Failure<World>($"Error saving world: {exception.Message}"));
         }
     }
 }

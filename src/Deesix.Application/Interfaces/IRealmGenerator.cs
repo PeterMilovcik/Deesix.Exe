@@ -1,6 +1,9 @@
+using CSharpFunctionalExtensions;
+using Deesix.Domain.Entities;
+
 namespace Deesix.Application.Interfaces;
 
 public interface IRealmGenerator
 {
-    Task<GenerateRealm.Response> GenerateRealmAsync(GenerateRealm.Request request);
+    Task<Result<GenerateRealm.GeneratedRealm>> GenerateRealmAsync(World world);
 }

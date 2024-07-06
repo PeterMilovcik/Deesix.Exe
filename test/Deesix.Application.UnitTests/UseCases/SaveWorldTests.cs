@@ -15,7 +15,8 @@ public class SaveWorldTests
     public void Setup()
     {
         mockRepository = new Mock<IRepository<World>>();
-        saveWorld = new SaveWorld(mockRepository.Object);
+        var userInterface = new Mock<IUserInterface>().Object;
+        saveWorld = new SaveWorld(mockRepository.Object, userInterface);
     }
 
     [Test]
@@ -28,16 +29,15 @@ public class SaveWorldTests
             Description = "Some Description",
             WorldSettings = new SomeWorldSettings()
         };
-        var request = new SaveWorld.Request { World = world };
         mockRepository.Setup(x => x.Add(It.IsAny<World>())).Returns(world);
 
         // Act
-        var response = await saveWorld.ExecuteAsync(request);
+        var result = await saveWorld.ExecuteAsync(world);
 
         // Assert
-        Assert.That(response.World.IsSuccess, 
+        Assert.That(result.IsSuccess, 
             $"Expected the result to be successful.");
-        Assert.That(response.World.Value, Is.EqualTo(world), 
+        Assert.That(result.Value, Is.EqualTo(world), 
             $"Expected the saved world to be the same as the input world.");
     }
 

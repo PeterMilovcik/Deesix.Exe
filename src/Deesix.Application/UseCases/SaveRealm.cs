@@ -4,32 +4,26 @@ using Deesix.Domain.Entities;
 
 namespace Deesix.Application.UseCases;
 
-public sealed class SaveRealm(IRepository<Realm> repository)
+public sealed class SaveRealm(IRepository<Realm> repository, IUserInterface userInterface)
 {
     private readonly IRepository<Realm> repository = repository;
-
-    public sealed class Request
-    {
-        public required Realm Realm { get; init; }
-    }
-
-    public sealed class Response
-    {
-        public required Result<Realm> Realm { get; init; }
-    }
-
-    public Task<Response> ExecuteAsync(Request request)
+    private readonly IUserInterface userInterface = userInterface;
+    
+    public async Task<Result<Realm>> ExecuteAsync(Realm realm)
     {
         try
         {
-            var savedRealm = repository.Add(request.Realm);
-            return Task.FromResult(savedRealm is not null
-                ? new Response { Realm = Result.Success(savedRealm) }
-                : new Response { Realm = Result.Failure<Realm>("Error saving realm") });
+            return await userInterface.ShowProgressAsync("Saving realm...", () => 
+            {
+                var savedRealm = repository.Add(realm);
+                return Task.FromResult(savedRealm is not null
+                    ? Result.Success(savedRealm)
+                    : Result.Failure<Realm>("Error saving realm"));
+            });
         }
         catch (Exception exception)
         {
-            return Task.FromResult(new Response { Realm = Result.Failure<Realm>($"Error saving realm: {exception.Message}") });
+            return Result.Failure<Realm>($"Error saving realm: {exception.Message}");
         }
     }
 }

@@ -10,15 +10,9 @@ public class RealmGenerator(IOpenAIGenerator openAIGenerator) : IRealmGenerator
 {
     private readonly IOpenAIGenerator openAIGenerator = openAIGenerator;
 
-    public async Task<GenerateRealm.Response> GenerateRealmAsync(GenerateRealm.Request request) => 
-        new GenerateRealm.Response
-        {
-            Realm = await GenerateRealmAsync(request.World)
-        };
-
-    private async Task<Result<GenerateRealm.Response.GeneratedRealm>> GenerateRealmAsync(World world)
+    public async Task<Result<GenerateRealm.GeneratedRealm>> GenerateRealmAsync(World world)
     {
-        var jsonSchema = typeof(GenerateRealm.Response.GeneratedRealm).GetJsonPropertyMetadataSchema();
+        var jsonSchema = typeof(GenerateRealm.GeneratedRealm).GetJsonPropertyMetadataSchema();
 
         var systemPrompt = $"You are a fictional writer tasked with creating a vivid and immersive realm within a world." + 
             "I ask you for specific realm within a world, and you will generate it in JSON object format. " +
@@ -32,6 +26,6 @@ public class RealmGenerator(IOpenAIGenerator openAIGenerator) : IRealmGenerator
             "Avoid mentioning the realm name and refrain from using bold markdown. " + 
             "Focus entirely on bringing the realm to life.";
         
-        return await openAIGenerator.GenerateJsonObjectAsync<GenerateRealm.Response.GeneratedRealm>(systemPrompt, userPrompt);
+        return await openAIGenerator.GenerateJsonObjectAsync<GenerateRealm.GeneratedRealm>(systemPrompt, userPrompt);
     }
 }
