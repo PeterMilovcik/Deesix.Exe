@@ -72,14 +72,14 @@ internal class Program
                         return;
                     }
                     var worldName = ui.SelectFromOptions("[green]Select a world name[/]", worldNames.Value);
-                    var world = await CreateWorldAsync(createWorld, worldSettings.Value, worldDescription.Value, worldName);
-                    if (world.IsFailure)
+                    var world = new World
                     {
-                        ui.ErrorMessage($"Failed to create world: {world.Error}");
-                        return;
-                    }
+                        Name = worldName,
+                        Description = worldDescription.Value,
+                        WorldSettings = worldSettings.Value,
+                    };
 
-                    var generatedRealm = await GenerateRealmAsync(generateRealm, world.Value);
+                    var generatedRealm = await GenerateRealmAsync(generateRealm, world);
                     if (generatedRealm.IsFailure)
                     {
                         ui.ErrorMessage($"Failed to generate realm: {generatedRealm.Error}");
@@ -88,7 +88,7 @@ internal class Program
 
                     var createdRealm = createRealm.Execute(new CreateRealm.Request
                     {
-                        WorldId = world.Value.WorldId,
+                        WorldId = world.WorldId,
                         GeneratedRealm = generatedRealm.Value
                     });
                     if (createdRealm.Realm.IsFailure)
@@ -104,12 +104,12 @@ internal class Program
                         return;
                     }
 
-                    world.Value.Realms.Add(savedRealm.Value);
+                    world.Realms.Add(savedRealm.Value);
 
-                    world = await SaveWorldAsync(saveWorld, world.Value);
-                    if (world.IsFailure)
+                    var savedWorld = await SaveWorldAsync(saveWorld, world);
+                    if (savedWorld.IsFailure)
                     {
-                        ui.ErrorMessage($"Failed to save world: {world.Error}");
+                        ui.ErrorMessage($"Failed to save world: {savedWorld.Error}");
                         return;
                     }
 
@@ -137,18 +137,6 @@ internal class Program
             async (ctx) => await generateRealm.ExecuteAsync(
                 new GenerateRealm.Request { World = world }));
         return response.Realm;
-    }
-
-    private static async Task<Result<World>> CreateWorldAsync(
-        CreateWorld createWorld, WorldSettings worldSettings, string worldDescription, string worldName)
-    {
-        var response = await createWorld.ExecuteAsync(new CreateWorld.Request
-        {
-            WorldName = worldName,
-            WorldDescription = worldDescription,
-            WorldSettings = worldSettings
-        });
-        return response.World;
     }
 
     private static async Task<Result<World>> SaveWorldAsync(SaveWorld saveWorld, World world)
