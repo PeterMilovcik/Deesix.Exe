@@ -12,6 +12,11 @@
   </ItemGroup>
 
   <PropertyGroup>
+    <OutputPath>../../bin/$(Configuration)</OutputPath>
+    <BaseOutputPath>../../bin/</BaseOutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>

@@ -25,6 +25,7 @@ internal class Program
         try
         {
             var ui = services.GetRequiredService<UserInterface>();
+            var openAiApiKey = services.GetRequiredService<IOpenAIApiKey>();
             var generateWorldSettings = services.GetRequiredService<GenerateWorldSettings>();
             var generateWorldDescription = services.GetRequiredService<GenerateWorldDescription>();
             var generateWorldNames = services.GetRequiredService<GenerateWorldNames>();
@@ -33,6 +34,8 @@ internal class Program
             var saveWorld = services.GetRequiredService<SaveWorld>();
 
             ui.DisplayGameTitleAndDescription();
+
+            openAiApiKey.CheckOpenAiApiKey();
 
             const string newGameOption = "New Game";
             const string loadGameOption = "Load Game";
@@ -169,11 +172,21 @@ internal class Program
         return response.World;
     }
 
-    public static IHostBuilder CreateHostBuilder(string[] args) =>
-        Host.CreateDefaultBuilder(args)
+    public static IHostBuilder CreateHostBuilder(string[] args)
+    {
+        var basePath = AppDomain.CurrentDomain.BaseDirectory;
+        var dbPath = Path.Combine(basePath, "database.db");
+
+        return Host.CreateDefaultBuilder(args)
             .ConfigureServices((hostContext, services) =>
             {
-                services.AddLogging(configure => configure.AddConsole());
+                services.AddLogging(configure => 
+                {
+                    configure.ClearProviders(); // Clears default logging providers
+                    configure.AddConsole();
+                    configure.SetMinimumLevel(LogLevel.Warning); // Set the minimum log level to Warning
+                    configure.AddFilter("Microsoft.EntityFrameworkCore.Database.Command", LogLevel.Warning);
+                });
                 services.AddSingleton<UserInterface>();
                 services.AddSingleton<GenerateWorldSettings>();
                 services.AddSingleton<GenerateWorldDescription>();
@@ -188,7 +201,8 @@ internal class Program
                 services.AddSingleton<ILocationGenerator, LocationGenerator>();
                 services.AddSingleton<IOpenAIGenerator, OpenAIGenerator>();
                 services.AddSingleton<IOpenAIApiKey, OpenAIApiKey>();
-                services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite("Data Source=database.db"));
+                services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite($"Data Source={dbPath}"));
                 services.AddScoped<IRepository<World>, GenericRepository<World>>();
             });
+    }
 }

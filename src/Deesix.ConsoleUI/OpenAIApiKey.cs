@@ -1,4 +1,5 @@
-﻿using Deesix.Infrastructure;
+﻿using CSharpFunctionalExtensions;
+using Deesix.Infrastructure;
 using Spectre.Console;
 using System.Text.Json;
 
@@ -83,5 +84,16 @@ internal class OpenAIApiKey : IOpenAIApiKey
         var openAiJsonText = JsonSerializer.Serialize(openAiJson, new JsonSerializerOptions { WriteIndented = true });
         File.WriteAllText(openAiFilePath, openAiJsonText);
         AnsiConsole.MarkupLine($"[gray]'{OpenAiFileName}' file created in the base directory.[/]");
+    }
+
+    public Result CheckOpenAiApiKey()
+    {
+        var openAiFilePath = Path.Combine(baseDirectory, OpenAiFileName);
+        var openAiApiKey = !File.Exists(openAiFilePath) 
+            ? ReadFromConsoleAndSaveToFile(openAiFilePath) 
+            : ReadFromFile(openAiFilePath);
+        return string.IsNullOrWhiteSpace(openAiApiKey) || !openAiApiKey.StartsWith("sk-")
+            ? Result.Failure("OpenAI API key is invalid")
+            : Result.Success();
     }
 }

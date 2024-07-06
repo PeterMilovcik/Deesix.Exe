@@ -5,6 +5,11 @@
     <ProjectReference Include="..\Deesix.Domain\Deesix.Domain.csproj" />
   </ItemGroup>
 
+  <PropertyGroup>
+    <OutputPath>../../bin/$(Configuration)</OutputPath>
+    <BaseOutputPath>../../bin/</BaseOutputPath>
+  </PropertyGroup>
+
   <ItemGroup>
     <Folder Include="Configuration\" />
     <Folder Include="FileAccess\" />
@@ -14,7 +19,15 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.6" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.6">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.6" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.6">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
     <PackageReference Include="OpenAI" Version="2.0.0-beta.5" />
   </ItemGroup>
 

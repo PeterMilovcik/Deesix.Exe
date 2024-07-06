@@ -6,6 +6,12 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <OutputPath>../../bin/$(Configuration)</OutputPath>
+    <BaseOutputPath>../../bin/</BaseOutputPath>
+  </PropertyGroup>
+
+
   <ItemGroup>
     <Folder Include="Enums\" />
     <Folder Include="Exceptions\" />
