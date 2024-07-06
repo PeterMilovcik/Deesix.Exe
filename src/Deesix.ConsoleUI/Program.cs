@@ -1,7 +1,5 @@
-﻿using CSharpFunctionalExtensions;
-using Deesix.Application;
+﻿using Deesix.Application;
 using Deesix.Application.Interfaces;
-using Deesix.Application.UseCases;
 using Deesix.ConsoleUI;
 using Deesix.Domain.Entities;
 using Deesix.Infrastructure;
@@ -11,7 +9,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Spectre.Console;
 
 internal class Program
 {
@@ -26,12 +23,10 @@ internal class Program
         {
             var ui = services.GetRequiredService<IUserInterface>();
             var openAiApiKey = services.GetRequiredService<IOpenAIApiKey>();
-            var generateWorldSettings = services.GetRequiredService<GenerateWorldSettings>();
-            var generateWorldDescription = services.GetRequiredService<GenerateWorldDescription>();
-            var generateWorldNames = services.GetRequiredService<GenerateWorldNames>();
-            var generateRealm = services.GetRequiredService<GenerateRealm>();
-            var saveWorld = services.GetRequiredService<SaveWorld>();
-            var saveRealm = services.GetRequiredService<SaveRealm>();
+            var worldRepository = services.GetRequiredService<IRepository<World>>();
+            var realmRepository = services.GetRequiredService<IRepository<Realm>>();
+            var generator = services.GetRequiredService<IGenerator>();
+            var newGame = services.GetRequiredService<NewGame>();
 
             ui.DisplayGameTitleAndDescription();
 
@@ -45,68 +40,7 @@ internal class Program
             switch (menu)
             {
                 case newGameOption:
-                    // New game
-                    var worldThemes = ui.PromptThemes();
-                    var worldSettings = await generateWorldSettings.ExecuteAsync(worldThemes);
-                    if (worldSettings.IsFailure)
-                    {
-                        ui.ErrorMessage($"Failed to generate world settings: {worldSettings.Error}");
-                        return;
-                    }
-                    ui.SuccessMessage($"World settings: {worldSettings.Value}");
-
-                    var worldDescription = await generateWorldDescription.ExecuteAsync(worldSettings.Value);
-                    if (worldDescription.IsFailure)
-                    {
-                        ui.ErrorMessage($"Failed to generate world description: {worldDescription.Error}");
-                        return;
-                    }
-                    ui.SuccessMessage($"World description: {worldDescription.Value}");
-
-                    var worldNames = await generateWorldNames.ExecuteAsync(worldDescription.Value, 10);
-                    if (worldNames.IsFailure)
-                    {
-                        ui.ErrorMessage($"Failed to generate world names: {worldNames.Error}");
-                        return;
-                    }
-                    var worldName = ui.SelectFromOptions("[green]Select a world name[/]", worldNames.Value);
-                    var world = new World
-                    {
-                        Name = worldName,
-                        Description = worldDescription.Value,
-                        WorldSettings = worldSettings.Value,
-                    };
-
-                    var generatedRealm = await generateRealm.ExecuteAsync(world);
-                    if (generatedRealm.IsFailure)
-                    {
-                        ui.ErrorMessage($"Failed to generate realm: {generatedRealm.Error}");
-                        return;
-                    }
-
-                    var createdRealm = new Realm
-                    {
-                        WorldId = world.WorldId,
-                        Name = generatedRealm.Value.Name,
-                        Description = generatedRealm.Value.Description,
-                    };
-
-                    var savedRealm = await saveRealm.ExecuteAsync(createdRealm);
-                    if (savedRealm.IsFailure)
-                    {
-                        ui.ErrorMessage($"Failed to save realm: {savedRealm.Error}");
-                        return;
-                    }
-
-                    world.Realms.Add(savedRealm.Value);
-
-                    var savedWorld = await saveWorld.ExecuteAsync(world);
-                    if (savedWorld.IsFailure)
-                    {
-                        ui.ErrorMessage($"Failed to save world: {savedWorld.Error}");
-                        return;
-                    }
-
+                    await newGame.ExecuteAsync();
                     break;
                 case loadGameOption:
                     // Load game
@@ -139,12 +73,6 @@ internal class Program
                     configure.AddFilter("Microsoft.EntityFrameworkCore.Database.Command", LogLevel.Warning);
                 });
                 services.AddSingleton<IUserInterface, UserInterface>();
-                services.AddSingleton<GenerateWorldSettings>();
-                services.AddSingleton<GenerateWorldDescription>();
-                services.AddSingleton<GenerateWorldNames>();
-                services.AddSingleton<SaveWorld>();
-                services.AddSingleton<SaveRealm>();
-                services.AddSingleton<GenerateRealm>();
                 services.AddSingleton<IGenerator, Generator>();
                 services.AddSingleton<IWorldGenerator, WorldGenerator>();
                 services.AddSingleton<IRealmGenerator, RealmGenerator>();
@@ -155,6 +83,7 @@ internal class Program
                 services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite($"Data Source={dbPath}"));
                 services.AddScoped<IRepository<World>, GenericRepository<World>>();
                 services.AddScoped<IRepository<Realm>, GenericRepository<Realm>>();
+                services.AddSingleton<NewGame>();
             });
     }
 }

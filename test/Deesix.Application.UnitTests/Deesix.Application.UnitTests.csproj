@@ -30,4 +30,8 @@
     <ProjectReference Include="..\..\src\Deesix.Domain\Deesix.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="UseCases\" />
+  </ItemGroup>
+
 </Project>

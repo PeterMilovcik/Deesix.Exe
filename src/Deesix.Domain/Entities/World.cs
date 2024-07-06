@@ -20,4 +20,6 @@ public class World : IEntity
                 : null;
         set => WorldSettingsJson = JsonSerializer.Serialize(value);
     }
+
+    public override string ToString() => $"World[Id: {Id}, WorldId: {WorldId}, Name: {Name}]";
 }

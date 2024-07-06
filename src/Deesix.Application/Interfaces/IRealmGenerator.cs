@@ -5,5 +5,5 @@ namespace Deesix.Application.Interfaces;
 
 public interface IRealmGenerator
 {
-    Task<Result<GenerateRealm.GeneratedRealm>> GenerateRealmAsync(World world);
+    Task<Result<GeneratedRealm>> GenerateRealmAsync(World world);
 }
