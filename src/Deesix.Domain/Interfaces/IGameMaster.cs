@@ -11,20 +11,3 @@ public interface IGameMaster
     IGameOption[] GetOptions();
     Task ProcessOptionAsync(IGameOption option);
 }
-
-public class GameOptionResult
-{
-    public string ResultMessage { get; }
-
-    public GameOptionResult(string resultMessage)
-    {
-        ResultMessage = resultMessage;
-    }
-}
-
-public interface IGameOption
-{
-    string Description { get; }
-
-    bool CanExecute(Maybe<Game> game);
-}

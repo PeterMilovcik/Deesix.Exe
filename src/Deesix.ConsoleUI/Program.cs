@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Spectre.Console;
 
 internal class Program
 {
@@ -16,7 +17,7 @@ internal class Program
         }
         catch (Exception exception)
         {
-            Console.WriteLine(exception.Message);
+            AnsiConsole.MarkupLine($"[red]An error occurred: {exception.Message}[/]");
         }
     }
 }

@@ -3,6 +3,7 @@ using Deesix.Application.GameOptions;
 using Deesix.Application.Interfaces;
 using Deesix.Domain.Entities;
 using Deesix.Domain.Interfaces;
+using Spectre.Console;
 
 internal class GameLoop(IGameMaster gameMaster, IRepository<Game> gameRepository)
 {
@@ -12,48 +13,34 @@ internal class GameLoop(IGameMaster gameMaster, IRepository<Game> gameRepository
     public async Task StartAsync()
     {
         int turn = 1;
-        while(true)
+        IGameOption? gameOption = null;
+        while (gameOption is not ExitGameOption)
         {
-            Console.WriteLine($"Turn: {turn}");
-            Console.WriteLine($"Game Master says: {gameMaster.GetMessage()}");
-            Console.WriteLine($"Game Master asks: {gameMaster.GetQuestion()}");
-
-            // Call GetOptions() and show them to the console
-            IGameOption[] options = gameMaster.GetOptions();
-            for (int i = 0; i < options.Length; i++)
-            {
-                if (options[i].CanExecute(gameMaster.Game))
-                {
-                    Console.WriteLine($"{i + 1}. {options[i].Description}");
-                }
-            }
-
-            // Read the input from the user - player for these options
-            int selectedOption;
-            if (int.TryParse(Console.ReadLine(), out selectedOption) && selectedOption > 0 && selectedOption <= options.Length)
-            {
-                var option = options[selectedOption - 1];
-                if (option.CanExecute(gameMaster.Game))
-                {
-                    await gameMaster.ProcessOptionAsync(option);
-                    if (option is ExitGameOption)
-                    {
-                        break;
-                    }
-                }
-                else
-                {
-                    Console.WriteLine("This option cannot be executed right now.");
-                }
-            }
-            else
-            {
-                Console.WriteLine("Invalid option, please try again.");
-            }
-
+            DisplayGameState(turn);
+            gameOption = SelectGameOption();
+            await gameMaster.ProcessOptionAsync(gameOption);
             gameMaster.Game.Execute(game => gameRepository.Update(game));
-            
             turn++;
         }
+    }
+
+    private IGameOption SelectGameOption()
+    {
+        var options = gameMaster.GetOptions();
+
+        var option = AnsiConsole.Prompt(
+            new SelectionPrompt<IGameOption>()
+                .UseConverter(option => option.Description)
+                .Title(gameMaster.GetQuestion())
+                .PageSize(10)
+                .MoreChoicesText("[grey](Move up and down to reveal more choices)[/]")
+                .AddChoices(options));
+        return option;
+    }
+
+    private void DisplayGameState(int turn)
+    {
+        AnsiConsole.Write(new Rule($"Turn {turn}") { Justification = Justify.Left });
+        AnsiConsole.MarkupLine($"[bold]Game Master says[/]: {gameMaster.GetMessage()}");
     }
 }
