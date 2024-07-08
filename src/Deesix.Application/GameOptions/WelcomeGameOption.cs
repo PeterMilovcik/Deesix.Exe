@@ -1,7 +1,8 @@
 using CSharpFunctionalExtensions;
+using Deesix.Domain.Entities;
 using Deesix.Domain.Interfaces;
 
-namespace Deesix.Domain.Entities;
+namespace Deesix.Application.GameOptions;
 
 public sealed class WelcomeGameOption : IGameOption
 {

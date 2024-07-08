@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Deesix.ConsoleUI;
 using Deesix.Domain.Interfaces;
+using Deesix.Application.GameOptions;
 
 internal static class ServiceCollectionExtensions
 {
