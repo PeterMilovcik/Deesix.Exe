@@ -3,8 +3,9 @@ using Deesix.Domain.Interfaces;
 
 namespace Deesix.Domain.Entities;
 
-public sealed class GameMaster : IGameMaster
+public sealed class GameMaster(IEnumerable<IGameOption> gameOptions) : IGameMaster
 {
+    private readonly IEnumerable<IGameOption> gameOptions = gameOptions ?? Array.Empty<IGameOption>();
     private string message = "Message from the Game Master";
     public Maybe<Game> Game { get; } = Maybe<Game>.None;
 
@@ -22,12 +23,7 @@ public sealed class GameMaster : IGameMaster
 
     public IGameOption[] GetOptions()
     {
-        return
-        [
-            new GameOption("Option 1"),
-            new GameOption("Option 2"),
-            new GameOption("Option 3"),
-        ];
+        return gameOptions.ToArray();
     }
 
     public string GetQuestion() => "Question from the Game Master";
@@ -38,11 +34,4 @@ public sealed class GameMaster : IGameMaster
         message = gameOptionResult.ResultMessage;
         return Task.CompletedTask;
     }
-}
-
-internal class GameOption(string description) : IGameOption
-{
-    public string Description { get; } = description;
-
-    public bool CanExecute(Maybe<Game> game) => true;
 }

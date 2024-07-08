@@ -1,3 +1,4 @@
+using CSharpFunctionalExtensions;
 using Deesix.Application.Interfaces;
 using Deesix.Domain.Entities;
 using Deesix.Domain.Interfaces;
@@ -44,6 +45,8 @@ internal class GameLoop(IGameMaster gameMaster, IRepository<Game> gameRepository
             {
                 Console.WriteLine("Invalid option, please try again.");
             }
+
+            gameMaster.Game.Execute(game => gameRepository.Update(game));
             
             turn++;
         }
