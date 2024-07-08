@@ -1,4 +1,5 @@
 using CSharpFunctionalExtensions;
+using Deesix.Application.GameOptions;
 using Deesix.Application.Interfaces;
 using Deesix.Domain.Entities;
 using Deesix.Domain.Interfaces;
@@ -35,6 +36,10 @@ internal class GameLoop(IGameMaster gameMaster, IRepository<Game> gameRepository
                 if (option.CanExecute(gameMaster.Game))
                 {
                     await gameMaster.ProcessOptionAsync(option);
+                    if (option is ExitGameOption)
+                    {
+                        break;
+                    }
                 }
                 else
                 {
