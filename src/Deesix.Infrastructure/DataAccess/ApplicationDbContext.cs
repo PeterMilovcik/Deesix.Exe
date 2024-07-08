@@ -11,17 +11,27 @@ public class ApplicationDbContext : DbContext
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
+    {        
+        // Game
+        modelBuilder.Entity<Game>().HasKey(g => g.GameId);
+
+        // Character
+        modelBuilder.Entity<Character>().HasKey(c => c.CharacterId);
+
+        // World
         modelBuilder.Entity<World>().HasKey(w => w.WorldId);
         modelBuilder.Entity<World>().Property(b => b.WorldSettingsJson);
-        modelBuilder.Entity<World>().Property(w => w.WorldId).ValueGeneratedOnAdd();
 
+        // Realm
+        modelBuilder.Entity<Realm>().HasKey(r => r.RealmId);
         modelBuilder.Entity<Realm>()
             .HasOne<World>()
             .WithMany(w => w.Realms)
             .HasForeignKey(r => r.WorldId);
     }
 
+    public DbSet<Game> Games { get; set; }
+    public DbSet<Character> Characters { get; set; }
     public DbSet<World> Worlds { get; set; }
     public DbSet<Realm> Realms { get; set; }
 }

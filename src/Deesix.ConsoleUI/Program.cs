@@ -14,7 +14,12 @@ internal class Program
 {
     private static async Task Main(string[] args)
     {
-        var host = CreateHostBuilder(args).Build();
+        var host = Host
+            .CreateDefaultBuilder(args)
+            .ConfigureServices((hostContext, services) => services.AddDeesix()).Build();
+
+        var gameLoop = host.Services.GetRequiredService<GameLoop>();
+        await gameLoop.StartAsync();
 
         using var serviceScope = host.Services.CreateScope();
         var services = serviceScope.ServiceProvider;
@@ -55,35 +60,5 @@ internal class Program
             var logger = services.GetRequiredService<ILogger<Program>>();
             logger.LogError(ex, "An error occurred.");
         }
-    }
-
-    public static IHostBuilder CreateHostBuilder(string[] args)
-    {
-        var basePath = AppDomain.CurrentDomain.BaseDirectory;
-        var dbPath = Path.Combine(basePath, "database.db");
-
-        return Host.CreateDefaultBuilder(args)
-            .ConfigureServices((hostContext, services) =>
-            {
-                services.AddLogging(configure => 
-                {
-                    configure.ClearProviders(); // Clears default logging providers
-                    configure.AddConsole();
-                    configure.SetMinimumLevel(LogLevel.Warning); // Set the minimum log level to Warning
-                    configure.AddFilter("Microsoft.EntityFrameworkCore.Database.Command", LogLevel.Warning);
-                });
-                services.AddSingleton<IUserInterface, UserInterface>();
-                services.AddSingleton<IGenerator, Generator>();
-                services.AddSingleton<IWorldGenerator, WorldGenerator>();
-                services.AddSingleton<IRealmGenerator, RealmGenerator>();
-                services.AddSingleton<IRegionGenerator, RegionGenerator>();
-                services.AddSingleton<ILocationGenerator, LocationGenerator>();
-                services.AddSingleton<IOpenAIGenerator, OpenAIGenerator>();
-                services.AddSingleton<IOpenAIApiKey, OpenAIApiKey>();
-                services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite($"Data Source={dbPath}"));
-                services.AddScoped<IRepository<World>, GenericRepository<World>>();
-                services.AddScoped<IRepository<Realm>, GenericRepository<Realm>>();
-                services.AddSingleton<NewGame>();
-            });
     }
 }

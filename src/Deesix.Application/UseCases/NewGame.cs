@@ -40,7 +40,7 @@ public class NewGame(
             "Generating world names...", 
             async () => await generator.World.GenerateWorldNamesAsync(worldDescription, 10));
         var worldName = userInterface.SelectFromOptions("[green]Select a world name[/]", worldNames);
-        var createdWorld = new World
+        var createdWorld = new World()
         {
             Name = worldName,
             Description = worldDescription,

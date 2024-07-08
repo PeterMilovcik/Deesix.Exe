@@ -4,7 +4,7 @@ using Deesix.Domain.Entities;
 
 namespace Deesix.Infrastructure.UnitTests;
 
-public class SomeWorld : World
+public record SomeWorld : World
 {
     [SetsRequiredMembers]
     public SomeWorld()
