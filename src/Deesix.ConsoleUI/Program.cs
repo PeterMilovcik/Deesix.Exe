@@ -20,6 +20,7 @@ internal class Program
 
         var gameLoop = host.Services.GetRequiredService<GameLoop>();
         await gameLoop.StartAsync();
+        return;
 
         using var serviceScope = host.Services.CreateScope();
         var services = serviceScope.ServiceProvider;
