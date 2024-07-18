@@ -53,3 +53,5 @@ dotnet tool update --global dotnet-ef
 ```
 
 This guide is designed to facilitate the use of EF Core commands from the root of your repository, making it more convenient and ensuring a smooth workflow with .NET 8. Adjust the guide as needed based on the specifics of your environment and project configurations.
+
+---
