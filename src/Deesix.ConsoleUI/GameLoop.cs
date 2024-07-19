@@ -7,8 +7,10 @@ using Spectre.Console;
 
 internal class GameLoop(IGameMaster gameMaster, IRepository<Game> gameRepository)
 {
-    private readonly IGameMaster gameMaster = gameMaster ?? throw new ArgumentNullException(nameof(gameMaster));
-    private readonly IRepository<Game> gameRepository = gameRepository ?? throw new ArgumentNullException(nameof(gameRepository));
+    private readonly IGameMaster gameMaster = gameMaster ?? 
+        throw new ArgumentNullException(nameof(gameMaster));
+    private readonly IRepository<Game> gameRepository = gameRepository ?? 
+        throw new ArgumentNullException(nameof(gameRepository));
 
     public async Task StartAsync()
     {
