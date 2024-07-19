@@ -6,7 +6,7 @@ public interface IRepository<TEntity> where TEntity : class
 {
     TEntity Add(TEntity entity);
     void AddRange(IEnumerable<TEntity> entity);
-    TEntity? GetId(int id);
+    TEntity? GetById(int id);
     Task<TEntity?> GetIdAsync(int id);
     TEntity? Get(Expression<Func<TEntity, bool>> predicate);
     Task<TEntity?> GetAsync(Expression<Func<TEntity, bool>> predicate);

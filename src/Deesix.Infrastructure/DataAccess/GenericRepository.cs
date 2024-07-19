@@ -21,7 +21,7 @@ public sealed class GenericRepository<TEntity>(ApplicationDbContext applicationD
         context.SaveChanges();
     }
 
-    public TEntity? GetId(int id) => 
+    public TEntity? GetById(int id) => 
         context.Set<TEntity>().Find(id);
 
     public async Task<TEntity?> GetIdAsync(int id) => 
