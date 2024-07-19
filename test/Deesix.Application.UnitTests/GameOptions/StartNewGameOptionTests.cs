@@ -10,10 +10,7 @@ namespace Deesix.Application.UnitTests
         private StartNewGameOption startNewGameOption;
 
         [SetUp]
-        public void SetUp()
-        {
-            startNewGameOption = new StartNewGameOption();
-        }
+        public void SetUp() => startNewGameOption = new StartNewGameOption();
 
         [Test]
         public void Title_Should_Return_Start_New_Game() => 
