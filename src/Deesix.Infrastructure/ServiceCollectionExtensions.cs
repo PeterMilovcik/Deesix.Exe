@@ -1,4 +1,4 @@
-using Deesix.Application;
+﻿using Deesix.Application;
 using Deesix.Application.Interfaces;
 using Deesix.Domain.Entities;
 using Deesix.Infrastructure;
@@ -7,29 +7,26 @@ using Deesix.Infrastructure.Generators;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Deesix.ConsoleUI;
 using Deesix.Domain.Interfaces;
 using Deesix.Application.GameOptions;
 
-namespace Deesix.ConsoleUI;
+namespace Deesix.Infrastructure;
 
 public static class ServiceCollectionExtensions
 {
-    public static IServiceCollection AddDeesixConsoleUI(this IServiceCollection services)
+
+    public static IServiceCollection AddDeesixInfrastructure(this IServiceCollection services)
     {
-        services.AddDeesixInfrastructure();
+        var basePath = AppDomain.CurrentDomain.BaseDirectory;
+        var dbPath = Path.Combine(basePath, "database.db");        
+        
+        services.AddSingleton<IGameMaster, GameMaster>();
+        services.AddScoped<IRepository<Game>, GenericRepository<Game>>();
+        services.AddSingleton<IGameOption, StartNewGameOption>();
+        services.AddSingleton<IGameOption, ExitGameOption>();
 
-        services.AddLogging(configure => 
-        {
-            configure.ClearProviders();
-            configure.AddConsole();
-            configure.SetMinimumLevel(LogLevel.Warning); // Set the minimum log level to Warning
-            configure.AddFilter("Microsoft.EntityFrameworkCore.Database.Command", LogLevel.Warning);
-        });
-
-        services.AddSingleton<GameLoop>();
-
-        // old
+        // // old
+        services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite($"Data Source={dbPath}"));
         // services.AddSingleton<IUserInterface, UserInterface>();
         // services.AddSingleton<IGenerator, Generator>();
         // services.AddSingleton<IWorldGenerator, WorldGenerator>();
