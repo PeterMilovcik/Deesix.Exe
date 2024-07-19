@@ -26,5 +26,9 @@ namespace Deesix.Application.UnitTests
         [Test]
         public void CanExecute_Should_Return_False_When_Game_Has_Value() =>
             startNewGameOption.CanExecute(Maybe<Game>.From(new Game())).Should().BeFalse();
+        
+        [Test]
+        public async Task ExecuteAsync_Should_Return_GameOptionResult_With_Title() =>
+            (await startNewGameOption.ExecuteAsync(Maybe<Game>.None)).Message.Should().Be("Start new game");
     }
 }
