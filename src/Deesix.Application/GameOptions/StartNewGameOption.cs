@@ -6,10 +6,10 @@ namespace Deesix.Application.GameOptions;
 
 public sealed class StartNewGameOption : IGameOption
 {
-    public string Title => "Start new game";
+    public string Title => "Start a new game";
 
     public bool CanExecute(Maybe<Game> game) => game.HasNoValue;
 
     public Task<GameOptionResult> ExecuteAsync(Maybe<Game> game) => 
-        Task.FromResult(new GameOptionResult(Title));
+        Task.FromResult(new GameOptionResult(Title, new Game()));
 }

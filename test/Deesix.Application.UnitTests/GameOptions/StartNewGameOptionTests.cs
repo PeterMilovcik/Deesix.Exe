@@ -14,7 +14,7 @@ namespace Deesix.Application.UnitTests
 
         [Test]
         public void Title_Should_Return_Start_New_Game() => 
-            startNewGameOption.Title.Should().Be("Start new game", because: "that is the expected title.");
+            startNewGameOption.Title.Should().Be("Start a new game", because: "that is the expected title.");
 
         [Test]
         public void CanExecute_Should_Return_True_When_Game_Has_No_Value() =>
@@ -25,7 +25,7 @@ namespace Deesix.Application.UnitTests
             startNewGameOption.CanExecute(Maybe<Game>.From(new Game())).Should().BeFalse();
         
         [Test]
-        public async Task ExecuteAsync_Should_Return_GameOptionResult_With_Title() =>
-            (await startNewGameOption.ExecuteAsync(Maybe<Game>.None)).Message.Should().Be("Start new game");
+        public async Task ExecuteAsync_Should_Return_GameOptionResult_When_Game_Has_No_Value() =>
+            (await startNewGameOption.ExecuteAsync(Maybe<Game>.None)).Game.Should().NotBeNull();
     }
 }
