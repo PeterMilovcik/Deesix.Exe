@@ -1,4 +1,6 @@
-﻿using Deesix.Application.GameOptions;
+﻿using CSharpFunctionalExtensions;
+using Deesix.Application.GameOptions;
+using Deesix.Domain.Entities;
 using FluentAssertions;
 
 namespace Deesix.Application.UnitTests
@@ -16,5 +18,13 @@ namespace Deesix.Application.UnitTests
         [Test]
         public void Title_Should_Return_Start_New_Game() => 
             startNewGameOption.Title.Should().Be("Start new game", because: "that is the expected title.");
+
+        [Test]
+        public void CanExecute_Should_Return_True_When_Game_Has_No_Value() =>
+            startNewGameOption.CanExecute(Maybe<Game>.None).Should().BeTrue();
+        
+        [Test]
+        public void CanExecute_Should_Return_False_When_Game_Has_Value() =>
+            startNewGameOption.CanExecute(Maybe<Game>.From(new Game())).Should().BeFalse();
     }
 }
