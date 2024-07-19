@@ -1,4 +1,5 @@
 ﻿using Deesix.Application.GameOptions;
+using FluentAssertions;
 
 namespace Deesix.Application.UnitTests
 {
