@@ -12,6 +12,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{91C59F3E-6965-4254-B18A-5C6D1A0B0D24}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{1FFE403E-17A1-45D6-9E21-7A095CC11CE4}"
+	ProjectSection(SolutionItems) = preProject
+		UnitTestGuidelines.md = UnitTestGuidelines.md
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Deesix.Domain.UnitTests", "test\Deesix.Domain.UnitTests\Deesix.Domain.UnitTests.csproj", "{55B44938-7122-48F8-9CDE-2D2C2BE44BB0}"
 EndProject
