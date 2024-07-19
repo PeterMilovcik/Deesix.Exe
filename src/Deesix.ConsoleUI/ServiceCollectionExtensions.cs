@@ -28,7 +28,7 @@ internal static class ServiceCollectionExtensions
         services.AddSingleton<GameLoop>();
         services.AddSingleton<IGameMaster, GameMaster>();
         services.AddScoped<IRepository<Game>, GenericRepository<Game>>();
-        services.AddSingleton<IGameOption, WelcomeGameOption>();
+        services.AddSingleton<IGameOption, StartNewGameOption>();
         services.AddSingleton<IGameOption, ExitGameOption>();
 
 

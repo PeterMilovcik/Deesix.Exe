@@ -32,7 +32,7 @@ internal class GameLoop(IGameMaster gameMaster, IRepository<Game> gameRepository
 
         var option = AnsiConsole.Prompt(
             new SelectionPrompt<IGameOption>()
-                .UseConverter(option => option.Description)
+                .UseConverter(option => option.Title)
                 .Title(gameMaster.GetQuestion())
                 .PageSize(10)
                 .MoreChoicesText("[grey](Move up and down to reveal more choices)[/]")

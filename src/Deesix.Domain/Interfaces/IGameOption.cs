@@ -5,7 +5,7 @@ namespace Deesix.Domain.Interfaces;
 
 public interface IGameOption
 {
-    string Description { get; }
+    string Title { get; }
 
     bool CanExecute(Maybe<Game> game);
 
