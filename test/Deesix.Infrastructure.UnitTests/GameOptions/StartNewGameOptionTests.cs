@@ -31,9 +31,12 @@ public class StartNewGameOptionTests : TestFixture
         var noGame = Maybe<Game>.None;
 
         // Act
-        var result = await startNewGameOption!.ExecuteAsync(noGame);
+        var gameOptionsResult = await startNewGameOption!.ExecuteAsync(noGame);
 
         // Assert
-        gameRepository.GetById(result.Game.Id).Should().Be(result.Game);
+        gameOptionsResult.Game.IsSuccess.Should().BeTrue();
+        var game = gameRepository.GetById(gameOptionsResult.Game.Value.Id);
+        game.Should().NotBeNull();
+        game.Should().Be(gameOptionsResult.Game.Value);
     }
 }

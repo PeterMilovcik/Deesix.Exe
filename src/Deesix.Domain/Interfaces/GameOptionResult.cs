@@ -1,12 +1,12 @@
+using CSharpFunctionalExtensions;
 using Deesix.Domain.Entities;
 
 namespace Deesix.Domain.Interfaces;
 
-public class GameOptionResult(string message, Game game)
+public class GameOptionResult(string message, Result<Game> game)
 {
     public string Message { get; } = message ?? 
         throw new ArgumentNullException(nameof(message));
 
-    public Game Game { get; } = game ?? 
-        throw new ArgumentNullException(nameof(game));
+    public Result<Game> Game { get; } = game;
 }

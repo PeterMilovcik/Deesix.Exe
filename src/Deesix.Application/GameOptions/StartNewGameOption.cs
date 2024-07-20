@@ -16,7 +16,7 @@ public sealed class StartNewGameOption(IRepository<Game> gameRepository) : IGame
 
     public Task<GameOptionResult> ExecuteAsync(Maybe<Game> game)
     {
-        var createdGame = gameRepository.Add(new Game());
-        return Task.FromResult(new GameOptionResult(Title, createdGame));
+        var createdGame = gameRepository.Add(new Game());        
+        return Task.FromResult(new GameOptionResult(Title, Result.Success(createdGame)));
     }
 }
