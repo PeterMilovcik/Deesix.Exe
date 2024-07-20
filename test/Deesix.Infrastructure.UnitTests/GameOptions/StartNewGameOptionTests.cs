@@ -6,7 +6,7 @@ using Deesix.Domain.Interfaces;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Deesix.Infrastructure.UnitTests;
+namespace Deesix.Infrastructure.UnitTests.GameOptions;
 
 [TestFixture]
 public class StartNewGameOptionTests : TestFixture
