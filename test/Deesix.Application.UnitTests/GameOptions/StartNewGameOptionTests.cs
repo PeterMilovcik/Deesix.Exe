@@ -6,7 +6,7 @@ using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 
-namespace Deesix.Application.UnitTests
+namespace Deesix.Application.UnitTests.GameOptions
 {
     public class StartNewGameOptionTests : TestFixture
     {
