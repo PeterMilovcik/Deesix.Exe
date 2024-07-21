@@ -42,7 +42,8 @@ namespace Deesix.Application.UnitTests.GameOptions
             // Act
             var gameOptionResult = await startNewGameOption!.ExecuteAsync(noGame);
             // Assert
-            gameOptionResult.Game.Should().NotBeNull();
+            gameOptionResult.NextGameState.Should().NotBeNull();
+            gameOptionResult.NextMessage.Should().Be("Game started successfully! Get ready for an exciting adventure!");
         }
     }
 }

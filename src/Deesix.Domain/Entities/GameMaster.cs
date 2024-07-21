@@ -6,18 +6,29 @@ namespace Deesix.Domain.Entities;
 public sealed class GameMaster(IEnumerable<IGameOption> gameOptions) : IGameMaster
 {
     private readonly IEnumerable<IGameOption> gameOptions = gameOptions ?? Array.Empty<IGameOption>();
-    private string message = "Message from the Game Master";
-    public Maybe<Game> Game { get; } = Maybe<Game>.None;
+
+    private string message = 
+        "Welcome, adventurer! I am here to guide you through this game. " + 
+        "As the game master, I have prepared a thrilling adventure filled with challenges and mysteries. ";
+    
+    private string question = "Are you ready to embark on this epic journey?";
+
+    public Maybe<Game> Game { get; private set; } = Maybe<Game>.None;
     
     public string GetMessage() => message;
 
-    public IGameOption[] GetOptions() => gameOptions.ToArray();
+    public IGameOption[] GetOptions() => gameOptions.Where(gameOption => gameOption.CanExecute(Game)).ToArray();
 
-    public string GetQuestion() => "What are you going to do?";
+    public string GetQuestion() => question;
 
     public async Task ProcessOptionAsync(IGameOption option)
     {
         var result = await option.ExecuteAsync(Game);
-        message = result.Message;
+        message = result.NextMessage;
+        question = result.NextQuestion;
+        if (result.NextGameState.IsSuccess)
+        {
+            Game = Maybe.From(result.NextGameState.Value);
+        }
     }
 }

@@ -11,7 +11,7 @@ public sealed class ExitGameOption : IGameOption
     public bool CanExecute(Maybe<Game> game) => true;
 
     public Task<GameOptionResult> ExecuteAsync(Maybe<Game> game) => 
-        Task.FromResult(new GameOptionResult("See you next time! Have a nice day!", game.Value));
+        Task.FromResult(new GameOptionResult("See you next time! Have a nice day!"));
 
     public override string ToString() => Title;
 }
