@@ -6,7 +6,9 @@ namespace Deesix.Application.GameOptions;
 
 public sealed class ExitGameOption : IGameOption
 {
-    public string Title => "Exit the game";
+    public string Title => "Exit Game";
+
+    public int Order => int.MaxValue;
 
     public bool CanExecute(Maybe<Game> game) => true;
 

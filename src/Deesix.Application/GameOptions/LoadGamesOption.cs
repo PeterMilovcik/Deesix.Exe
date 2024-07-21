@@ -10,7 +10,9 @@ public class LoadGamesOption(IRepository<Game> gameRepository) : IGameOption
     private readonly IRepository<Game> gameRepository = gameRepository
         ?? throw new ArgumentNullException(nameof(gameRepository));
 
-    public string Title => "Load a game";
+    public string Title => "Load Game";
+
+    public int Order => 2;
 
     public bool CanExecute(Maybe<Game> game)
     {

@@ -9,29 +9,29 @@ using Microsoft.Extensions.DependencyInjection;
 namespace Deesix.Infrastructure.UnitTests.GameOptions;
 
 [TestFixture]
-public class StartNewGameOptionTests : TestFixture
+public class CreateNewGameOptionTests : TestFixture
 {
-    private StartNewGameOption? startNewGameOption;
+    private CreateNewGameOption? createNewGameOption;
     private IRepository<Game> gameRepository;
 
     [SetUp]
     public override void SetUp()
     {
         base.SetUp();
-        startNewGameOption = Services.GetRequiredService<IEnumerable<IGameOption>>().OfType<StartNewGameOption>().FirstOrDefault();
-        startNewGameOption.Should().NotBeNull(because: "it is registered as a service.");
+        createNewGameOption = Services.GetRequiredService<IEnumerable<IGameOption>>().OfType<CreateNewGameOption>().FirstOrDefault();
+        createNewGameOption.Should().NotBeNull(because: "it is registered as a service.");
         gameRepository = Services.GetRequiredService<IRepository<Game>>();
         gameRepository.Should().NotBeNull(because: "it is registered as a service.");
     }
 
     [Test]
-    public async Task StartNewGameOption_Should_CreateNewGame()
+    public async Task ExecuteAsync_Should_CreateNewGame()
     {
         // Arrange
         var noGame = Maybe<Game>.None;
 
         // Act
-        var gameOptionsResult = await startNewGameOption!.ExecuteAsync(noGame);
+        var gameOptionsResult = await createNewGameOption!.ExecuteAsync(noGame);
 
         // Assert
         gameOptionsResult.NextGameState.IsSuccess.Should().BeTrue();

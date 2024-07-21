@@ -20,7 +20,9 @@ public sealed class GameMaster(IEnumerable<IGameOption> gameOptions) : IGameMast
 
     public IGameOption[] GetOptions() => 
         initialGameOptions.Concat(temporaryGameOptions)
-            .Where(gameOption => gameOption.CanExecute(Game)).ToArray();
+            .Where(gameOption => gameOption.CanExecute(Game))
+            .OrderBy(gameOption => gameOption.Order)
+            .ToArray();
 
     public string GetQuestion() => question;
 

@@ -13,6 +13,8 @@ public class LoadGameOption(Game game) : IGameOption
             ? $"Load: {gameToLoad.GameId} - Unknown World"
             : $"Load: {gameToLoad.GameId} - {gameToLoad.World.Name}";
 
+    public int Order => 2;
+
     public bool CanExecute(Maybe<Game> game) => game.HasNoValue;
 
     public Task<GameOptionResult> ExecuteAsync(Maybe<Game> game)

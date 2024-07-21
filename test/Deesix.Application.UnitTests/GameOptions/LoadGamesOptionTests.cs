@@ -21,12 +21,22 @@ public class LoadGamesOptionTests : TestFixture
     }
 
     [Test]
+    public void Title_Should_Return_Load_Games() => 
+        loadGamesOption!.Title.Should().Be("Load Game", because: "that is the expected title.");
+
+    [Test]
+    public void Order_Should_Return_2() => 
+        loadGamesOption!.Order.Should().Be(2, because: "that is the expected order.");
+
+    [Test]
     public void CanExecute_WhenGameHasValue_ReturnsFalse() => 
-        loadGamesOption!.CanExecute(Maybe<Game>.From(new Game())).Should().BeFalse(because: "a game is already loaded.");
+        loadGamesOption!.CanExecute(Maybe<Game>.From(new Game()))
+            .Should().BeFalse(because: "a game is already loaded.");
 
     [Test]
     public void CanExecute_WhenGameHasNoValueAndRepositoryHasNoGames_ReturnsFalse() => 
-        loadGamesOption!.CanExecute(Maybe<Game>.None).Should().BeFalse(because: "there are no games in the repository.");
+        loadGamesOption!.CanExecute(Maybe<Game>.None)
+            .Should().BeFalse(because: "there are no games in the repository.");
 
     [Test]
     public void CanExecute_WhenGameHasNoValueAndRepositoryHasGames_ReturnsTrue()

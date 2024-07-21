@@ -5,12 +5,14 @@ using Deesix.Domain.Interfaces;
 
 namespace Deesix.Application.GameOptions;
 
-public sealed class StartNewGameOption(IRepository<Game> gameRepository) : IGameOption
+public sealed class CreateNewGameOption(IRepository<Game> gameRepository) : IGameOption
 {
     private readonly IRepository<Game> gameRepository = gameRepository
         ?? throw new ArgumentNullException(nameof(gameRepository));
 
-    public string Title => "Start a new game";
+    public string Title => "Create New Game";
+
+    public int Order => 1;
 
     public bool CanExecute(Maybe<Game> game) => game.HasNoValue;
 
@@ -18,7 +20,7 @@ public sealed class StartNewGameOption(IRepository<Game> gameRepository) : IGame
     {
         var createdGame = gameRepository.Add(new Game());
         return Task.FromResult(new GameOptionResult(
-            "Game started successfully! Get ready for an exciting adventure!")
+            "Game created successfully! Get ready for an exciting adventure!")
             {
                 NextGameState = Result.Success(createdGame)
             });

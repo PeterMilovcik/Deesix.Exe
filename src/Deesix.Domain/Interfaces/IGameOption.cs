@@ -7,6 +7,8 @@ public interface IGameOption
 {
     string Title { get; }
 
+    int Order { get; }
+
     bool CanExecute(Maybe<Game> game);
 
     Task<GameOptionResult> ExecuteAsync(Maybe<Game> game);

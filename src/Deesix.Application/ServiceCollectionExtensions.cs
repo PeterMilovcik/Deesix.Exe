@@ -10,7 +10,7 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddDeesixApplication(this IServiceCollection services)
     {
         services.AddDeesixDomain();
-        services.AddSingleton<IGameOption, StartNewGameOption>();
+        services.AddSingleton<IGameOption, CreateNewGameOption>();
         services.AddSingleton<IGameOption, ExitGameOption>();
         services.AddSingleton<IGameOption, LoadGamesOption>();
 

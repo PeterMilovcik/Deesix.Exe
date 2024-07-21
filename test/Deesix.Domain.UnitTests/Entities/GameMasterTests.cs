@@ -52,4 +52,28 @@ public class GameMasterTests : TestFixture
             .Contain(nextGameOption, 
                 because: "the game master should use the next additional game options in the next call to GetOptions.");
     }
+
+    [Test]
+    public void GetOptions_ReturnsOptionsInCorrectOrder()
+    {
+        // Arrange
+        var gameOption1Mock = new Mock<IGameOption>();
+        gameOption1Mock.Setup(x => x.CanExecute(It.IsAny<Maybe<Game>>())).Returns(true);
+        gameOption1Mock.Setup(x => x.Order).Returns(3);
+        var gameOption2Mock = new Mock<IGameOption>();
+        gameOption2Mock.Setup(x => x.CanExecute(It.IsAny<Maybe<Game>>())).Returns(true);
+        gameOption2Mock.Setup(x => x.Order).Returns(1);
+        var gameOption3Mock = new Mock<IGameOption>();
+        gameOption3Mock.Setup(x => x.CanExecute(It.IsAny<Maybe<Game>>())).Returns(true);
+        gameOption3Mock.Setup(x => x.Order).Returns(2);
+        var gameOption1 = gameOption1Mock.Object;
+        var gameOption2 = gameOption2Mock.Object;
+        var gameOption3 = gameOption3Mock.Object;
+        gameMaster = new GameMaster([gameOption1, gameOption2, gameOption3]);
+        // Act
+        var gameOptions = gameMaster.GetOptions();
+        // Assert
+        gameOptions.Should().BeInAscendingOrder(x => x.Order);
+        gameOptions.Should().ContainInOrder(gameOption2, gameOption3, gameOption1);
+    }
 }
