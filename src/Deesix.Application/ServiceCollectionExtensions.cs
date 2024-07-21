@@ -12,6 +12,7 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IGameMaster, GameMaster>();
         services.AddSingleton<IGameOption, StartNewGameOption>();
         services.AddSingleton<IGameOption, ExitGameOption>();
+        services.AddSingleton<IGameOption, LoadGameOption>();
 
         return services;
     }
