@@ -3,39 +3,17 @@ using Deesix.Domain.Interfaces;
 
 namespace Deesix.Domain.Entities;
 
-public sealed class GameMaster(IEnumerable<IGameOption> gameOptions) : IGameMaster
+public sealed class GameMaster : IGameMaster
 {
-    private readonly IEnumerable<IGameOption> initialGameOptions = gameOptions ?? Array.Empty<IGameOption>();
-    private List<IGameOption> temporaryGameOptions = new List<IGameOption>();
+    public GameTurn GameTurn { get; private set; }
 
-    private string message = 
-        "Welcome, adventurer! I am here to guide you through this game. " + 
-        "As the game master, I have prepared a thrilling adventure filled with challenges and mysteries. ";
-    
-    private string question = "Are you ready to embark on this epic journey?";
-
-    public Maybe<Game> Game { get; private set; } = Maybe<Game>.None;
-    
-    public string GetMessage() => message;
-
-    public IGameOption[] GetOptions() => 
-        initialGameOptions.Concat(temporaryGameOptions)
-            .Where(gameOption => gameOption.CanExecute(Game))
-            .OrderBy(gameOption => gameOption.Order)
-            .ToArray();
-
-    public string GetQuestion() => question;
-
-    public async Task ProcessOptionAsync(IGameOption option)
+    public GameMaster(IEnumerable<IGameOption> initialGameOptions)
     {
-        var result = await option.ExecuteAsync(Game);
-        message = result.NextMessage;
-        question = result.NextQuestion;
-        if (result.NextGameState.IsSuccess)
-        {
-            Game = Maybe.From(result.NextGameState.Value);
-        }
-
-        temporaryGameOptions = result.NextAdditionalGameOptions;
+        GameTurn = new GameTurn();
+        GameTurn.GameOptions = initialGameOptions
+            .Where(gameOption => gameOption.CanExecute(GameTurn))
+            .OrderBy(gameOption => gameOption.Order).ToList();
     }
+
+    public async Task ProcessOptionAsync(IGameOption option) => GameTurn = await option.ExecuteAsync(GameTurn);
 }

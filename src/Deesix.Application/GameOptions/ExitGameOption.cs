@@ -10,10 +10,12 @@ public sealed class ExitGameOption : IGameOption
 
     public int Order => int.MaxValue;
 
-    public bool CanExecute(Maybe<Game> game) => true;
+    public bool CanExecute(GameTurn gameTurn) => true;
 
-    public Task<GameOptionResult> ExecuteAsync(Maybe<Game> game) => 
-        Task.FromResult(new GameOptionResult("See you next time! Have a nice day!"));
+    public Task<GameTurn> ExecuteAsync(GameTurn gameTurn) => Task.FromResult(gameTurn with 
+        {
+            Message = "See you later!"
+        });
 
     public override string ToString() => Title;
 }

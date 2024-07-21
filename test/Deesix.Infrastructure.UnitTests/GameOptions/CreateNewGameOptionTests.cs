@@ -1,5 +1,4 @@
-﻿using CSharpFunctionalExtensions;
-using Deesix.Application.GameOptions;
+﻿using Deesix.Application.GameOptions;
 using Deesix.Application.Interfaces;
 using Deesix.Domain.Entities;
 using Deesix.Domain.Interfaces;
@@ -28,15 +27,15 @@ public class CreateNewGameOptionTests : TestFixture
     public async Task ExecuteAsync_Should_CreateNewGame()
     {
         // Arrange
-        var noGame = Maybe<Game>.None;
+        var gameTurn = new GameTurn();
 
         // Act
-        var gameOptionsResult = await createNewGameOption!.ExecuteAsync(noGame);
+        var nextGameTurn = await createNewGameOption!.ExecuteAsync(gameTurn);
 
         // Assert
-        gameOptionsResult.NextGameState.IsSuccess.Should().BeTrue();
-        var game = gameRepository.GetById(gameOptionsResult.NextGameState.Value.Id);
+        nextGameTurn.Game.HasValue.Should().BeTrue();
+        var game = gameRepository.GetById(nextGameTurn.Game.Value.Id);
         game.Should().NotBeNull();
-        game.Should().Be(gameOptionsResult.NextGameState.Value);
+        game.Should().Be(nextGameTurn.Game.Value);
     }
 }

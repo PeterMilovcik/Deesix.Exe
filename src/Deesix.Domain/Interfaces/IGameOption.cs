@@ -1,4 +1,3 @@
-using CSharpFunctionalExtensions;
 using Deesix.Domain.Entities;
 
 namespace Deesix.Domain.Interfaces;
@@ -9,7 +8,7 @@ public interface IGameOption
 
     int Order { get; }
 
-    bool CanExecute(Maybe<Game> game);
+    bool CanExecute(GameTurn gameTurn);
 
-    Task<GameOptionResult> ExecuteAsync(Maybe<Game> game);
+    Task<GameTurn> ExecuteAsync(GameTurn gameTurn);
 }

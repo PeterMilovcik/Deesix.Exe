@@ -25,11 +25,11 @@ public class ExitGameOptionTests : TestFixture
     
     [Test]
     public void CanExecute__WithNoGame_Should_Return_True() => 
-        exitGameOption!.CanExecute(Maybe<Game>.None).Should().BeTrue();
+        exitGameOption!.CanExecute(new GameTurn()).Should().BeTrue();
 
     [Test]
     public void CanExecute_WithGame_Should_Return_True() => 
-        exitGameOption!.CanExecute(Maybe.From(new Game())).Should().BeTrue();
+        exitGameOption!.CanExecute(new GameTurn{ Game = new Game() }).Should().BeTrue();
 
     [Test]
     public void Order_Should_Return_IntMaxValue() => 

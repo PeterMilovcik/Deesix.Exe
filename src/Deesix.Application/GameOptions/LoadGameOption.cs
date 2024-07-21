@@ -1,5 +1,4 @@
-﻿using CSharpFunctionalExtensions;
-using Deesix.Domain.Entities;
+﻿using Deesix.Domain.Entities;
 using Deesix.Domain.Interfaces;
 
 namespace Deesix.Application.GameOptions;
@@ -15,13 +14,11 @@ public class LoadGameOption(Game game) : IGameOption
 
     public int Order => 2;
 
-    public bool CanExecute(Maybe<Game> game) => game.HasNoValue;
+    public bool CanExecute(GameTurn gameTurn) => gameTurn.Game.HasNoValue;
 
-    public Task<GameOptionResult> ExecuteAsync(Maybe<Game> game)
+    public Task<GameTurn> ExecuteAsync(GameTurn gameTurn) => Task.FromResult(gameTurn with 
     {
-        return Task.FromResult(new GameOptionResult("Game loaded successfully.")
-        {
-            NextGameState = Result.Success(gameToLoad)
-        });
-    }
+        Message = "Game loaded successfully.",
+        Game = gameToLoad
+    });
 }

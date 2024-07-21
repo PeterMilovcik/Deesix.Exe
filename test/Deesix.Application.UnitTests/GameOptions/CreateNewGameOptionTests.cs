@@ -30,11 +30,11 @@ public class CreateNewGameOptionTests : TestFixture
 
     [Test]
     public void CanExecute_Should_Return_True_When_Game_Has_No_Value() =>
-        startNewGameOption!.CanExecute(Maybe<Game>.None).Should().BeTrue();
+        startNewGameOption!.CanExecute(new GameTurn()).Should().BeTrue();
     
     [Test]
     public void CanExecute_Should_Return_False_When_Game_Has_Value() =>
-        startNewGameOption!.CanExecute(Maybe<Game>.From(new Game())).Should().BeFalse();
+        startNewGameOption!.CanExecute(new GameTurn { Game = new Game()}).Should().BeFalse();
 
     [Test]
     public async Task ExecuteAsync_Should_Return_GameOptionResult_With_Game_When_Game_Has_No_Value()
@@ -44,9 +44,9 @@ public class CreateNewGameOptionTests : TestFixture
         var createdGame = new Game();
         GameRepositoryMock.Setup(x => x.Add(It.IsAny<Game>())).Returns(createdGame);
         // Act
-        var gameOptionResult = await startNewGameOption!.ExecuteAsync(noGame);
+        var nextGameTurn = await startNewGameOption!.ExecuteAsync(new GameTurn());
         // Assert
-        gameOptionResult.NextGameState.Should().NotBeNull();
-        gameOptionResult.NextMessage.Should().Be("Game created successfully! Get ready for an exciting adventure!");
+        nextGameTurn.Game.HasValue.Should().BeTrue();
+        nextGameTurn.Message.Should().Be("Game created successfully! Get ready for an exciting adventure!");
     }
 }

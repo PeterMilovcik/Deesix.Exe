@@ -14,20 +14,21 @@ public class LoadGamesOption(IRepository<Game> gameRepository) : IGameOption
 
     public int Order => 2;
 
-    public bool CanExecute(Maybe<Game> game)
-    {
-        if (game.HasValue) return false;
-        return gameRepository.GetAll().Any();
-    }
+    public bool CanExecute(GameTurn gameTurn) => gameTurn.Game.HasNoValue && gameRepository.GetAll().Any();
 
-    public Task<GameOptionResult> ExecuteAsync(Maybe<Game> game)
+    public Task<GameTurn> ExecuteAsync(GameTurn gameTurn)
     {
         var games = gameRepository.GetAll().ToList();
-        var additionalGameOptions = new List<IGameOption>();
-        games.ForEach(game => additionalGameOptions.Add(new LoadGameOption(game)));
+        var loadGameOptions = new List<IGameOption>();
+        games.ForEach(game => loadGameOptions.Add(new LoadGameOption(game)));
         GameOptionResult result = new GameOptionResult("Please choose a game to play.");
         result.NextQuestion = "Which game would you like to play?";
-        result.NextAdditionalGameOptions.AddRange(additionalGameOptions);
-        return Task.FromResult(result);
+        result.NextAdditionalGameOptions.AddRange(loadGameOptions);
+        return Task.FromResult(gameTurn with 
+        {
+            Message = "Please choose a game to play.",
+            Question = "Which one would you like to play?",
+            GameOptions = new List<IGameOption>(loadGameOptions)
+        });
     }
 }

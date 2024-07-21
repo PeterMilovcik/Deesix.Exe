@@ -1,4 +1,3 @@
-using CSharpFunctionalExtensions;
 using Deesix.Application.Interfaces;
 using Deesix.Domain.Entities;
 using Deesix.Domain.Interfaces;
@@ -14,15 +13,15 @@ public sealed class CreateNewGameOption(IRepository<Game> gameRepository) : IGam
 
     public int Order => 1;
 
-    public bool CanExecute(Maybe<Game> game) => game.HasNoValue;
+    public bool CanExecute(GameTurn gameTurn) => gameTurn.Game.HasNoValue;
 
-    public Task<GameOptionResult> ExecuteAsync(Maybe<Game> game)
+    public Task<GameTurn> ExecuteAsync(GameTurn gameTurn)
     {
         var createdGame = gameRepository.Add(new Game());
-        return Task.FromResult(new GameOptionResult(
-            "Game created successfully! Get ready for an exciting adventure!")
-            {
-                NextGameState = Result.Success(createdGame)
-            });
+        return Task.FromResult(gameTurn with
+        {
+            Message = "Game created successfully! Get ready for an exciting adventure!",
+            Game = createdGame
+        });
     }
 }
