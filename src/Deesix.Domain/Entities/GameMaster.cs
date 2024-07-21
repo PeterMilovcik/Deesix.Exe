@@ -5,7 +5,8 @@ namespace Deesix.Domain.Entities;
 
 public sealed class GameMaster(IEnumerable<IGameOption> gameOptions) : IGameMaster
 {
-    private readonly IEnumerable<IGameOption> gameOptions = gameOptions ?? Array.Empty<IGameOption>();
+    private readonly IEnumerable<IGameOption> initialGameOptions = gameOptions ?? Array.Empty<IGameOption>();
+    private List<IGameOption> temporaryGameOptions = new List<IGameOption>();
 
     private string message = 
         "Welcome, adventurer! I am here to guide you through this game. " + 
@@ -17,7 +18,9 @@ public sealed class GameMaster(IEnumerable<IGameOption> gameOptions) : IGameMast
     
     public string GetMessage() => message;
 
-    public IGameOption[] GetOptions() => gameOptions.Where(gameOption => gameOption.CanExecute(Game)).ToArray();
+    public IGameOption[] GetOptions() => 
+        initialGameOptions.Concat(temporaryGameOptions)
+            .Where(gameOption => gameOption.CanExecute(Game)).ToArray();
 
     public string GetQuestion() => question;
 
@@ -30,5 +33,7 @@ public sealed class GameMaster(IEnumerable<IGameOption> gameOptions) : IGameMast
         {
             Game = Maybe.From(result.NextGameState.Value);
         }
+
+        temporaryGameOptions = result.NextAdditionalGameOptions;
     }
 }

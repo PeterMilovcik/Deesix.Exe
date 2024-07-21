@@ -2,7 +2,7 @@
 using FluentAssertions;
 using Deesix.Domain.Entities;
 
-namespace Deesix.Domain.UnitTests;
+namespace Deesix.Domain.UnitTests.Entities;
 
 [TestFixture]
 public class GameOptionResultTests

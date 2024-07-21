@@ -1,30 +1,25 @@
 ﻿using CSharpFunctionalExtensions;
-using Deesix.Application.Interfaces;
 using Deesix.Domain.Entities;
 using Deesix.Domain.Interfaces;
 
 namespace Deesix.Application.GameOptions;
 
-public class LoadGameOption(IRepository<Game> gameRepository) : IGameOption
+public class LoadGameOption(Game game) : IGameOption
 {
-    private readonly IRepository<Game> gameRepository = gameRepository
-        ?? throw new ArgumentNullException(nameof(gameRepository));
+    private readonly Game gameToLoad = game;
 
-    public string Title => "Load a game";
+    public string Title => 
+        string.IsNullOrEmpty(gameToLoad.World?.Name)
+            ? $"Load: {gameToLoad.GameId} - Unknown World"
+            : $"Load: {gameToLoad.GameId} - {gameToLoad.World.Name}";
 
-    public bool CanExecute(Maybe<Game> game)
-    {
-        if (game.HasValue) return false;
-        return gameRepository.GetAll().Any();
-    }
+    public bool CanExecute(Maybe<Game> game) => game.HasNoValue;
 
     public Task<GameOptionResult> ExecuteAsync(Maybe<Game> game)
     {
-        // TODO: add a list property with additional game options into the game option result class and fill it with loaded specific game options with games
-        // use game Id for title and if the game has world, use also a world name.
-        // implement this load game option using the TDD approach
-        var games = gameRepository.GetAll().ToList();
-        return Task.FromResult(new GameOptionResult(
-            "Game started successfully! Get ready for an exciting adventure!"));
+        return Task.FromResult(new GameOptionResult("Game loaded successfully.")
+        {
+            NextGameState = Result.Success(gameToLoad)
+        });
     }
 }
