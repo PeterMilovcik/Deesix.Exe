@@ -21,9 +21,6 @@ public class LoadGamesOption(IRepository<Game> gameRepository) : IGameOption
         var games = gameRepository.GetAll().ToList();
         var loadGameOptions = new List<IGameOption>();
         games.ForEach(game => loadGameOptions.Add(new LoadGameOption(game)));
-        GameOptionResult result = new GameOptionResult("Please choose a game to play.");
-        result.NextQuestion = "Which game would you like to play?";
-        result.NextAdditionalGameOptions.AddRange(loadGameOptions);
         return Task.FromResult(gameTurn with 
         {
             Message = "Please choose a game to play.",

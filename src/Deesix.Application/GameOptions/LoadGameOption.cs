@@ -5,7 +5,8 @@ namespace Deesix.Application.GameOptions;
 
 public class LoadGameOption(Game game) : IGameOption
 {
-    private readonly Game gameToLoad = game;
+    private readonly Game gameToLoad = game 
+        ?? throw new ArgumentNullException(nameof(game));
 
     public string Title => 
         string.IsNullOrEmpty(gameToLoad.World?.Name)

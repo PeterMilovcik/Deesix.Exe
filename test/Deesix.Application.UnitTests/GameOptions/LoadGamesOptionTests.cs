@@ -2,10 +2,9 @@
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Deesix.Application.GameOptions;
-using CSharpFunctionalExtensions;
 using Deesix.Domain.Entities;
 
-namespace Deesix.Application.UnitTests;
+namespace Deesix.Application.UnitTests.GameOptions;
 
 [TestFixture]
 public class LoadGamesOptionTests : TestFixture
@@ -16,7 +15,9 @@ public class LoadGamesOptionTests : TestFixture
     public override void SetUp()
     {
         base.SetUp();
-        loadGamesOption = Services.GetRequiredService<IEnumerable<IGameOption>>().OfType<LoadGamesOption>().FirstOrDefault();
+        GameRepositoryMock.Setup(x => x.GetAll()).Returns(new List<Game>{new Game{GameId = 1}});
+        var gameOptionFactory = Services.GetRequiredService<IGameOptionFactory>();
+        loadGamesOption = gameOptionFactory.CreateGameOptions(new GameTurn()).OfType<LoadGamesOption>().FirstOrDefault();
         loadGamesOption.Should().NotBeNull(because: "it is registered as a service.");
     }
 
@@ -34,9 +35,12 @@ public class LoadGamesOptionTests : TestFixture
             .Should().BeFalse(because: "a game is already loaded.");
 
     [Test]
-    public void CanExecute_WhenGameHasNoValueAndRepositoryHasNoGames_ReturnsFalse() => 
+    public void CanExecute_WhenGameHasNoValueAndRepositoryHasNoGames_ReturnsFalse()
+    {
+        GameRepositoryMock.Setup(x => x.GetAll()).Returns(new List<Game>());
         loadGamesOption!.CanExecute(new GameTurn())
             .Should().BeFalse(because: "there are no games in the repository.");
+    }
 
     [Test]
     public void CanExecute_WhenGameHasNoValueAndRepositoryHasGames_ReturnsTrue()
