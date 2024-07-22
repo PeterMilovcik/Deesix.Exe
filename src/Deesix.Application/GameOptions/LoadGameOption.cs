@@ -15,11 +15,12 @@ public class LoadGameOption(Game game) : IGameOption
 
     public int Order => 2;
 
-    public bool CanExecute(GameTurn gameTurn) => gameTurn.Game.HasNoValue;
+    public bool CanExecute(GameTurn gameTurn) => gameTurn.Game.HasNoValue && gameTurn.LastOption is LoadGamesOption;
 
     public Task<GameTurn> ExecuteAsync(GameTurn gameTurn) => Task.FromResult(gameTurn with 
     {
         Message = "Game loaded successfully.",
-        Game = gameToLoad
+        Game = gameToLoad,
+        GameOptions = new List<IGameOption>()
     });
 }

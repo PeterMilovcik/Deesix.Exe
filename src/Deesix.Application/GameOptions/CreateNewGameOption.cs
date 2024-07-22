@@ -13,7 +13,9 @@ public sealed class CreateNewGameOption(IRepository<Game> gameRepository) : IGam
 
     public int Order => 1;
 
-    public bool CanExecute(GameTurn gameTurn) => gameTurn.Game.HasNoValue;
+    public bool CanExecute(GameTurn gameTurn) => 
+        gameTurn.Game.HasNoValue && 
+        gameTurn.LastOption is not LoadGamesOption;
 
     public Task<GameTurn> ExecuteAsync(GameTurn gameTurn)
     {
@@ -21,7 +23,7 @@ public sealed class CreateNewGameOption(IRepository<Game> gameRepository) : IGam
         return Task.FromResult(gameTurn with
         {
             Message = "Game created successfully! Get ready for an exciting adventure!",
-            Game = createdGame
+            Game = createdGame,
         });
     }
 }

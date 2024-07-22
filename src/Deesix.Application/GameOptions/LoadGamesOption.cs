@@ -14,7 +14,10 @@ public class LoadGamesOption(IRepository<Game> gameRepository) : IGameOption
 
     public int Order => 2;
 
-    public bool CanExecute(GameTurn gameTurn) => gameTurn.Game.HasNoValue && gameRepository.GetAll().Any();
+    public bool CanExecute(GameTurn gameTurn) => 
+        gameTurn.Game.HasNoValue && 
+        gameRepository.GetAll().Any() && 
+        gameTurn.LastOption is not LoadGamesOption;
 
     public Task<GameTurn> ExecuteAsync(GameTurn gameTurn)
     {
