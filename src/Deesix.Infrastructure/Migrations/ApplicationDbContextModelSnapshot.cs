@@ -34,7 +34,7 @@ namespace Deesix.Infrastructure.Migrations
                     b.HasIndex("GameId")
                         .IsUnique();
 
-                    b.ToTable("Characters");
+                    b.ToTable("Character");
                 });
 
             modelBuilder.Entity("Deesix.Domain.Entities.Game", b =>
@@ -72,7 +72,7 @@ namespace Deesix.Infrastructure.Migrations
 
                     b.HasIndex("WorldId");
 
-                    b.ToTable("Realms");
+                    b.ToTable("Realm");
                 });
 
             modelBuilder.Entity("Deesix.Domain.Entities.World", b =>
@@ -101,7 +101,7 @@ namespace Deesix.Infrastructure.Migrations
                     b.HasIndex("GameId")
                         .IsUnique();
 
-                    b.ToTable("Worlds");
+                    b.ToTable("World");
                 });
 
             modelBuilder.Entity("Deesix.Domain.Entities.Character", b =>

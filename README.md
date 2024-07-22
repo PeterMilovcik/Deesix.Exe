@@ -22,7 +22,7 @@ dotnet tool install --global dotnet-ef --version 8.0.6
    - Generate a new migration using the following command. Specify the path to the project file correctly relative to the repository root:
 
 ```bash
-dotnet ef migrations add <YourMigrationName> --project src/Deesix.Infrastructure/Deesix.Infrastructure.csproj --output-dir src/Deesix.Infrastructure/Migrations
+dotnet ef migrations add <YourMigrationName> --project src/Deesix.Infrastructure/Deesix.Infrastructure.csproj
 ```
 
 Important: Don't forget to update `<YourMigrationName>` to your migration name, e.g., `Initial`

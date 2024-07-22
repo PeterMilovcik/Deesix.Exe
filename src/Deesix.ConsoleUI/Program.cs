@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Deesix.Infrastructure.DataAccess;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Spectre.Console;
 
@@ -13,6 +15,12 @@ internal class Program
             var host = Host
                 .CreateDefaultBuilder(args)
                 .ConfigureServices((hostContext, services) => services.AddDeesixConsoleUI()).Build();
+            
+            using (var scope = host.Services.CreateScope())
+            {
+                var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+                dbContext.Database.Migrate();       // Applies any pending migrations
+            }
     
             var gameLoop = host.Services.GetRequiredService<GameLoop>();
             await gameLoop.StartAsync();
