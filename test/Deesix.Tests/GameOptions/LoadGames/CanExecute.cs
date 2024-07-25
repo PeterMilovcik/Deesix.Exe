@@ -26,6 +26,6 @@ public class CanExecute : GameOptionTestFixture<LoadGamesOption>
     {
         GameRepository.Add(new Game());
         GameOption!.CanExecute(new GameTurn{ LastOption = null! })
-            .Should().BeTrue(because: "there is a game in the repository.");
+            .Should().BeTrue(because: "there is some game in the repository.");
     }
 }
