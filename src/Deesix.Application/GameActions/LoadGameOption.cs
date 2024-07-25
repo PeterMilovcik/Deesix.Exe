@@ -1,7 +1,7 @@
-﻿using Deesix.Domain.Entities;
+using Deesix.Domain.Entities;
 using Deesix.Domain.Interfaces;
 
-namespace Deesix.Application.GameOptions;
+namespace Deesix.Application.GameActions;
 
 public class LoadGameOption(Game game) : IGameOption
 {

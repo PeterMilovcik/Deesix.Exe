@@ -1,9 +1,8 @@
-﻿using Deesix.Application.GameOptions;
 using Deesix.Application.Interfaces;
 using Deesix.Domain.Entities;
 using Deesix.Domain.Interfaces;
 
-namespace Deesix.Application;
+namespace Deesix.Application.GameActions;
 
 public class WorldGenresGameOption(IRepository<World> worldRepository) : IGameOption
 {

@@ -1,5 +1,5 @@
 ﻿using Deesix.Application.Factories;
-using Deesix.Application.GameOptions;
+using Deesix.Application.GameActions;
 using Deesix.Domain;
 using Deesix.Domain.Interfaces;
 using Microsoft.Extensions.DependencyInjection;

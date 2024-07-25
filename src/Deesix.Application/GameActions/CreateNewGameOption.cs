@@ -2,7 +2,7 @@ using Deesix.Application.Interfaces;
 using Deesix.Domain.Entities;
 using Deesix.Domain.Interfaces;
 
-namespace Deesix.Application.GameOptions;
+namespace Deesix.Application.GameActions;
 
 public sealed class CreateNewGameOption(IRepository<Game> gameRepository) : IGameOption
 {

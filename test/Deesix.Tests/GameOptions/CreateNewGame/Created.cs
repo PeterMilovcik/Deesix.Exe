@@ -1,4 +1,4 @@
-﻿using Deesix.Application.GameOptions;
+﻿using Deesix.Application.GameActions;
 using FluentAssertions;
 
 namespace Deesix.Tests.GameOptions.CreateNewGame;

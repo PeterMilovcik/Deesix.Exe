@@ -1,8 +1,4 @@
-﻿using CSharpFunctionalExtensions;
-using Deesix.Domain.Entities;
-using Deesix.Domain.Interfaces;
-
-namespace Deesix.Application;
+﻿namespace Deesix.Application;
 
 // public sealed class CreateWorldGameAction : IGameAction
 // {

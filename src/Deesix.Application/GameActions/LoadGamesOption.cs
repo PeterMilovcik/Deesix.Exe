@@ -1,9 +1,9 @@
-﻿using CSharpFunctionalExtensions;
+using CSharpFunctionalExtensions;
 using Deesix.Application.Interfaces;
 using Deesix.Domain.Entities;
 using Deesix.Domain.Interfaces;
 
-namespace Deesix.Application.GameOptions;
+namespace Deesix.Application.GameActions;
 
 public class LoadGamesOption(IRepository<Game> gameRepository) : IGameOption
 {

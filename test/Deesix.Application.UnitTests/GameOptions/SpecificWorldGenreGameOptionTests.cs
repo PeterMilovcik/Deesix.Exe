@@ -1,4 +1,5 @@
-﻿using Deesix.Application.Interfaces;
+﻿using Deesix.Application.GameActions;
+using Deesix.Application.Interfaces;
 using Deesix.Domain.Entities;
 using FluentAssertions;
 using Moq;

@@ -1,5 +1,5 @@
 using CSharpFunctionalExtensions;
-using Deesix.Application.GameOptions;
+using Deesix.Application.GameActions;
 using Deesix.Domain.Entities;
 using Deesix.Domain.Interfaces;
 using FluentAssertions;
