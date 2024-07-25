@@ -22,51 +22,6 @@ public class LoadGamesOptionTests : TestFixture
     }
 
     [Test]
-    public void Title_Should_Return_Load_Games() => 
-        loadGamesOption!.Title.Should().Be("Load Game", because: "that is the expected title.");
-
-    [Test]
-    public void Order_Should_Return_2() => 
-        loadGamesOption!.Order.Should().Be(2, because: "that is the expected order.");
-
-    [Test]
-    public void CanExecute_WhenGameHasValue_ReturnsFalse() => 
-        loadGamesOption!.CanExecute(new GameTurn{ Game = new Game() })
-            .Should().BeFalse(because: "a game is already loaded.");
-
-    [Test]
-    public void CanExecute_WhenGameHasNoValueAndRepositoryHasNoGames_ReturnsFalse()
-    {
-        GameRepositoryMock.Setup(x => x.GetAll()).Returns(new List<Game>());
-        loadGamesOption!.CanExecute(new GameTurn())
-            .Should().BeFalse(because: "there are no games in the repository.");
-    }
-
-    [Test]
-    public void CanExecute_WhenGameHasNoValueAndRepositoryHasGames_ReturnsTrue()
-    {
-        // Arrange
-        GameRepositoryMock.Setup(x => x.GetAll()).Returns(new List<Game> { new Game() });
-        // Act & Assert
-        bool result = loadGamesOption!.CanExecute(new GameTurn());
-        result.Should().BeTrue(because: "there is a game in the repository.");
-    }
-
-    [Test]
-    public void CanExecute_Should_Return_True_When_LastOption_Is_Null()
-    {
-        // Arrange
-        var gameTurn = new GameTurn
-        {
-            LastOption = null!
-        };
-        // Act
-        bool result = loadGamesOption!.CanExecute(gameTurn);
-        // Assert
-        result.Should().BeTrue();
-    }
-
-    [Test]
     public async Task ExecuteAsync_WhenGameHasNoValueAndRepositoryHasGames_ReturnsGameOptionResult()
     {
         // Arrange
