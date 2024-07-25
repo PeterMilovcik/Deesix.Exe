@@ -3,7 +3,7 @@ using Deesix.Domain.Interfaces;
 
 namespace Deesix.Application.GameActions;
 
-public sealed class ExitGameOption : IGameAction
+public sealed class ExitGameAction : IGameAction
 {
     public string Title => "Exit Game";
 

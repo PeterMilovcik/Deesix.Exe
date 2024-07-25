@@ -16,7 +16,7 @@ internal class GameLoop(IGameMaster gameMaster, IRepository<Game> gameRepository
     {
         int turn = 1;
         IGameAction? gameOption = null;
-        while (gameOption is not ExitGameOption)
+        while (gameOption is not ExitGameAction)
         {
             DisplayGameState(turn);
             gameOption = SelectGameOption();
