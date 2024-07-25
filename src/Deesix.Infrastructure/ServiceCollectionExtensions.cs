@@ -17,6 +17,7 @@ public static class ServiceCollectionExtensions
         var dbPath = Path.Combine(basePath, "database.db");        
         
         services.AddScoped<IRepository<Game>, GenericRepository<Game>>();
+        services.AddScoped<IRepository<World>, GenericRepository<World>>();
 
         services.AddDbContext<ApplicationDbContext>(options => 
             options.UseSqlite($"Data Source={dbPath}"));

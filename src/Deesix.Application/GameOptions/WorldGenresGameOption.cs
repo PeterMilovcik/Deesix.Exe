@@ -1,11 +1,15 @@
 ﻿using Deesix.Application.GameOptions;
+using Deesix.Application.Interfaces;
 using Deesix.Domain.Entities;
 using Deesix.Domain.Interfaces;
 
 namespace Deesix.Application;
 
-public class WorldGenresGameOption : IGameOption
+public class WorldGenresGameOption(IRepository<World> worldRepository) : IGameOption
 {
+    private readonly IRepository<World> worldRepository = worldRepository
+        ?? throw new ArgumentNullException(nameof(worldRepository));
+
     public string Title => "Choose a World Genre";
 
     public int Order => 1;
@@ -19,17 +23,17 @@ public class WorldGenresGameOption : IGameOption
     {
         var gameOptions = new List<IGameOption>
         {
-            new SpecificWorldGenreGameOption("High Fantasy"),
-            new SpecificWorldGenreGameOption("Low Fantasy"),
-            new SpecificWorldGenreGameOption("Dystopian Fantasy"),
-            new SpecificWorldGenreGameOption("Magical Realism"),
-            new SpecificWorldGenreGameOption("Sword and Sorcery"),
-            new SpecificWorldGenreGameOption("Urban Fantasy"),
-            new SpecificWorldGenreGameOption("Paranormal Fantasy"),
-            new SpecificWorldGenreGameOption("Dark Fantasy"),
-            new SpecificWorldGenreGameOption("Superhero Fantasy"),
-            new SpecificWorldGenreGameOption("Steampunk Fantasy"),
-            new SpecificWorldGenreGameOption("Sci-fi Fantasy")
+            new SpecificWorldGenreGameOption("High Fantasy", worldRepository),
+            new SpecificWorldGenreGameOption("Low Fantasy", worldRepository),
+            new SpecificWorldGenreGameOption("Dystopian Fantasy", worldRepository),
+            new SpecificWorldGenreGameOption("Magical Realism", worldRepository),
+            new SpecificWorldGenreGameOption("Sword and Sorcery", worldRepository),
+            new SpecificWorldGenreGameOption("Urban Fantasy", worldRepository),
+            new SpecificWorldGenreGameOption("Paranormal Fantasy", worldRepository),
+            new SpecificWorldGenreGameOption("Dark Fantasy", worldRepository),
+            new SpecificWorldGenreGameOption("Superhero Fantasy", worldRepository),
+            new SpecificWorldGenreGameOption("Steampunk Fantasy", worldRepository),
+            new SpecificWorldGenreGameOption("Sci-fi Fantasy", worldRepository),
         
         };
         return Task.FromResult(gameTurn with 

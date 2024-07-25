@@ -15,7 +15,7 @@ public sealed class CreateNewGameOption(IRepository<Game> gameRepository) : IGam
 
     public bool CanExecute(GameTurn gameTurn) => 
         gameTurn.Game.HasNoValue && 
-        gameTurn.LastOption is not LoadGamesOption;
+        gameTurn.LastOption is null;
 
     public Task<GameTurn> ExecuteAsync(GameTurn gameTurn)
     {
