@@ -4,7 +4,7 @@ using Deesix.Domain.Interfaces;
 
 namespace Deesix.Application.GameActions;
 
-public sealed class CreateNewGameOption(IRepository<Game> gameRepository) : IGameOption
+public sealed class CreateNewGameAction(IRepository<Game> gameRepository) : IGameAction
 {
     private readonly IRepository<Game> gameRepository = gameRepository
         ?? throw new ArgumentNullException(nameof(gameRepository));
@@ -15,7 +15,7 @@ public sealed class CreateNewGameOption(IRepository<Game> gameRepository) : IGam
 
     public bool CanExecute(GameTurn gameTurn) => 
         gameTurn.Game.HasNoValue && 
-        gameTurn.LastOption is null;
+        gameTurn.LastGameAction is null;
 
     public Task<GameTurn> ExecuteAsync(GameTurn gameTurn)
     {
@@ -24,7 +24,7 @@ public sealed class CreateNewGameOption(IRepository<Game> gameRepository) : IGam
         {
             Message = "Game created successfully! Get ready for an exciting adventure!",
             Game = createdGame,
-            GameOptions = []
+            GameActions = []
         });
     }
 }

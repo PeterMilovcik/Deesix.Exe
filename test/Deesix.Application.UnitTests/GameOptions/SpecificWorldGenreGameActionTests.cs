@@ -55,6 +55,6 @@ public class SpecificWorldGenreGameActionTests : TestFixture
         result.Game.Value.World!.Genre.Should().Be(Genre);
         result.Message.Should().Be($"World genre set to {Genre}. Good choice!");
         result.Question.Should().Be("What would you like to do next?");
-        result.GameOptions.Should().BeEmpty();
+        result.GameActions.Should().BeEmpty();
     }
 }

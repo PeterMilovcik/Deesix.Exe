@@ -14,16 +14,16 @@ public sealed class GameMaster : IGameMaster
         var options = gameOptionFactory
             .CreateGameOptions(GameTurn)
             .Where(option => option.CanExecute(GameTurn));
-        GameTurn.GameOptions.AddRange(options);
+        GameTurn.GameActions.AddRange(options);
     }
 
-    public async Task ProcessOptionAsync(IGameOption option)
+    public async Task ProcessOptionAsync(IGameAction option)
     {
         GameTurn = await option.ExecuteAsync(GameTurn);
-        GameTurn.LastOption = option;
+        GameTurn.LastGameAction = option;
         var generalGameOptions = gameOptionFactory
             .CreateGameOptions(GameTurn)
             .Where(option => option.CanExecute(GameTurn));
-        GameTurn.GameOptions.AddRange(generalGameOptions);
+        GameTurn.GameActions.AddRange(generalGameOptions);
     }
 }

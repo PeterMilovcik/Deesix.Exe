@@ -12,5 +12,5 @@ public class GameOptionResult(string message)
 
     public Result<Game> NextGameState { get; set; } = Result.Failure<Game>("No game loaded yet.");
 
-    public List<IGameOption> NextAdditionalGameOptions { get; } = new List<IGameOption>();
+    public List<IGameAction> NextAdditionalGameOptions { get; } = new List<IGameAction>();
 }

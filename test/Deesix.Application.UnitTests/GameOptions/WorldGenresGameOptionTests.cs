@@ -43,15 +43,15 @@ public class WorldGenresGameOptionTests : TestFixture
         worldGenresGameOption!.CanExecute(new GameTurn{ Game = new Game{ World = new World() } }).Should().BeFalse(because: "the game has a value and the world is not null.");
     
     [Test]
-    public void CanExecute_Should_Return_True_When_Game_HasValue_And_World_IsNull_And_LastOption_Is_CreateNewGameOption()
+    public void CanExecute_Should_Return_True_When_Game_HasValue_And_World_IsNull_And_LastOption_Is_CreateNewGameAction()
     {
         // Arrange
         var gameRepository = new Mock<IRepository<Game>>().Object;
-        var lastOption = new CreateNewGameOption(gameRepository);
+        var lastOption = new CreateNewGameAction(gameRepository);
         // Act and Assert
         worldGenresGameOption!.CanExecute(validGameTurnInput with 
         {        
-            LastOption = lastOption
+            LastGameAction = lastOption
         }).Should().BeTrue(
             because: "the game has a value, the world is null, " + 
             "and the last option is CreateNewGameOption.");
@@ -81,7 +81,7 @@ public class WorldGenresGameOptionTests : TestFixture
     public async Task ExecuteAsync_Should_Return_New_GameTurn_With_Specific_GameOptions()
     {
         var newGameTurn = await worldGenresGameOption!.ExecuteAsync(validGameTurnInput);
-        newGameTurn.GameOptions.Should().NotBeNullOrEmpty(because: "it should have specific game options.");
+        newGameTurn.GameActions.Should().NotBeNullOrEmpty(because: "it should have specific game options.");
     }
 
     [TestCase("High Fantasy")]
@@ -98,7 +98,7 @@ public class WorldGenresGameOptionTests : TestFixture
     public async Task ExecuteAsync_Should_Return_New_GameTurn_With_SpecificWorldGenreGameOption_With_Title(string genreName)
     {
         var newGameTurn = await worldGenresGameOption!.ExecuteAsync(validGameTurnInput);
-        var specificWorldGenreGameOption = newGameTurn.GameOptions.OfType<SpecificWorldGenreGameAction>().FirstOrDefault(x => x.Title == genreName);
+        var specificWorldGenreGameOption = newGameTurn.GameActions.OfType<SpecificWorldGenreGameAction>().FirstOrDefault(x => x.Title == genreName);
         specificWorldGenreGameOption.Should().NotBeNull(because: $"it should have a specific world genre game option with title {genreName}.");
     }
 }

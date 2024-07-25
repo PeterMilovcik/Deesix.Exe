@@ -4,7 +4,7 @@ using Deesix.Domain.Interfaces;
 
 namespace Deesix.Application.GameActions;
 
-public class WorldGenresGameOption(IRepository<World> worldRepository) : IGameOption
+public class WorldGenresGameOption(IRepository<World> worldRepository) : IGameAction
 {
     private readonly IRepository<World> worldRepository = worldRepository
         ?? throw new ArgumentNullException(nameof(worldRepository));
@@ -16,11 +16,11 @@ public class WorldGenresGameOption(IRepository<World> worldRepository) : IGameOp
     public bool CanExecute(GameTurn gameTurn) => 
         gameTurn.Game.HasValue && 
         gameTurn.Game.Value.World is null &&
-        gameTurn.LastOption is CreateNewGameOption;
+        gameTurn.LastGameAction is CreateNewGameAction;
 
     public Task<GameTurn> ExecuteAsync(GameTurn gameTurn)
     {
-        var gameOptions = new List<IGameOption>
+        var gameOptions = new List<IGameAction>
         {
             new SpecificWorldGenreGameAction("High Fantasy", worldRepository),
             new SpecificWorldGenreGameAction("Low Fantasy", worldRepository),
@@ -39,7 +39,7 @@ public class WorldGenresGameOption(IRepository<World> worldRepository) : IGameOp
         {
             Message = "Let's choose a specific world genre.",
             Question = "Which one would you like to choose?",
-            GameOptions = gameOptions
+            GameActions = gameOptions
         });
     }
 }

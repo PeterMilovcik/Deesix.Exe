@@ -4,7 +4,7 @@ using Deesix.Domain.Interfaces;
 
 namespace Deesix.Application.GameActions;
 
-public class SpecificWorldGenreGameAction(string genre, IRepository<World> worldRepository) : IGameOption
+public class SpecificWorldGenreGameAction(string genre, IRepository<World> worldRepository) : IGameAction
 {
     private readonly IRepository<World> worldRepository = worldRepository 
         ?? throw new ArgumentNullException(nameof(worldRepository));
@@ -30,7 +30,7 @@ public class SpecificWorldGenreGameAction(string genre, IRepository<World> world
                 World = addedWorld
             },
             Question = "What would you like to do next?",
-            GameOptions = []
+            GameActions = []
         });
     }
 }

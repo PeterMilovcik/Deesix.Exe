@@ -12,10 +12,10 @@ public static class ServiceCollectionExtensions
     {
         services.AddDeesixDomain();
         services.AddSingleton<IGameOptionFactory, GameOptionFactory>();
-        services.AddSingleton<IGameOption, CreateNewGameOption>();
-        services.AddSingleton<IGameOption, ExitGameOption>();
-        services.AddSingleton<IGameOption, LoadGamesOption>();
-        services.AddSingleton<IGameOption, WorldGenresGameOption>();
+        services.AddSingleton<IGameAction, CreateNewGameAction>();
+        services.AddSingleton<IGameAction, ExitGameOption>();
+        services.AddSingleton<IGameAction, LoadGamesAction>();
+        services.AddSingleton<IGameAction, WorldGenresGameOption>();
 
         return services;
     }

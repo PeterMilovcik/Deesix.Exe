@@ -2,21 +2,21 @@ using Deesix.Domain.Interfaces;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Deesix.Tests.GameOptions;
+namespace Deesix.Tests.GameActions;
 
-public class GameOptionTestFixture<T> : TestFixture where T : IGameOption
+public class GameActionTestFixture<T> : TestFixture where T : IGameAction
 {
-    protected T? GameOption;
+    protected T? GameAction;
 
     [SetUp]
     public override void SetUp()
     {
         base.SetUp();
-        GameOption = Services
-            .GetRequiredService<IEnumerable<IGameOption>>()
+        GameAction = Services
+            .GetRequiredService<IEnumerable<IGameAction>>()
             .OfType<T>()
             .FirstOrDefault();
-        GameOption.Should().NotBeNull(
+        GameAction.Should().NotBeNull(
             because: "it is registered as a service.");
     }
 }

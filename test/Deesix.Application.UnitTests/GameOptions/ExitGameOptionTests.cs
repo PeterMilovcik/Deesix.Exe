@@ -15,7 +15,7 @@ public class ExitGameOptionTests : TestFixture
     public override void SetUp()
     {
         base.SetUp();
-        exitGameOption = Services.GetRequiredService<IEnumerable<IGameOption>>().OfType<ExitGameOption>().FirstOrDefault();
+        exitGameOption = Services.GetRequiredService<IEnumerable<IGameAction>>().OfType<ExitGameOption>().FirstOrDefault();
         exitGameOption.Should().NotBeNull(because: "it is registered as a service.");
     }    
 

@@ -4,5 +4,5 @@ namespace Deesix.Domain.Interfaces;
 
 public interface IGameOptionFactory
 {
-    List<IGameOption> CreateGameOptions(GameTurn gameTurn);
+    List<IGameAction> CreateGameOptions(GameTurn gameTurn);
 }

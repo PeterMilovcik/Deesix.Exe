@@ -15,7 +15,7 @@ internal class GameLoop(IGameMaster gameMaster, IRepository<Game> gameRepository
     public async Task StartAsync()
     {
         int turn = 1;
-        IGameOption? gameOption = null;
+        IGameAction? gameOption = null;
         while (gameOption is not ExitGameOption)
         {
             DisplayGameState(turn);
@@ -26,12 +26,12 @@ internal class GameLoop(IGameMaster gameMaster, IRepository<Game> gameRepository
         }
     }
 
-    private IGameOption SelectGameOption()
+    private IGameAction SelectGameOption()
     {
-        var options = gameMaster.GameTurn.GameOptions;
+        var options = gameMaster.GameTurn.GameActions;
 
         var option = AnsiConsole.Prompt(
-            new SelectionPrompt<IGameOption>()
+            new SelectionPrompt<IGameAction>()
                 .UseConverter(option => option.Title)
                 .Title(gameMaster.GameTurn.Question)
                 .PageSize(10)

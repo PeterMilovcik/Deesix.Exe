@@ -2,7 +2,7 @@ using Deesix.Domain.Entities;
 
 namespace Deesix.Domain.Interfaces;
 
-public interface IGameOption
+public interface IGameAction
 {
     string Title { get; }
     int Order { get; }
