@@ -13,7 +13,10 @@ public class Created : TestFixture
     public override void SetUp()
     {
         base.SetUp();
-        createNewGameOption = Services.GetRequiredService<IEnumerable<IGameOption>>().OfType<CreateNewGameOption>().FirstOrDefault();
+        createNewGameOption = Services
+            .GetRequiredService<IEnumerable<IGameOption>>()
+            .OfType<CreateNewGameOption>()
+            .FirstOrDefault();
         createNewGameOption.Should().NotBeNull(
             because: "it is registered as a service.");
     }
