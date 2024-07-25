@@ -11,13 +11,19 @@ public sealed class GameMaster : IGameMaster
     {
         GameTurn = new GameTurn();
         this.gameOptionFactory = gameOptionFactory;
-        GameTurn.GameOptions.AddRange(gameOptionFactory.CreateGameOptions(GameTurn));
+        var options = gameOptionFactory
+            .CreateGameOptions(GameTurn)
+            .Where(option => option.CanExecute(GameTurn));
+        GameTurn.GameOptions.AddRange(options);
     }
 
     public async Task ProcessOptionAsync(IGameOption option)
     {
         GameTurn = await option.ExecuteAsync(GameTurn);
         GameTurn.LastOption = option;
-        GameTurn.GameOptions.AddRange(gameOptionFactory.CreateGameOptions(GameTurn));
+        var generalGameOptions = gameOptionFactory
+            .CreateGameOptions(GameTurn)
+            .Where(option => option.CanExecute(GameTurn));
+        GameTurn.GameOptions.AddRange(generalGameOptions);
     }
 }

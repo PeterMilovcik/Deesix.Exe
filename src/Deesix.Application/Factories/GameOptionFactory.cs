@@ -9,7 +9,6 @@ public class GameOptionFactory(IEnumerable<IGameOption> gameOptions) : IGameOpti
 
     public List<IGameOption> CreateGameOptions(GameTurn gameTurn) => 
         gameOptions
-            .Where(option => option.CanExecute(gameTurn))
             .OrderBy(option => option.Order)
             .ToList();
 }

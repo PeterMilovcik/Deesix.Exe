@@ -24,6 +24,7 @@ public sealed class CreateNewGameOption(IRepository<Game> gameRepository) : IGam
         {
             Message = "Game created successfully! Get ready for an exciting adventure!",
             Game = createdGame,
+            GameOptions = []
         });
     }
 }

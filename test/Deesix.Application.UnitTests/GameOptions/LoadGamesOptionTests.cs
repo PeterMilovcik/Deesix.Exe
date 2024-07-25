@@ -53,6 +53,20 @@ public class LoadGamesOptionTests : TestFixture
     }
 
     [Test]
+    public void CanExecute_Should_Return_True_When_LastOption_Is_Null()
+    {
+        // Arrange
+        var gameTurn = new GameTurn
+        {
+            LastOption = null!
+        };
+        // Act
+        bool result = loadGamesOption!.CanExecute(gameTurn);
+        // Assert
+        result.Should().BeTrue();
+    }
+
+    [Test]
     public async Task ExecuteAsync_WhenGameHasNoValueAndRepositoryHasGames_ReturnsGameOptionResult()
     {
         // Arrange

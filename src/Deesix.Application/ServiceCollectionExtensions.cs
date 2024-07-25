@@ -15,6 +15,7 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IGameOption, CreateNewGameOption>();
         services.AddSingleton<IGameOption, ExitGameOption>();
         services.AddSingleton<IGameOption, LoadGamesOption>();
+        services.AddSingleton<IGameOption, WorldGenresGameOption>();
 
         return services;
     }
