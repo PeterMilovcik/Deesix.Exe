@@ -23,6 +23,7 @@ public class TestFixture
         GameRepository = Services.GetRequiredService<IRepository<Game>>();
         WorldRepository = Services.GetRequiredService<IRepository<World>>();
     }
+    
     private static IServiceProvider CreateServices() => 
         Host.CreateDefaultBuilder()
             .ConfigureServices((hostContext, services) =>
