@@ -98,7 +98,7 @@ public class WorldGenresGameOptionTests : TestFixture
     public async Task ExecuteAsync_Should_Return_New_GameTurn_With_SpecificWorldGenreGameOption_With_Title(string genreName)
     {
         var newGameTurn = await worldGenresGameOption!.ExecuteAsync(validGameTurnInput);
-        var specificWorldGenreGameOption = newGameTurn.GameOptions.OfType<SpecificWorldGenreGameOption>().FirstOrDefault(x => x.Title == genreName);
+        var specificWorldGenreGameOption = newGameTurn.GameOptions.OfType<SpecificWorldGenreGameAction>().FirstOrDefault(x => x.Title == genreName);
         specificWorldGenreGameOption.Should().NotBeNull(because: $"it should have a specific world genre game option with title {genreName}.");
     }
 }

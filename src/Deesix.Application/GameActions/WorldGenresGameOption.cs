@@ -22,17 +22,17 @@ public class WorldGenresGameOption(IRepository<World> worldRepository) : IGameOp
     {
         var gameOptions = new List<IGameOption>
         {
-            new SpecificWorldGenreGameOption("High Fantasy", worldRepository),
-            new SpecificWorldGenreGameOption("Low Fantasy", worldRepository),
-            new SpecificWorldGenreGameOption("Dystopian Fantasy", worldRepository),
-            new SpecificWorldGenreGameOption("Magical Realism", worldRepository),
-            new SpecificWorldGenreGameOption("Sword and Sorcery", worldRepository),
-            new SpecificWorldGenreGameOption("Urban Fantasy", worldRepository),
-            new SpecificWorldGenreGameOption("Paranormal Fantasy", worldRepository),
-            new SpecificWorldGenreGameOption("Dark Fantasy", worldRepository),
-            new SpecificWorldGenreGameOption("Superhero Fantasy", worldRepository),
-            new SpecificWorldGenreGameOption("Steampunk Fantasy", worldRepository),
-            new SpecificWorldGenreGameOption("Sci-fi Fantasy", worldRepository),
+            new SpecificWorldGenreGameAction("High Fantasy", worldRepository),
+            new SpecificWorldGenreGameAction("Low Fantasy", worldRepository),
+            new SpecificWorldGenreGameAction("Dystopian Fantasy", worldRepository),
+            new SpecificWorldGenreGameAction("Magical Realism", worldRepository),
+            new SpecificWorldGenreGameAction("Sword and Sorcery", worldRepository),
+            new SpecificWorldGenreGameAction("Urban Fantasy", worldRepository),
+            new SpecificWorldGenreGameAction("Paranormal Fantasy", worldRepository),
+            new SpecificWorldGenreGameAction("Dark Fantasy", worldRepository),
+            new SpecificWorldGenreGameAction("Superhero Fantasy", worldRepository),
+            new SpecificWorldGenreGameAction("Steampunk Fantasy", worldRepository),
+            new SpecificWorldGenreGameAction("Sci-fi Fantasy", worldRepository),
         
         };
         return Task.FromResult(gameTurn with 

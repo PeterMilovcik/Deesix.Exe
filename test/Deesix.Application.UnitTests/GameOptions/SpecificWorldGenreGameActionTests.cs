@@ -6,18 +6,18 @@ using Moq;
 
 namespace Deesix.Application.UnitTests.GameOptions;
 
-public class SpecificWorldGenreGameOptionTests : TestFixture
+public class SpecificWorldGenreGameActionTests : TestFixture
 {
     private const string Genre = "Test Genre";
     private Mock<IRepository<World>> worldRepositoryMock;
-    private SpecificWorldGenreGameOption? specificWorldGenreGameOption;
+    private SpecificWorldGenreGameAction? specificWorldGenreGameOption;
 
     [SetUp]
     public override void SetUp()
     {
         base.SetUp();
         worldRepositoryMock = new Mock<IRepository<World>>();
-        specificWorldGenreGameOption = new SpecificWorldGenreGameOption(Genre, worldRepositoryMock.Object);
+        specificWorldGenreGameOption = new SpecificWorldGenreGameAction(Genre, worldRepositoryMock.Object);
     }
 
     [Test]
