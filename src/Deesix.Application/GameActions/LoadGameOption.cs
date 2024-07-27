@@ -13,7 +13,7 @@ public class LoadGameAction(Game game) : IGameAction
             ? $"Load: {gameToLoad.GameId} - Unknown World"
             : $"Load: {gameToLoad.GameId} - {gameToLoad.World.Name}";
 
-    public int Order => 2;
+    public int Order => 1;
 
     public bool CanExecute(GameTurn gameTurn) => gameTurn.Game.HasNoValue && gameTurn.LastGameAction is LoadGamesAction;
 
