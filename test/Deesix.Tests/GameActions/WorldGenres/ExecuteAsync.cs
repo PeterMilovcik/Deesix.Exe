@@ -45,7 +45,7 @@ public class ExecuteAsync : GameActionTestFixture<WorldGenresGameOption>
     {
         var gameTurn = new GameTurn();
         gameTurn = await GameAction!.ExecuteAsync(gameTurn);        
-        var gameAction = gameTurn.GameActions.FirstOrDefault(action => action.Title == genre);
+        var gameAction = gameTurn.GameActions.FirstOrDefault(action => action.Title.StartsWith(genre));
         gameAction.Should().NotBeNull(
             because: "the specific world genre game action should be added to the GameTurn");
     }

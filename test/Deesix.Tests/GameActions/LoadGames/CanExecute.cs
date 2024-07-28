@@ -25,6 +25,7 @@ public class CanExecute : GameActionTestFixture<LoadGamesAction>
     public void Should_Return_True_When_Game_HasNoValue_And_GameRepository_HasSomeGame_And_LastGameAction_IsNull()
     {
         GameRepository.Add(new Game());
+        GameRepository.SaveChanges();
         GameAction!.CanExecute(new GameTurn{ LastGameAction = null! })
             .Should().BeTrue(because: "there is no game yet, " + 
                 "there are games in the game repository and " + 

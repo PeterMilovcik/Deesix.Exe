@@ -10,6 +10,7 @@ public class ExecuteAsync : GameActionTestFixture<LoadGamesAction>
     {
         base.SetUp();
         GameRepository.Add(new Game());
+        GameRepository.SaveChanges();
     }
 
     [Test]

@@ -1,3 +1,5 @@
+using CSharpFunctionalExtensions;
+using Deesix.Application.GameActions;
 using Deesix.Domain.Interfaces;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,5 +16,19 @@ public class GameMasterTestFixture : TestFixture
         base.SetUp();
         GameMaster = Services.GetRequiredService<IGameMaster>();
         GameMaster.Should().NotBeNull(because: "the game master should be registered in the services");
+    }
+
+    protected async Task CreateNewGame() => await Process<CreateNewGameAction>();
+    protected async Task ShowWorldGendres() => await Process<WorldGenresGameOption>();
+    protected async Task ChooseWorldGenre() => await Process<SpecificWorldGenreGameAction>();
+
+    private async Task Process<TGameAction>() where TGameAction : IGameAction
+    {
+        GameMaster.GameTurn.ToConsole();
+        Console.WriteLine($"Processing {typeof(TGameAction).Name}");
+        await GameMaster.ProcessGameActionAsync(
+            GameMaster.GameTurn.GameActions.OfType<TGameAction>().First());
+        GameMaster.GameTurn.Game.ToConsole();
+        GameMaster.GameTurn.Game.Execute(game => GameRepository.SaveChanges());
     }
 }
