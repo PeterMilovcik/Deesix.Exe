@@ -14,7 +14,13 @@ public static class ServiceCollectionExtensions
         services.AddDeesixApplication();
 
         var basePath = AppDomain.CurrentDomain.BaseDirectory;
-        var dbPath = Path.Combine(basePath, "database.db");        
+        var dbName = "database.db";
+        if (IsTestEnvironment())
+        {
+            dbName = "test.db";
+        }
+        var dbPath = Path.Combine(basePath, dbName);        
+
         
         services.AddScoped<IRepository<Game>, GenericRepository<Game>>();
         services.AddScoped<IRepository<World>, GenericRepository<World>>();
@@ -26,4 +32,7 @@ public static class ServiceCollectionExtensions
         
         return services;
     }
+
+    private static bool IsTestEnvironment() => 
+        Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Test";
 }

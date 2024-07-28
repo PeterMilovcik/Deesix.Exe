@@ -18,5 +18,6 @@ public interface IRepository<TEntity> where TEntity : class
     Task<int> CountAsync();
     void Update(TEntity entity);
     void Remove(TEntity entity);
+    void SaveChanges();
     void Dispose();
 }

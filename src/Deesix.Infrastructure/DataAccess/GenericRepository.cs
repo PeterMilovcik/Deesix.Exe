@@ -11,14 +11,12 @@ public sealed class GenericRepository<TEntity>(ApplicationDbContext applicationD
     public TEntity Add(TEntity model)
     {
         var entry = context.Set<TEntity>().Add(model);
-        context.SaveChanges();
         return entry.Entity;
     }
 
     public void AddRange(IEnumerable<TEntity> model)
     {
         context.Set<TEntity>().AddRange(model);
-        context.SaveChanges();
     }
 
     public TEntity? GetById(int id) => 
@@ -54,14 +52,14 @@ public sealed class GenericRepository<TEntity>(ApplicationDbContext applicationD
     public void Update(TEntity entity)
     {
         context.Entry(entity).State = EntityState.Modified;
-        context.SaveChanges();
     }
 
     public void Remove(TEntity entity)
     {
         context.Set<TEntity>().Remove(entity);
-        context.SaveChanges();
     }
 
     public void Dispose() => context.Dispose();
+
+    public void SaveChanges() => context.SaveChanges();
 }

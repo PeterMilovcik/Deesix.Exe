@@ -21,7 +21,8 @@ public class SpecificWorldGenreGameAction(string genre, IRepository<World> world
         {
             GameId = gameTurn.Game.Value.Id,
             Genre = genre
-        };        
+        };
+        gameTurn.Game.Value.World = newWorld;
         return Task.FromResult(gameTurn with
         {
             Message = $"World genre set to {genre}. Good choice!",
