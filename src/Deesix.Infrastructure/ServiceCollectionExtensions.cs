@@ -20,7 +20,9 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IRepository<World>, GenericRepository<World>>();
 
         services.AddDbContext<ApplicationDbContext>(options => 
-            options.UseSqlite($"Data Source={dbPath}"));
+            options
+                .UseSqlite($"Data Source={dbPath}")
+                .EnableSensitiveDataLogging());
         
         return services;
     }
