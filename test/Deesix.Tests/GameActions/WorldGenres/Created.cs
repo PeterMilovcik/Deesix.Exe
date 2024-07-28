@@ -1,5 +1,4 @@
 ﻿using Deesix.Application.GameActions;
-using Deesix.Tests.GameActions;
 using FluentAssertions;
 
 namespace Deesix.Tests.GameActions.WorldGenres;

@@ -20,7 +20,7 @@ internal class GameLoop(IGameMaster gameMaster, IRepository<Game> gameRepository
         {
             DisplayGameState(turn);
             gameOption = SelectGameOption();
-            await gameMaster.ProcessOptionAsync(gameOption);
+            await gameMaster.ProcessGameActionAsync(gameOption);
             gameMaster.GameTurn.Game.Execute(game => gameRepository.Update(game));
             turn++;
         }

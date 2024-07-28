@@ -17,7 +17,7 @@ public sealed class GameMaster : IGameMaster
         GameTurn.GameActions.AddRange(options);
     }
 
-    public async Task ProcessOptionAsync(IGameAction option)
+    public async Task ProcessGameActionAsync(IGameAction option)
     {
         GameTurn = await option.ExecuteAsync(GameTurn);
         GameTurn.LastGameAction = option;

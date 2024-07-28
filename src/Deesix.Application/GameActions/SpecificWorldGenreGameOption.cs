@@ -17,17 +17,17 @@ public class SpecificWorldGenreGameAction(string genre, IRepository<World> world
 
     public Task<GameTurn> ExecuteAsync(GameTurn gameTurn)
     {
-        var world = new World
+        var newWorld = new World
         {
+            GameId = gameTurn.Game.Value.Id,
             Genre = genre
-        };
-        var addedWorld = worldRepository.Add(world);
+        };        
         return Task.FromResult(gameTurn with
         {
             Message = $"World genre set to {genre}. Good choice!",
             Game = gameTurn.Game.Value with
             {
-                World = addedWorld
+                World = newWorld
             },
             Question = "What would you like to do next?",
             GameActions = []
