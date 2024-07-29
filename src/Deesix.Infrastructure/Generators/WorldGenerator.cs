@@ -26,9 +26,9 @@ public class WorldGenerator(IOpenAIGenerator openAIGenerator) : IWorldGenerator
         if (result.IsSuccess)
         {
             names.AddRange(result.Value!
-                                .Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries)
-                                .Select(name => name.TrimStart('-').Trim())
-                                .ToList());
+                .Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries)
+                .Select(name => name.TrimStart('-').Trim())
+                .ToList());
         }
         return names;
     }
