@@ -42,27 +42,27 @@ public class WorldGenerator(IOpenAIGenerator openAIGenerator) : IWorldGenerator
             "Don't add 'RPG' in the description. " +
             $"Remember, the maximum length for the world description should be {600} characters.");
 
-    public async Task<Result<WorldSettings>> GenerateWorldSettingsAsync(List<string> worldThemes)
+    public async Task<Result<WorldSettings>> GenerateWorldSettingsAsync(string genre)
     {
-        var geographySettings = await GenerateSettingsAsync<GeographySettings>(worldThemes);
+        var geographySettings = await GenerateSettingsAsync<GeographySettings>(genre);
         if (geographySettings.IsFailure) return Result.Failure<WorldSettings>(geographySettings.Error);
 
-        var cultureSettings = await GenerateSettingsAsync<CultureSettings>(worldThemes);
+        var cultureSettings = await GenerateSettingsAsync<CultureSettings>(genre);
         if (cultureSettings.IsFailure) return Result.Failure<WorldSettings>(cultureSettings.Error);
 
-        var economySettings = await GenerateSettingsAsync<EconomySettings>(worldThemes);
+        var economySettings = await GenerateSettingsAsync<EconomySettings>(genre);
         if (economySettings.IsFailure) return Result.Failure<WorldSettings>(economySettings.Error);
 
-        var governanceSettings = await GenerateSettingsAsync<GovernanceSettings>(worldThemes);
+        var governanceSettings = await GenerateSettingsAsync<GovernanceSettings>(genre);
         if (governanceSettings.IsFailure) return Result.Failure<WorldSettings>(governanceSettings.Error);
 
-        var religionSettings = await GenerateSettingsAsync<ReligionSettings>(worldThemes);
+        var religionSettings = await GenerateSettingsAsync<ReligionSettings>(genre);
         if (religionSettings.IsFailure) return Result.Failure<WorldSettings>(religionSettings.Error);
 
-        var technologySettings = await GenerateSettingsAsync<TechnologySettings>(worldThemes);
+        var technologySettings = await GenerateSettingsAsync<TechnologySettings>(genre);
         if (technologySettings.IsFailure) return Result.Failure<WorldSettings>(technologySettings.Error);
 
-        var magicSettings = await GenerateSettingsAsync<MagicSettings>(worldThemes);
+        var magicSettings = await GenerateSettingsAsync<MagicSettings>(genre);
         if (magicSettings.IsFailure) return Result.Failure<WorldSettings>(magicSettings.Error);
 
         var worldSettings = new WorldSettings
@@ -79,7 +79,7 @@ public class WorldGenerator(IOpenAIGenerator openAIGenerator) : IWorldGenerator
         return Result.Success(worldSettings);
     }    
 
-    public async Task<Result<T>> GenerateSettingsAsync<T>(List<string> themes) where T : class
+    public async Task<Result<T>> GenerateSettingsAsync<T>(string genre) where T : class
     {
         var jsonSchema = typeof(T).GetJsonPropertyMetadataSchema();
         var systemPrompt = "You are a fictional world builder. " +
@@ -89,7 +89,7 @@ public class WorldGenerator(IOpenAIGenerator openAIGenerator) : IWorldGenerator
             "Use simple, clear, specific, and concise English language. \n\n" +
             $"Json Schema: \n{jsonSchema}";
         var userPrompt = $"Generate {typeof(T).Name} for a game world based on " + 
-            $"the world themes: {string.Join(", ", themes.Select(theme => theme.ToLower()))}. \n";
+            $"the world genre: {genre}. \n";
 
         return await openAIGenerator.GenerateJsonObjectAsync<T>(systemPrompt, userPrompt);
     }

@@ -5,7 +5,7 @@ namespace Deesix.Application.Interfaces;
 
 public interface IWorldGenerator
 {
-    Task<Result<WorldSettings>> GenerateWorldSettingsAsync(List<string> worldThemes);
+    Task<Result<WorldSettings>> GenerateWorldSettingsAsync(string genre);
     Task<Result<string>> GenerateWorldDescriptionAsync(WorldSettings worldSettings);
     Task<List<string>> GenerateWorldNamesAsync(string worldDescription, int count);
 }
