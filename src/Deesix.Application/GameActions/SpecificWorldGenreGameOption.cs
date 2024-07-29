@@ -13,20 +13,20 @@ public class SpecificWorldGenreGameAction(string genre, IRepository<World> world
 
     public int Order => 1;
 
-    public bool CanExecute(GameTurn gameTurn) => true;
+    public bool CanExecute(Turn turn) => true;
 
-    public Task<GameTurn> ExecuteAsync(GameTurn gameTurn)
+    public Task<Turn> ExecuteAsync(Turn turn)
     {
         var newWorld = new World
         {
-            GameId = gameTurn.Game.Value.Id,
+            GameId = turn.Game.Value.Id,
             Genre = genre
         };
-        gameTurn.Game.Value.World = newWorld;
-        return Task.FromResult(gameTurn with
+        turn.Game.Value.World = newWorld;
+        return Task.FromResult(turn with
         {
             Message = $"World genre set to {genre}. Good choice!",
-            Game = gameTurn.Game.Value with
+            Game = turn.Game.Value with
             {
                 World = newWorld
             },

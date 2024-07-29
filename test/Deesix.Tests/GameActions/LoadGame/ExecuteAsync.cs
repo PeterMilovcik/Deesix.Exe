@@ -21,20 +21,20 @@ public class ExecuteAsync : TestFixture
     }
 
     [Test]
-    public async Task Should_Return_GameTurn_With_Correct_Message() =>
-        (await GameAction.ExecuteAsync(new GameTurn()))
+    public async Task Should_Return_Turn_With_Correct_Message() =>
+        (await GameAction.ExecuteAsync(new Turn()))
             .Message.Should().Be("Game loaded successfully.", 
                 because: "that is the message that should be returned when the game is loaded");
     
     [Test]
-    public async Task Should_Return_GameTurn_With_Correct_Game() =>
-        (await GameAction.ExecuteAsync(new GameTurn()))
+    public async Task Should_Return_Turn_With_Correct_Game() =>
+        (await GameAction.ExecuteAsync(new Turn()))
             .Game.Should().Be(game, 
                 because: "this game action should load the game");
     
     [Test]
-    public async Task Should_Return_GameTurn_With_Empty_GameActions() =>
-        (await GameAction.ExecuteAsync(new GameTurn()))
+    public async Task Should_Return_Turn_With_Empty_GameActions() =>
+        (await GameAction.ExecuteAsync(new Turn()))
             .GameActions.Should().BeEmpty(
                 because: "this game action should not add any game actions");
 }

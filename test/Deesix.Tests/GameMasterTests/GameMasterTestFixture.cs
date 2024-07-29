@@ -24,11 +24,11 @@ public class GameMasterTestFixture : TestFixture
 
     private async Task Process<TGameAction>() where TGameAction : IGameAction
     {
-        GameMaster.GameTurn.ToConsole();
+        GameMaster.Turn.ToConsole();
         Console.WriteLine($"Processing {typeof(TGameAction).Name}");
         await GameMaster.ProcessGameActionAsync(
-            GameMaster.GameTurn.GameActions.OfType<TGameAction>().First());
-        GameMaster.GameTurn.Game.ToConsole();
-        GameMaster.GameTurn.Game.Execute(game => GameRepository.SaveChanges());
+            GameMaster.Turn.GameActions.OfType<TGameAction>().First());
+        GameMaster.Turn.Game.ToConsole();
+        GameMaster.Turn.Game.Execute(game => GameRepository.SaveChanges());
     }
 }

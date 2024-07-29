@@ -4,26 +4,26 @@ namespace Deesix.Domain.Entities;
 
 public sealed class GameMaster : IGameMaster
 {
-    public GameTurn GameTurn { get; private set; }
+    public Turn Turn { get; private set; }
     private readonly IGameOptionFactory gameOptionFactory;
 
     public GameMaster(IGameOptionFactory gameOptionFactory)
     {
-        GameTurn = new GameTurn();
+        Turn = new Turn();
         this.gameOptionFactory = gameOptionFactory;
         var options = gameOptionFactory
-            .CreateGameOptions(GameTurn)
-            .Where(option => option.CanExecute(GameTurn));
-        GameTurn.GameActions.AddRange(options);
+            .CreateGameOptions(Turn)
+            .Where(option => option.CanExecute(Turn));
+        Turn.GameActions.AddRange(options);
     }
 
     public async Task ProcessGameActionAsync(IGameAction option)
     {
-        GameTurn = await option.ExecuteAsync(GameTurn);
-        GameTurn.LastGameAction = option;
+        Turn = await option.ExecuteAsync(Turn);
+        Turn.LastGameAction = option;
         var generalGameOptions = gameOptionFactory
-            .CreateGameOptions(GameTurn)
-            .Where(option => option.CanExecute(GameTurn));
-        GameTurn.GameActions.AddRange(generalGameOptions);
+            .CreateGameOptions(Turn)
+            .Where(option => option.CanExecute(Turn));
+        Turn.GameActions.AddRange(generalGameOptions);
     }
 }

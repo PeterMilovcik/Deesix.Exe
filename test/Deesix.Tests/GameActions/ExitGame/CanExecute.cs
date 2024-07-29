@@ -8,5 +8,5 @@ public class CanExecute : GameActionTestFixture<ExitGameAction>
 {    
     [Test]
     public void Should_Return_True() => 
-        GameAction!.CanExecute(new GameTurn()).Should().BeTrue();
+        GameAction!.CanExecute(new Turn()).Should().BeTrue();
 }

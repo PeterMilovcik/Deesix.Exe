@@ -14,20 +14,20 @@ public class ExecuteAsync : GameActionTestFixture<LoadGamesAction>
     }
 
     [Test]
-    public async Task Should_Not_Return_GameTurn_With_Empty_GameActions() => 
-        (await GameAction!.ExecuteAsync(new GameTurn())).GameActions
+    public async Task Should_Not_Return_Turn_With_Empty_GameActions() => 
+        (await GameAction!.ExecuteAsync(new Turn())).GameActions
             .Should().NotBeEmpty(because: $"{nameof(LoadGamesAction)} " + 
                 $"should create new {nameof(LoadGameAction)}(s) for loading game(s).");
     
     [Test]
-    public async Task Should_Return_GameTurn_With_Correct_Message() => 
-        (await GameAction!.ExecuteAsync(new GameTurn())).Message
+    public async Task Should_Return_Turn_With_Correct_Message() => 
+        (await GameAction!.ExecuteAsync(new Turn())).Message
             .Should().Be("Please choose a game to play.", 
                 because: "that is the expected next message.");
     
     [Test]
-    public async Task Should_Return_GameTurn_With_Correct_Question() => 
-        (await GameAction!.ExecuteAsync(new GameTurn())).Question
+    public async Task Should_Return_Turn_With_Correct_Question() => 
+        (await GameAction!.ExecuteAsync(new Turn())).Question
             .Should().Be("Which one would you like to play?", 
                 because: "that is the expected next question.");
 }

@@ -12,16 +12,16 @@
 
 //     public TimeSpan Duration => TimeSpan.Zero;
 
-//     public bool CanExecute(GameTurn gameTurn) => gameTurn.Game.World is null;
+//     public bool CanExecute(Turn turn) => turn.Game.World is null;
 
-//     public Task<Result<GameTurn>> ExecuteAsync(GameTurn gameTurn) => 
-//         Task.FromResult(Result.Success(gameTurn with
+//     public Task<Result<Turn>> ExecuteAsync(Turn turn) => 
+//         Task.FromResult(Result.Success(turn with
 //         {
-//             Game = gameTurn.Game with
+//             Game = turn.Game with
 //             {
 //                 World = new World()
 //             },
-//             // GameMaster = (gameTurn.GameMaster with
+//             // GameMaster = (turn.GameMaster with
 //             // {
 //             //     StartActionMessage = "You have decided to create a new world for a game.",
 //             //     EndActionMessage = "You have decided to create a new world for a game.",
@@ -39,12 +39,12 @@
 //             // })
 //         }));
 
-//     public Task<GameTurn> FinishActionAsync(GameTurn gameTurn)
+//     public Task<Turn> FinishActionAsync(Turn turn)
 //     {
 //         throw new NotImplementedException();
 //     }
 
-//     public Task<GameTurn> StartActionAsync(GameTurn gameTurn)
+//     public Task<Turn> StartActionAsync(Turn turn)
 //     {
 //         throw new NotImplementedException();
 //     }

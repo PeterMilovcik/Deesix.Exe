@@ -15,9 +15,9 @@ public class LoadGameAction(Game game) : IGameAction
 
     public int Order => 1;
 
-    public bool CanExecute(GameTurn gameTurn) => gameTurn.Game.HasNoValue && gameTurn.LastGameAction is LoadGamesAction;
+    public bool CanExecute(Turn turn) => turn.Game.HasNoValue && turn.LastGameAction is LoadGamesAction;
 
-    public Task<GameTurn> ExecuteAsync(GameTurn gameTurn) => Task.FromResult(gameTurn with 
+    public Task<Turn> ExecuteAsync(Turn turn) => Task.FromResult(turn with 
     {
         Message = "Game loaded successfully.",
         Game = gameToLoad,

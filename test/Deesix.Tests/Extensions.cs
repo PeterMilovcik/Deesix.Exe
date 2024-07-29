@@ -6,12 +6,12 @@ namespace Deesix.Tests;
 
 public static class Extensions
 {
-    public static void ToConsole(this GameTurn gameTurn)
+    public static void ToConsole(this Turn turn)
     {
-        Console.WriteLine($"Message: {gameTurn.Message}");
-        Console.WriteLine($"Question: {gameTurn.Question}");
-        Console.WriteLine($"GameActions: {gameTurn.GameActions.Count}");
-        gameTurn.GameActions.ForEach(action => Console.WriteLine($" - {action.Title}"));
+        Console.WriteLine($"Message: {turn.Message}");
+        Console.WriteLine($"Question: {turn.Question}");
+        Console.WriteLine($"GameActions: {turn.GameActions.Count}");
+        turn.GameActions.ForEach(action => Console.WriteLine($" - {action.Title}"));
     }
 
     public static void ToConsole(this Maybe<Game> game)

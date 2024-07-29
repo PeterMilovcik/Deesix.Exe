@@ -21,19 +21,19 @@ internal class GameLoop(IGameMaster gameMaster, IRepository<Game> gameRepository
             DisplayGameState(turn);
             gameOption = SelectGameOption();
             await gameMaster.ProcessGameActionAsync(gameOption);
-            gameMaster.GameTurn.Game.Execute(game => gameRepository.SaveChanges());
+            gameMaster.Turn.Game.Execute(game => gameRepository.SaveChanges());
             turn++;
         }
     }
 
     private IGameAction SelectGameOption()
     {
-        var options = gameMaster.GameTurn.GameActions;
+        var options = gameMaster.Turn.GameActions;
 
         var option = AnsiConsole.Prompt(
             new SelectionPrompt<IGameAction>()
                 .UseConverter(option => option.Title)
-                .Title(gameMaster.GameTurn.Question)
+                .Title(gameMaster.Turn.Question)
                 .PageSize(10)
                 .MoreChoicesText("[grey](Move up and down to reveal more choices)[/]")
                 .AddChoices(options));
@@ -43,6 +43,6 @@ internal class GameLoop(IGameMaster gameMaster, IRepository<Game> gameRepository
     private void DisplayGameState(int turn)
     {
         AnsiConsole.Write(new Rule($"Turn {turn}") { Justification = Justify.Left });
-        AnsiConsole.MarkupLine($"[bold]Game Master says[/]: {gameMaster.GameTurn.Message}");
+        AnsiConsole.MarkupLine($"[bold]Game Master says[/]: {gameMaster.Turn.Message}");
     }
 }

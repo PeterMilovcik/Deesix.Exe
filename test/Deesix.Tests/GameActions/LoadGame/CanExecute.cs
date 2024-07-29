@@ -22,21 +22,21 @@ public class CanExecute : TestFixture
     }
 
     [Test]
-    public void Should_Return_False_When_GameTurn_Has_Value() =>
-        GameAction.CanExecute(new GameTurn { Game = new Game() })
+    public void Should_Return_False_When_Turn_Has_Value() =>
+        GameAction.CanExecute(new Turn { Game = new Game() })
             .Should().BeFalse(
-                because: "this game action should only be executed when GameTurn has no value");
+                because: "this game action should only be executed when Turn has no value");
     
     [Test]
     public void Should_Return_False_When_LastGameAction_Is_Not_LoadGamesAction() =>
-        GameAction.CanExecute(new GameTurn { Game = new Game(), LastGameAction = new Mock<IGameAction>().Object })
+        GameAction.CanExecute(new Turn { Game = new Game(), LastGameAction = new Mock<IGameAction>().Object })
             .Should().BeFalse(
                 because: "this game action should only be executed when LastGameAction is LoadGamesAction");
     
     [Test]
-    public void Should_Return_True_When_GameTurn_Has_No_Game_And_LastGameAction_Is_LoadGamesAction() =>
-        GameAction.CanExecute(new GameTurn { LastGameAction = new LoadGamesAction(GameRepository) })
+    public void Should_Return_True_When_Turn_Has_No_Game_And_LastGameAction_Is_LoadGamesAction() =>
+        GameAction.CanExecute(new Turn { LastGameAction = new LoadGamesAction(GameRepository) })
             .Should().BeTrue(
                 because: "this game action should only be executed when " + 
-                "GameTurn has no game and LastGameAction is LoadGamesAction");
+                "Turn has no game and LastGameAction is LoadGamesAction");
 }

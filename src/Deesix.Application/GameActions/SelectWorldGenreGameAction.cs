@@ -19,23 +19,23 @@ namespace Deesix.Application;
 
 //     public string GameMasterQuestion => "What would you like to do next?";
 
-//     public bool CanExecute(GameTurn gameTurn) =>
-//         gameTurn.Game.World is not null && 
-//         gameTurn.Game.World.Genre is null;
+//     public bool CanExecute(Turn turn) =>
+//         turn.Game.World is not null && 
+//         turn.Game.World.Genre is null;
 
-//     public Task<Result<GameTurn>> ExecuteAsync(GameTurn gameTurn) => 
-//         CanExecute(gameTurn) is false
-//             ? Task.FromResult(Result.Failure<GameTurn>("Cannot execute SelectWorldGenreGameAction."))
-//             : Task.FromResult(Result.Success(gameTurn with
+//     public Task<Result<Turn>> ExecuteAsync(Turn turn) => 
+//         CanExecute(turn) is false
+//             ? Task.FromResult(Result.Failure<Turn>("Cannot execute SelectWorldGenreGameAction."))
+//             : Task.FromResult(Result.Success(turn with
 //             {
-//                 Game = gameTurn.Game with
+//                 Game = turn.Game with
 //                 {
-//                     World = gameTurn.Game.World! with
+//                     World = turn.Game.World! with
 //                     {
 //                         Genre = genre
 //                     }
 //                 },
-//                 // GameMaster = gameTurn.GameMaster with
+//                 // GameMaster = turn.GameMaster with
 //                 // {
 //                 //     StartActionMessage = $"You have selected the {genre} genre for your game world.",
 //                 //     EndActionMessage = $"You have selected the {genre} genre for your game world.",
@@ -47,12 +47,12 @@ namespace Deesix.Application;
 //                 // }
 //             }));
 
-//     public Task<GameTurn> FinishActionAsync(GameTurn gameTurn)
+//     public Task<Turn> FinishActionAsync(Turn turn)
 //     {
 //         throw new NotImplementedException();
 //     }
 
-//     public Task<GameTurn> StartActionAsync(GameTurn gameTurn)
+//     public Task<Turn> StartActionAsync(Turn turn)
 //     {
 //         throw new NotImplementedException();
 //     }

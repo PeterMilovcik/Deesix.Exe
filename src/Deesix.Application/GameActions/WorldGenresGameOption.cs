@@ -13,12 +13,12 @@ public class WorldGenresGameOption(IRepository<World> worldRepository) : IGameAc
 
     public int Order => 1;
 
-    public bool CanExecute(GameTurn gameTurn) => 
-        gameTurn.Game.HasValue && 
-        gameTurn.Game.Value.World is null &&
-        gameTurn.LastGameAction is CreateNewGameAction;
+    public bool CanExecute(Turn turn) => 
+        turn.Game.HasValue && 
+        turn.Game.Value.World is null &&
+        turn.LastGameAction is CreateNewGameAction;
 
-    public Task<GameTurn> ExecuteAsync(GameTurn gameTurn)
+    public Task<Turn> ExecuteAsync(Turn turn)
     {
         var gameOptions = new List<IGameAction>
         {
@@ -34,7 +34,7 @@ public class WorldGenresGameOption(IRepository<World> worldRepository) : IGameAc
             new SpecificWorldGenreGameAction("Steampunk Fantasy - Features advanced steam-powered technology within a historical or fantastical setting, blending Victorian aesthetics with imaginative inventions.", worldRepository),
             new SpecificWorldGenreGameAction("Sci-fi Fantasy - Merges science fiction elements with traditional fantasy, involving futuristic technology, space travel, and magical elements.", worldRepository),
         };
-        return Task.FromResult(gameTurn with 
+        return Task.FromResult(turn with 
         {
             Message = "Let's choose a specific world genre.",
             Question = "Which one would you like to choose?",

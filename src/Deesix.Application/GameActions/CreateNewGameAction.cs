@@ -13,14 +13,14 @@ public sealed class CreateNewGameAction(IRepository<Game> gameRepository) : IGam
 
     public int Order => 1;
 
-    public bool CanExecute(GameTurn gameTurn) => 
-        gameTurn.Game.HasNoValue && 
-        gameTurn.LastGameAction is null;
+    public bool CanExecute(Turn turn) => 
+        turn.Game.HasNoValue && 
+        turn.LastGameAction is null;
 
-    public Task<GameTurn> ExecuteAsync(GameTurn gameTurn)
+    public Task<Turn> ExecuteAsync(Turn turn)
     {
         var createdGame = gameRepository.Add(new Game());
-        return Task.FromResult(gameTurn with
+        return Task.FromResult(turn with
         {
             Message = "Game created successfully! Get ready for an exciting adventure!",
             Game = createdGame,

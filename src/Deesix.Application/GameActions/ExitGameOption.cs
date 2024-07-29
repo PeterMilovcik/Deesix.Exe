@@ -9,9 +9,9 @@ public sealed class ExitGameAction : IGameAction
 
     public int Order => int.MaxValue;
 
-    public bool CanExecute(GameTurn gameTurn) => true;
+    public bool CanExecute(Turn turn) => true;
 
-    public Task<GameTurn> ExecuteAsync(GameTurn gameTurn) => Task.FromResult(gameTurn with 
+    public Task<Turn> ExecuteAsync(Turn turn) => Task.FromResult(turn with 
         {
             Message = "See you later!"
         });

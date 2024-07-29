@@ -3,7 +3,7 @@ using Deesix.Domain.Interfaces;
 
 namespace Deesix.Domain.Entities;
 
-public record GameTurn
+public record Turn
 {
     public Maybe<Game> Game { get; set; } = Maybe<Game>.None;
     public string Message { get; set; } = "Welcome to Deesix!";

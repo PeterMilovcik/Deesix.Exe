@@ -6,6 +6,6 @@ public interface IGameAction
 {
     string Title { get; }
     int Order { get; }
-    bool CanExecute(GameTurn gameTurn);
-    Task<GameTurn> ExecuteAsync(GameTurn gameTurn);
+    bool CanExecute(Turn turn);
+    Task<Turn> ExecuteAsync(Turn turn);
 }

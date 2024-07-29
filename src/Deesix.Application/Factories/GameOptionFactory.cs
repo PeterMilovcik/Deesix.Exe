@@ -7,7 +7,7 @@ public class GameOptionFactory(IEnumerable<IGameAction> gameOptions) : IGameOpti
 {
     private readonly IEnumerable<IGameAction> gameOptions = gameOptions;
 
-    public List<IGameAction> CreateGameOptions(GameTurn gameTurn) => 
+    public List<IGameAction> CreateGameOptions(Turn turn) => 
         gameOptions
             .OrderBy(option => option.Order)
             .ToList();

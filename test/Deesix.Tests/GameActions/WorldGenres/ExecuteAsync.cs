@@ -7,28 +7,28 @@ namespace Deesix.Tests.GameActions.WorldGenres;
 public class ExecuteAsync : GameActionTestFixture<WorldGenresGameOption>
 {
     [Test]
-    public async Task Should_Return_GameTurn_With_Message() =>
-        (await GameAction!.ExecuteAsync(new GameTurn()))
+    public async Task Should_Return_Turn_With_Message() =>
+        (await GameAction!.ExecuteAsync(new Turn()))
             .Message.Should().Be("Let's choose a specific world genre.",
-                because: "a message should be added to the GameTurn");
+                because: "a message should be added to the Turn");
 
     [Test]
-    public async Task Should_Return_GameTurn_With_Question() =>
-        (await GameAction!.ExecuteAsync(new GameTurn()))
+    public async Task Should_Return_Turn_With_Question() =>
+        (await GameAction!.ExecuteAsync(new Turn()))
             .Question.Should().Be("Which one would you like to choose?",
-                because: "a question should be added to the GameTurn");
+                because: "a question should be added to the Turn");
     
     [Test]
-    public async Task Should_Return_GameTurn_With_GameAction() =>
-        (await GameAction!.ExecuteAsync(new GameTurn()))
+    public async Task Should_Return_Turn_With_GameAction() =>
+        (await GameAction!.ExecuteAsync(new Turn()))
             .GameActions.Should().NotBeEmpty(
-                because: "a new game action should be added to the GameTurn");
+                because: "a new game action should be added to the Turn");
     
     [Test]
-    public async Task Should_Return_GameTurn_With_GameAction_With_Correct_Type() =>
-        (await GameAction!.ExecuteAsync(new GameTurn()))
+    public async Task Should_Return_Turn_With_GameAction_With_Correct_Type() =>
+        (await GameAction!.ExecuteAsync(new Turn()))
             .GameActions.First().Should().BeOfType<SpecificWorldGenreGameAction>(
-                because: "a new game action should be added to the GameTurn");
+                because: "a new game action should be added to the Turn");
 
     [TestCase("High Fantasy")]
     [TestCase("Low Fantasy")]
@@ -41,12 +41,12 @@ public class ExecuteAsync : GameActionTestFixture<WorldGenresGameOption>
     [TestCase("Superhero Fantasy")]
     [TestCase("Steampunk Fantasy")]
     [TestCase("Sci-fi Fantasy")]
-    public async Task Should_Return_GameTurn_With_GameAction_With_Correct_Title(string genre)
+    public async Task Should_Return_Turn_With_GameAction_With_Correct_Title(string genre)
     {
-        var gameTurn = new GameTurn();
-        gameTurn = await GameAction!.ExecuteAsync(gameTurn);        
-        var gameAction = gameTurn.GameActions.FirstOrDefault(action => action.Title.StartsWith(genre));
+        var turn = new Turn();
+        turn = await GameAction!.ExecuteAsync(turn);        
+        var gameAction = turn.GameActions.FirstOrDefault(action => action.Title.StartsWith(genre));
         gameAction.Should().NotBeNull(
-            because: "the specific world genre game action should be added to the GameTurn");
+            because: "the specific world genre game action should be added to the Turn");
     }
 }

@@ -14,17 +14,17 @@ public class LoadGamesAction(IRepository<Game> gameRepository) : IGameAction
 
     public int Order => 2;
 
-    public bool CanExecute(GameTurn gameTurn) => 
-        gameTurn.Game.HasNoValue && 
+    public bool CanExecute(Turn turn) => 
+        turn.Game.HasNoValue && 
         gameRepository.GetAll().Any() && 
-        gameTurn.LastGameAction is not LoadGamesAction;
+        turn.LastGameAction is not LoadGamesAction;
 
-    public Task<GameTurn> ExecuteAsync(GameTurn gameTurn)
+    public Task<Turn> ExecuteAsync(Turn turn)
     {
         var games = gameRepository.GetAll().ToList();
         var loadGameOptions = new List<IGameAction>();
         games.ForEach(game => loadGameOptions.Add(new LoadGameAction(game)));
-        return Task.FromResult(gameTurn with 
+        return Task.FromResult(turn with 
         {
             Message = "Please choose a game to play.",
             Question = "Which one would you like to play?",
