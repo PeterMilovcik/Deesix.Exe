@@ -7,7 +7,7 @@ namespace Deesix.Infrastructure.Generators;
 public class OpenAIGenerator(IOpenAIApiKey openAIApiKey) : IOpenAIGenerator
 {
     private readonly IOpenAIApiKey openAIApiKey = openAIApiKey;
-    private const string Model = "gpt-3.5-turbo"; // TODO: Move to configuration
+    private const string Model = "gpt-4o-mini"; // TODO: Move to configuration
 
     public async Task<Result<string>> GenerateJsonAsync(string systemPrompt, string userPrompt) => 
         await GenerateAsync(systemPrompt, userPrompt, ChatResponseFormat.JsonObject);
