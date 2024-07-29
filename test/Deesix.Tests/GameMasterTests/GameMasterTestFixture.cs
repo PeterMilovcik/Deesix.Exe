@@ -19,7 +19,7 @@ public class GameMasterTestFixture : TestFixture
     }
 
     protected async Task CreateNewGame() => await Process<CreateNewAction>();
-    protected async Task ShowWorldGendres() => await Process<WorldGenresGameOption>();
+    protected async Task ShowWorldGendres() => await Process<WorldGenresAction>();
     protected async Task ChooseWorldGenre() => await Process<SpecificWorldGenreAction>();
 
     private async Task Process<TAction>() where TAction : IAction

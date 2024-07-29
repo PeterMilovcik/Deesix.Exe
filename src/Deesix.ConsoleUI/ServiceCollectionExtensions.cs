@@ -18,7 +18,7 @@ public static class ServiceCollectionExtensions
             configure.AddFilter("Microsoft.EntityFrameworkCore.Database.Command", LogLevel.Warning);
         });
 
-        services.AddSingleton<GameLoop>();
+        services.AddScoped<GameLoop>();
         return services;
     }
 }

@@ -3,7 +3,7 @@ using Deesix.Domain.Interfaces;
 
 namespace Deesix.Application.Actions;
 
-public class GenerateWorldSettings : IAction
+public class GenerateWorldSettingsAction : IAction
 {
     public string Title => "Generate World Settings";
 

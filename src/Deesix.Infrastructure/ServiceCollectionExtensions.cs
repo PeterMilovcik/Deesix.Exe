@@ -14,12 +14,7 @@ public static class ServiceCollectionExtensions
         services.AddDeesixApplication();
 
         var basePath = AppDomain.CurrentDomain.BaseDirectory;
-        var dbName = "database.db";
-        if (IsTestEnvironment())
-        {
-            dbName = "test.db";
-        }
-        var dbPath = Path.Combine(basePath, dbName);        
+        var dbPath = Path.Combine(basePath, IsTestEnvironment() ? "test.db" : "database.db");
 
         
         services.AddScoped<IRepository<Game>, GenericRepository<Game>>();

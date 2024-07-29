@@ -4,7 +4,7 @@ using Deesix.Domain.Interfaces;
 
 namespace Deesix.Application.Actions;
 
-public class WorldGenresGameOption(IRepository<World> worldRepository) : IAction
+public class WorldGenresAction(IRepository<World> worldRepository) : IAction
 {
     private readonly IRepository<World> worldRepository = worldRepository
         ?? throw new ArgumentNullException(nameof(worldRepository));

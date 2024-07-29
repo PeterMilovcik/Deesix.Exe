@@ -4,7 +4,7 @@ using FluentAssertions;
 
 namespace Deesix.Tests.Actions.WorldGenres;
 
-public class ExecuteAsync : ActionTestFixture<WorldGenresGameOption>
+public class ExecuteAsync : ActionTestFixture<WorldGenresAction>
 {
     [Test]
     public async Task Should_Return_Turn_With_Message() =>

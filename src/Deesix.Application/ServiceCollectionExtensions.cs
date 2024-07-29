@@ -11,11 +11,12 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddDeesixApplication(this IServiceCollection services)
     {
         services.AddDeesixDomain();
-        services.AddSingleton<IGameOptionFactory, GameOptionFactory>();
-        services.AddSingleton<IAction, CreateNewAction>();
-        services.AddSingleton<IAction, ExitAction>();
-        services.AddSingleton<IAction, LoadGamesAction>();
-        services.AddSingleton<IAction, WorldGenresGameOption>();
+        services.AddScoped<IGameOptionFactory, GameOptionFactory>();
+        services.AddScoped<IAction, CreateNewAction>();
+        services.AddScoped<IAction, ExitAction>();
+        services.AddScoped<IAction, LoadGamesAction>();
+        services.AddScoped<IAction, WorldGenresAction>();
+        services.AddScoped<IAction, GenerateWorldSettingsAction>();
 
         return services;
     }

@@ -8,7 +8,7 @@ public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddDeesixDomain(this IServiceCollection services)
     {
-        services.AddSingleton<IGameMaster, GameMaster>();
+        services.AddScoped<IGameMaster, GameMaster>();
         return services;
     }
 

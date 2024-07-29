@@ -6,7 +6,7 @@ using Moq;
 
 namespace Deesix.Tests.Actions.WorldGenres;
 
-public class CanExecute : ActionTestFixture<WorldGenresGameOption>
+public class CanExecute : ActionTestFixture<WorldGenresAction>
 {
     [Test]
     public void Should_Return_False_When_Turn_Has_No_Game() =>

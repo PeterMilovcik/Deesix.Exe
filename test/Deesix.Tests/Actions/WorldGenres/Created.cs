@@ -3,7 +3,7 @@ using FluentAssertions;
 
 namespace Deesix.Tests.Actions.WorldGenres;
 
-public class Created : ActionTestFixture<WorldGenresGameOption>
+public class Created : ActionTestFixture<WorldGenresAction>
 {
     [Test]
     public void Should_Have_Correct_Title() => 
