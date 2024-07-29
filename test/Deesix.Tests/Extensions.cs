@@ -10,8 +10,8 @@ public static class Extensions
     {
         Console.WriteLine($"Message: {turn.Message}");
         Console.WriteLine($"Question: {turn.Question}");
-        Console.WriteLine($"GameActions: {turn.GameActions.Count}");
-        turn.GameActions.ForEach(action => Console.WriteLine($" - {action.Title}"));
+        Console.WriteLine($"Actions: {turn.Actions.Count}");
+        turn.Actions.ForEach(action => Console.WriteLine($" - {action.Title}"));
     }
 
     public static void ToConsole(this Maybe<Game> game)

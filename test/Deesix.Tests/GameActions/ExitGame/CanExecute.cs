@@ -1,12 +1,12 @@
-using Deesix.Application.GameActions;
+using Deesix.Application.Actions;
 using Deesix.Domain.Entities;
 using FluentAssertions;
 
-namespace Deesix.Tests.GameActions.ExitGame;
+namespace Deesix.Tests.Actions.ExitGame;
 
-public class CanExecute : GameActionTestFixture<ExitGameAction>
+public class CanExecute : ActionTestFixture<ExitAction>
 {    
     [Test]
     public void Should_Return_True() => 
-        GameAction!.CanExecute(new Turn()).Should().BeTrue();
+        Action!.CanExecute(new Turn()).Should().BeTrue();
 }

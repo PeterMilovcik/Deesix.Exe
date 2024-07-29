@@ -5,5 +5,5 @@ namespace Deesix.Domain.Interfaces;
 public interface IGameMaster
 {
     Turn Turn { get; }
-    Task ProcessGameActionAsync(IGameAction option);
+    Task ProcessActionAsync(IAction option);
 }

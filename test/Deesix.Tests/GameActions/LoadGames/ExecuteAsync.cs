@@ -1,10 +1,10 @@
-using Deesix.Application.GameActions;
+using Deesix.Application.Actions;
 using Deesix.Domain.Entities;
 using FluentAssertions;
 
-namespace Deesix.Tests.GameActions.LoadGames;
+namespace Deesix.Tests.Actions.LoadGames;
 
-public class ExecuteAsync : GameActionTestFixture<LoadGamesAction>
+public class ExecuteAsync : ActionTestFixture<LoadGamesAction>
 {
     public override void SetUp()
     {
@@ -14,20 +14,20 @@ public class ExecuteAsync : GameActionTestFixture<LoadGamesAction>
     }
 
     [Test]
-    public async Task Should_Not_Return_Turn_With_Empty_GameActions() => 
-        (await GameAction!.ExecuteAsync(new Turn())).GameActions
+    public async Task Should_Not_Return_Turn_With_Empty_Actions() => 
+        (await Action!.ExecuteAsync(new Turn())).Actions
             .Should().NotBeEmpty(because: $"{nameof(LoadGamesAction)} " + 
-                $"should create new {nameof(LoadGameAction)}(s) for loading game(s).");
+                $"should create new {nameof(LoadAction)}(s) for loading game(s).");
     
     [Test]
     public async Task Should_Return_Turn_With_Correct_Message() => 
-        (await GameAction!.ExecuteAsync(new Turn())).Message
+        (await Action!.ExecuteAsync(new Turn())).Message
             .Should().Be("Please choose a game to play.", 
                 because: "that is the expected next message.");
     
     [Test]
     public async Task Should_Return_Turn_With_Correct_Question() => 
-        (await GameAction!.ExecuteAsync(new Turn())).Question
+        (await Action!.ExecuteAsync(new Turn())).Question
             .Should().Be("Which one would you like to play?", 
                 because: "that is the expected next question.");
 }

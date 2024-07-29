@@ -1,16 +1,16 @@
-﻿using Deesix.Application.GameActions;
+﻿using Deesix.Application.Actions;
 using FluentAssertions;
 
-namespace Deesix.Tests.GameActions.ExitGame;
+namespace Deesix.Tests.Actions.ExitGame;
 
-public class Created : GameActionTestFixture<ExitGameAction>
+public class Created : ActionTestFixture<ExitAction>
 {
     [Test]
     public void Title_Should_Return_Start_New_Game() => 
-        GameAction!.Title.Should().Be("Exit Game", because: "that is the expected title.");
+        Action!.Title.Should().Be("Exit Game", because: "that is the expected title.");
     
 
     [Test]
     public void Order_Should_Return_IntMaxValue() => 
-        GameAction!.Order.Should().Be(int.MaxValue, because: "that is the expected order.");
+        Action!.Order.Should().Be(int.MaxValue, because: "that is the expected order.");
 }

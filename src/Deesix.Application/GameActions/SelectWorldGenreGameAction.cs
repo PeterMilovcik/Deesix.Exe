@@ -5,7 +5,7 @@ using Deesix.Domain.Interfaces;
 
 namespace Deesix.Application;
 
-// public sealed class SelectWorldGenreGameAction(string genre) : IGameAction
+// public sealed class SelectWorldGenreAction(string genre) : IAction
 // {
 //     private readonly string genre = genre ?? throw new ArgumentNullException(nameof(genre));
 
@@ -25,7 +25,7 @@ namespace Deesix.Application;
 
 //     public Task<Result<Turn>> ExecuteAsync(Turn turn) => 
 //         CanExecute(turn) is false
-//             ? Task.FromResult(Result.Failure<Turn>("Cannot execute SelectWorldGenreGameAction."))
+//             ? Task.FromResult(Result.Failure<Turn>("Cannot execute SelectWorldGenreAction."))
 //             : Task.FromResult(Result.Success(turn with
 //             {
 //                 Game = turn.Game with
@@ -40,9 +40,9 @@ namespace Deesix.Application;
 //                 //     StartActionMessage = $"You have selected the {genre} genre for your game world.",
 //                 //     EndActionMessage = $"You have selected the {genre} genre for your game world.",
 //                 //     Question = "What would you like to do next?",
-//                 //     PossibleActions = new Collection<IGameAction>
+//                 //     PossibleActions = new Collection<IAction>
 //                 //     {
-//                 //         new GenerateWorldSettingsGameAction()
+//                 //         new GenerateWorldSettingsAction()
 //                 //     }
 //                 // }
 //             }));

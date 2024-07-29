@@ -22,7 +22,7 @@ public class UserInterface : IUserInterface
                 .MoreChoicesText("[grey](Move up and down to reveal more options)[/]")
                 .AddChoices(options));
     
-    public List<string> PromptThemes()
+    public string PromptGenre()
     {
         var themes = AnsiConsole.Prompt(new MultiSelectionPrompt<string>()
             .Title("What [green]game world would you like to create[/]?")
@@ -37,7 +37,7 @@ public class UserInterface : IUserInterface
                 "Horror", "Wilderness Survival", "Mystery",
             ]));
         AnsiConsole.MarkupLine("World themes: [green]{0}[/]", string.Join(", ", themes));
-        return themes;
+        return themes.First(); // this is temporal, this method will be removed anyway
     }
     
     public void Clear() => AnsiConsole.Clear();

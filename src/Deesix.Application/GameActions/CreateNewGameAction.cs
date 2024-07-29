@@ -2,9 +2,9 @@ using Deesix.Application.Interfaces;
 using Deesix.Domain.Entities;
 using Deesix.Domain.Interfaces;
 
-namespace Deesix.Application.GameActions;
+namespace Deesix.Application.Actions;
 
-public sealed class CreateNewGameAction(IRepository<Game> gameRepository) : IGameAction
+public sealed class CreateNewAction(IRepository<Game> gameRepository) : IAction
 {
     private readonly IRepository<Game> gameRepository = gameRepository
         ?? throw new ArgumentNullException(nameof(gameRepository));
@@ -15,7 +15,7 @@ public sealed class CreateNewGameAction(IRepository<Game> gameRepository) : IGam
 
     public bool CanExecute(Turn turn) => 
         turn.Game.HasNoValue && 
-        turn.LastGameAction is null;
+        turn.LastAction is null;
 
     public Task<Turn> ExecuteAsync(Turn turn)
     {
@@ -24,7 +24,7 @@ public sealed class CreateNewGameAction(IRepository<Game> gameRepository) : IGam
         {
             Message = "Game created successfully! Get ready for an exciting adventure!",
             Game = createdGame,
-            GameActions = []
+            Actions = []
         });
     }
 }

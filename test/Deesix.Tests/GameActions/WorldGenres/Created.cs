@@ -1,17 +1,17 @@
-﻿using Deesix.Application.GameActions;
+﻿using Deesix.Application.Actions;
 using FluentAssertions;
 
-namespace Deesix.Tests.GameActions.WorldGenres;
+namespace Deesix.Tests.Actions.WorldGenres;
 
-public class Created : GameActionTestFixture<WorldGenresGameOption>
+public class Created : ActionTestFixture<WorldGenresGameOption>
 {
     [Test]
     public void Should_Have_Correct_Title() => 
-        GameAction!.Title.Should().Be("Choose a World Genre", 
+        Action!.Title.Should().Be("Choose a World Genre", 
             because: "that is the expected title");
     
     [Test]
     public void Should_Have_Correct_Order() =>
-        GameAction!.Order.Should().Be(1, 
+        Action!.Order.Should().Be(1, 
             because: "that is the expected order");
 }

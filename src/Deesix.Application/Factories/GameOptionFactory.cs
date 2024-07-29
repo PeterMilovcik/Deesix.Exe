@@ -3,11 +3,11 @@ using Deesix.Domain.Interfaces;
 
 namespace Deesix.Application.Factories;
 
-public class GameOptionFactory(IEnumerable<IGameAction> gameOptions) : IGameOptionFactory
+public class GameOptionFactory(IEnumerable<IAction> gameOptions) : IGameOptionFactory
 {
-    private readonly IEnumerable<IGameAction> gameOptions = gameOptions;
+    private readonly IEnumerable<IAction> gameOptions = gameOptions;
 
-    public List<IGameAction> CreateGameOptions(Turn turn) => 
+    public List<IAction> CreateGameOptions(Turn turn) => 
         gameOptions
             .OrderBy(option => option.Order)
             .ToList();

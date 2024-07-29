@@ -4,9 +4,9 @@ using Deesix.Domain.Interfaces;
 
 namespace Deesix.Application;
 
-// public class GenerateWorldSettingsGameAction : GameAction
+// public class GenerateWorldSettingsAction : Action
 // {
-//     public GenerateWorldSettingsGameAction()
+//     public GenerateWorldSettingsAction()
 //     {
 //         Name = "Generate World Settings";
 //         ProgressName = "Generating world settings...";
@@ -54,9 +54,9 @@ namespace Deesix.Application;
 //     //         // GameMaster = turn.GameMaster with
 //     //         // {
 //     //         //     Question = "What would you like to do next?",
-//     //         //     PossibleActions = new Collection<IGameAction>
+//     //         //     PossibleActions = new Collection<IAction>
 //     //         //     {
-//     //         //         // new GenerateWorldDescriptionGameAction() // TODO: Implement world description generation
+//     //         //         // new GenerateWorldDescriptionAction() // TODO: Implement world description generation
 //     //         //     }
 //     //         // }
 //     //     });

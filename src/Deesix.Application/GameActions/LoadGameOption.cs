@@ -1,9 +1,9 @@
 using Deesix.Domain.Entities;
 using Deesix.Domain.Interfaces;
 
-namespace Deesix.Application.GameActions;
+namespace Deesix.Application.Actions;
 
-public class LoadGameAction(Game game) : IGameAction
+public class LoadAction(Game game) : IAction
 {
     private readonly Game gameToLoad = game 
         ?? throw new ArgumentNullException(nameof(game));
@@ -15,12 +15,12 @@ public class LoadGameAction(Game game) : IGameAction
 
     public int Order => 1;
 
-    public bool CanExecute(Turn turn) => turn.Game.HasNoValue && turn.LastGameAction is LoadGamesAction;
+    public bool CanExecute(Turn turn) => turn.Game.HasNoValue && turn.LastAction is LoadGamesAction;
 
     public Task<Turn> ExecuteAsync(Turn turn) => Task.FromResult(turn with 
     {
         Message = "Game loaded successfully.",
         Game = gameToLoad,
-        GameActions = new List<IGameAction>()
+        Actions = new List<IAction>()
     });
 }

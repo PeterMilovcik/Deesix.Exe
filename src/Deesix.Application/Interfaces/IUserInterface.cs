@@ -4,7 +4,7 @@ public interface IUserInterface
 {
     void DisplayGameTitleAndDescription();
     string SelectFromOptions(string title, List<string> options);
-    List<string> PromptThemes();
+    string PromptGenre();
     void Clear();
     void ErrorMessage(string message);
     void SuccessMessage(string message);

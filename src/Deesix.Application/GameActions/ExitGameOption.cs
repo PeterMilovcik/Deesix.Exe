@@ -1,9 +1,9 @@
 using Deesix.Domain.Entities;
 using Deesix.Domain.Interfaces;
 
-namespace Deesix.Application.GameActions;
+namespace Deesix.Application.Actions;
 
-public sealed class ExitGameAction : IGameAction
+public sealed class ExitAction : IAction
 {
     public string Title => "Exit Game";
 

@@ -3,9 +3,9 @@ using Deesix.Application.Interfaces;
 using Deesix.Domain.Entities;
 using Deesix.Domain.Interfaces;
 
-namespace Deesix.Application.GameActions;
+namespace Deesix.Application.Actions;
 
-public class LoadGamesAction(IRepository<Game> gameRepository) : IGameAction
+public class LoadGamesAction(IRepository<Game> gameRepository) : IAction
 {
     private readonly IRepository<Game> gameRepository = gameRepository
         ?? throw new ArgumentNullException(nameof(gameRepository));
@@ -17,18 +17,18 @@ public class LoadGamesAction(IRepository<Game> gameRepository) : IGameAction
     public bool CanExecute(Turn turn) => 
         turn.Game.HasNoValue && 
         gameRepository.GetAll().Any() && 
-        turn.LastGameAction is not LoadGamesAction;
+        turn.LastAction is not LoadGamesAction;
 
     public Task<Turn> ExecuteAsync(Turn turn)
     {
         var games = gameRepository.GetAll().ToList();
-        var loadGameOptions = new List<IGameAction>();
-        games.ForEach(game => loadGameOptions.Add(new LoadGameAction(game)));
+        var loadGameOptions = new List<IAction>();
+        games.ForEach(game => loadGameOptions.Add(new LoadAction(game)));
         return Task.FromResult(turn with 
         {
             Message = "Please choose a game to play.",
             Question = "Which one would you like to play?",
-            GameActions = new List<IGameAction>(loadGameOptions)
+            Actions = new List<IAction>(loadGameOptions)
         });
     }
 }

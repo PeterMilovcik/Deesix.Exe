@@ -1,26 +1,26 @@
-using Deesix.Application.GameActions;
+using Deesix.Application.Actions;
 using Deesix.Domain.Entities;
 using FluentAssertions;
 
-namespace Deesix.Tests.GameActions.CreateNewGame;
+namespace Deesix.Tests.Actions.CreateNewGame;
 
-public class CanExecute : GameActionTestFixture<CreateNewGameAction>
+public class CanExecute : ActionTestFixture<CreateNewAction>
 {
     [Test]
     public void Should_Return_True_When_Game_Has_No_Value() =>
-        GameAction!.CanExecute(new Turn()).Should().BeTrue(
+        Action!.CanExecute(new Turn()).Should().BeTrue(
             because: "the game has no value.");
     
     [Test]
     public void Should_Return_False_When_Game_Has_Value() =>
-        GameAction!.CanExecute(new Turn { Game = new Game()})
+        Action!.CanExecute(new Turn { Game = new Game()})
             .Should().BeFalse(
                 because: "the game has already a value.");
 
     [Test]
-    public void Should_Return_False_When_LastGameAction_Is_LoadGamesAction() => 
-        GameAction!.CanExecute(
-            new Turn { LastGameAction = new LoadGamesAction(GameRepository) })
+    public void Should_Return_False_When_LastAction_Is_LoadGamesAction() => 
+        Action!.CanExecute(
+            new Turn { LastAction = new LoadGamesAction(GameRepository) })
                 .Should().BeFalse(
-                    because: $"the {nameof(Turn.LastGameAction)} is {nameof(LoadGamesAction)}.");
+                    because: $"the {nameof(Turn.LastAction)} is {nameof(LoadGamesAction)}.");
 }

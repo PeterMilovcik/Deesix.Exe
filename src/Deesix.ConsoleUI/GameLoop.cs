@@ -1,5 +1,5 @@
 using CSharpFunctionalExtensions;
-using Deesix.Application.GameActions;
+using Deesix.Application.Actions;
 using Deesix.Application.Interfaces;
 using Deesix.Domain.Entities;
 using Deesix.Domain.Interfaces;
@@ -15,23 +15,23 @@ internal class GameLoop(IGameMaster gameMaster, IRepository<Game> gameRepository
     public async Task StartAsync()
     {
         int turn = 1;
-        IGameAction? gameOption = null;
-        while (gameOption is not ExitGameAction)
+        IAction? gameOption = null;
+        while (gameOption is not ExitAction)
         {
             DisplayGameState(turn);
             gameOption = SelectGameOption();
-            await gameMaster.ProcessGameActionAsync(gameOption);
+            await gameMaster.ProcessActionAsync(gameOption);
             gameMaster.Turn.Game.Execute(game => gameRepository.SaveChanges());
             turn++;
         }
     }
 
-    private IGameAction SelectGameOption()
+    private IAction SelectGameOption()
     {
-        var options = gameMaster.Turn.GameActions;
+        var options = gameMaster.Turn.Actions;
 
         var option = AnsiConsole.Prompt(
-            new SelectionPrompt<IGameAction>()
+            new SelectionPrompt<IAction>()
                 .UseConverter(option => option.Title)
                 .Title(gameMaster.Turn.Question)
                 .PageSize(10)

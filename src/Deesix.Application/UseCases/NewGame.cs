@@ -17,10 +17,10 @@ public class NewGame(
 
     public async Task<Result<Game>> ExecuteAsync()
     {
-        var worldThemes = userInterface.PromptThemes();
+        var genre = userInterface.PromptGenre();
         var worldSettings = await userInterface.ShowProgressAsync(
             "Generating world settings...", 
-            async () => await generator.World.GenerateWorldSettingsAsync(worldThemes));
+            async () => await generator.World.GenerateWorldSettingsAsync(genre));
         worldSettings.MapError(e => Result.Failure<Game>($"Failed to generate world settings: {e}"));
         return await worldSettings.Map(ws => OnWorldSettingsGenerated(ws));
     }

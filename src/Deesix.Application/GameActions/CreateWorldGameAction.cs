@@ -1,6 +1,6 @@
 ﻿namespace Deesix.Application;
 
-// public sealed class CreateWorldGameAction : IGameAction
+// public sealed class CreateWorldAction : IAction
 // {
 //     public string Name => "Create World";
 
@@ -28,13 +28,13 @@
 //             //     Question = "What genre of game world would you like to play?",
 //             //     PossibleActions =
 //             //     [
-//             //         new SelectWorldGenreGameAction("Fantasy"),
-//             //         new SelectWorldGenreGameAction("Sci-Fi"),
-//             //         new SelectWorldGenreGameAction("Post-Apocalyptic"),
-//             //         new SelectWorldGenreGameAction("Cyberpunk"),
-//             //         new SelectWorldGenreGameAction("Steampunk"),
-//             //         new SelectWorldGenreGameAction("Historical"),
-//             //         new SelectWorldGenreGameAction("Wilderness Survival")
+//             //         new SelectWorldGenreAction("Fantasy"),
+//             //         new SelectWorldGenreAction("Sci-Fi"),
+//             //         new SelectWorldGenreAction("Post-Apocalyptic"),
+//             //         new SelectWorldGenreAction("Cyberpunk"),
+//             //         new SelectWorldGenreAction("Steampunk"),
+//             //         new SelectWorldGenreAction("Historical"),
+//             //         new SelectWorldGenreAction("Wilderness Survival")
 //             //     ]
 //             // })
 //         }));
