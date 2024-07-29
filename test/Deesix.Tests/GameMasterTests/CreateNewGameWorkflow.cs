@@ -10,6 +10,7 @@ public class CreateNewGameWorkflow : GameMasterTestFixture
         await CreateNewGame();
         await ShowWorldGendres();
         await ChooseWorldGenre();
+        await GenerateWorldSettings();
         GameMaster.Turn.Game.Value.World.Should().NotBeNull(because: "the world should be created");
     }
 }

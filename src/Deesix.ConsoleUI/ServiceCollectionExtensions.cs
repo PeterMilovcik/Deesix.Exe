@@ -19,6 +19,7 @@ public static class ServiceCollectionExtensions
         });
 
         services.AddScoped<GameLoop>();
+        services.AddScoped<IOpenAIApiKey, OpenAIApiKey>();
         return services;
     }
 }

@@ -36,4 +36,8 @@
     <ProjectReference Include="..\..\src\Deesix.ConsoleUI\Deesix.ConsoleUI.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Actions\SpecificWorldGenre\" />
+  </ItemGroup>
+
 </Project>

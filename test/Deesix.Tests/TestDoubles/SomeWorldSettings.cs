@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using Deesix.Domain.Entities;
 
-namespace Deesix.Application.UnitTests.TestDoubles;
+namespace Deesix.Tests.TestDoubles;
 
 public sealed class SomeWorldSettings : WorldSettings
 {

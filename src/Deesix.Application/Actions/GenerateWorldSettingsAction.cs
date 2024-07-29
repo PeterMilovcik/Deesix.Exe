@@ -1,21 +1,34 @@
-﻿using Deesix.Domain.Entities;
+﻿using Deesix.Application.Interfaces;
+using Deesix.Domain.Entities;
 using Deesix.Domain.Interfaces;
 
 namespace Deesix.Application.Actions;
 
-public class GenerateWorldSettingsAction : IAction
+public class GenerateWorldSettingsAction(IGenerator generator) : IAction
 {
+    private readonly IGenerator generator = generator 
+        ?? throw new ArgumentNullException(nameof(generator));
+
     public string Title => "Generate World Settings";
 
     public int Order => 1;
 
-    public bool CanExecute(Turn turn)
-    {
-        throw new NotImplementedException();
-    }
+    public bool CanExecute(Turn turn) => 
+        turn.Game.HasValue && 
+        turn.Game.Value.World is not null && 
+        !string.IsNullOrWhiteSpace(turn.Game.Value.World.Genre) &&
+        turn.Game.Value.World.WorldSettings is null;
 
-    public Task<Turn> ExecuteAsync(Turn turn)
+    public async Task<Turn> ExecuteAsync(Turn turn)
     {
-        throw new NotImplementedException();
+        if (CanExecute(turn))
+        {
+            var result = await generator.World.GenerateWorldSettingsAsync(turn.Game.Value.World!.Genre!);
+            if (result.IsSuccess)
+            {
+                turn.Game.Value.World.WorldSettings = result.Value;
+            }
+        }
+        return turn;
     }
 }

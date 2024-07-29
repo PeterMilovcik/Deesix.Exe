@@ -17,11 +17,18 @@ internal class OpenAIApiKey : IOpenAIApiKey
 
     public string? GetOpenAiApiKey()
     {
+        if (IsTestEnvironment())
+        {
+            return Environment.GetEnvironmentVariable("OPEN_AI_KEY");
+        }
         var openAiFilePath = Path.Combine(baseDirectory, OpenAiFileName);
         return !File.Exists(openAiFilePath) 
             ? ReadFromConsoleAndSaveToFile(openAiFilePath) 
             : ReadFromFile(openAiFilePath);
     }
+
+    private static bool IsTestEnvironment() => 
+        Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Test";
 
     private static string? ReadFromFile(string openAiFilePath)
     {

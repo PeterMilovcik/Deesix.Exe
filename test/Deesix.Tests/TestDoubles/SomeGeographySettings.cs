@@ -1,6 +1,6 @@
 using Deesix.Domain.Entities;
 
-namespace Deesix.Application.UnitTests.TestDoubles;
+namespace Deesix.Tests.TestDoubles;
 
 internal sealed class SomeGeographySettings : GeographySettings
 {

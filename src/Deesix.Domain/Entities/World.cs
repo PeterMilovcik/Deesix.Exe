@@ -20,7 +20,7 @@ public record World : IEntity
         get => !string.IsNullOrWhiteSpace(WorldSettingsJson)
                 ? JsonSerializer.Deserialize<WorldSettings>(WorldSettingsJson)
                 : null;
-        init => WorldSettingsJson = JsonSerializer.Serialize(value);
+        set => WorldSettingsJson = JsonSerializer.Serialize(value);
     }
 
     public override string ToString() => $"World[Id: {Id}, Genre: {Genre}, Name: {Name}, Description: {Description}]";

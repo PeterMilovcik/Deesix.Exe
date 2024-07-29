@@ -2,6 +2,7 @@
 using Deesix.Application.Interfaces;
 using Deesix.Domain.Entities;
 using Deesix.Infrastructure.DataAccess;
+using Deesix.Infrastructure.Generators;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -15,10 +16,15 @@ public static class ServiceCollectionExtensions
 
         var basePath = AppDomain.CurrentDomain.BaseDirectory;
         var dbPath = Path.Combine(basePath, IsTestEnvironment() ? "test.db" : "database.db");
-
         
         services.AddScoped<IRepository<Game>, GenericRepository<Game>>();
         services.AddScoped<IRepository<World>, GenericRepository<World>>();
+        services.AddScoped<IGenerator, Generator>();
+        services.AddScoped<IWorldGenerator, WorldGenerator>();
+        services.AddScoped<IRealmGenerator, RealmGenerator>();
+        services.AddScoped<IRegionGenerator, RegionGenerator>();
+        services.AddScoped<ILocationGenerator, LocationGenerator>();
+        services.AddScoped<IOpenAIGenerator, OpenAIGenerator>();
 
         services.AddDbContext<ApplicationDbContext>(options => 
             options
