@@ -1,4 +1,4 @@
-﻿namespace Deesix.Tests;
+﻿namespace TestKitLibrary;
 
 public sealed class TestKitConfiguration
 {
@@ -56,7 +56,7 @@ public sealed class TestKitConfiguration
     {
         var item = myItems.OfType<T>().FirstOrDefault();
         return item == null 
-            ? throw new TestKitItemNotFoundException($"Item of type {typeof(T).Name} not found.")
+            ? throw new TestKitItemNotFoundException(typeof(T))
             : item;
     }
 

@@ -1,4 +1,4 @@
-﻿namespace Deesix.Tests;
+﻿namespace TestKitLibrary;
 
 public static class TestKit
 {

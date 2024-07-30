@@ -34,6 +34,11 @@
     <ProjectReference Include="..\..\src\Deesix.Application\Deesix.Application.csproj" />
     <ProjectReference Include="..\..\src\Deesix.Infrastructure\Deesix.Infrastructure.csproj" />
     <ProjectReference Include="..\..\src\Deesix.ConsoleUI\Deesix.ConsoleUI.csproj" />
+    <ProjectReference Include="..\TestKitLibrary\TestKitLibrary.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Items\" />
   </ItemGroup>
 
 </Project>
