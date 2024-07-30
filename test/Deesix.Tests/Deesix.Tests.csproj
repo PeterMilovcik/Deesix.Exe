@@ -38,7 +38,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Items\" />
+    <Folder Include="TestSteps\" />
   </ItemGroup>
 
 </Project>

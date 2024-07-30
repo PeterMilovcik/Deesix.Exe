@@ -4,7 +4,7 @@ namespace Deesix.Application.Interfaces;
 
 public interface IRepository<TEntity> where TEntity : class
 {
-    TEntity Add(TEntity entity);
+    void Add(TEntity entity);
     void AddRange(IEnumerable<TEntity> entity);
     TEntity? GetById(int id);
     Task<TEntity?> GetIdAsync(int id);

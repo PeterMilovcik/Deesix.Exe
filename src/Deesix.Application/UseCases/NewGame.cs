@@ -47,14 +47,14 @@ public class NewGame(
             WorldSettings = worldSettings,
         };
         
-        var addedWorld = worldRepository.Add(createdWorld);
+        worldRepository.Add(createdWorld);
 
         var generatedRealm = await userInterface.ShowProgressAsync(
             "Generating realm...", 
             async () => await generator.Realm.GenerateRealmAsync(createdWorld));
 
         generatedRealm.MapError(e => Result.Failure<Game>($"Failed to generate realm: {e}"));
-        return await generatedRealm.Map(r => OnGeneratedRealm(r, addedWorld));
+        return await generatedRealm.Map(r => OnGeneratedRealm(r, createdWorld));
     }
 
     private Task<Result<Game>> OnGeneratedRealm(GeneratedRealm realm, World world)
@@ -66,7 +66,7 @@ public class NewGame(
             Description = realm.Description,
         };
 
-        var addedRealm = realmRepository.Add(createdRealm);
+        realmRepository.Add(createdRealm);
 
         return Task.FromResult(Result.Failure<Game>("Not implemented"));
     }

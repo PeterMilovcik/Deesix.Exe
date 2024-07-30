@@ -19,11 +19,12 @@ public sealed class CreateNewAction(IRepository<Game> gameRepository) : IAction
 
     public Task<Turn> ExecuteAsync(Turn turn)
     {
-        var createdGame = gameRepository.Add(new Game());
+        var newGame = new Game();
+        gameRepository.Add(newGame);
         return Task.FromResult(turn with
         {
             Message = "Game created successfully! Get ready for an exciting adventure!",
-            Game = createdGame,
+            Game = newGame,
             Actions = []
         });
     }

@@ -8,16 +8,11 @@ public sealed class GenericRepository<TEntity>(ApplicationDbContext applicationD
 {
     private readonly ApplicationDbContext context = applicationDbContext;
 
-    public TEntity Add(TEntity model)
-    {
-        var entry = context.Set<TEntity>().Add(model);
-        return entry.Entity;
-    }
+    public void Add(TEntity model) => 
+        context.Set<TEntity>().Add(model);
 
-    public void AddRange(IEnumerable<TEntity> model)
-    {
+    public void AddRange(IEnumerable<TEntity> model) => 
         context.Set<TEntity>().AddRange(model);
-    }
 
     public TEntity? GetById(int id) => 
         context.Set<TEntity>().Find(id);
@@ -49,17 +44,15 @@ public sealed class GenericRepository<TEntity>(ApplicationDbContext applicationD
     public async Task<int> CountAsync() => 
         await context.Set<TEntity>().CountAsync();
 
-    public void Update(TEntity entity)
-    {
+    public void Update(TEntity entity) => 
         context.Entry(entity).State = EntityState.Modified;
-    }
 
-    public void Remove(TEntity entity)
-    {
+    public void Remove(TEntity entity) => 
         context.Set<TEntity>().Remove(entity);
-    }
 
-    public void Dispose() => context.Dispose();
+    public void Dispose() => 
+        context.Dispose();
 
-    public void SaveChanges() => context.SaveChanges();
+    public void SaveChanges() => 
+        context.SaveChanges();
 }
