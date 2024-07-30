@@ -13,7 +13,9 @@ public class SpecificWorldGenreAction(string genre, IRepository<World> worldRepo
 
     public int Order => 1;
 
-    public bool CanExecute(Turn turn) => true;
+    public bool CanExecute(Turn turn) => 
+        turn.Game.HasValue && 
+        turn.Game.Value.World is null;
 
     public Task<Turn> ExecuteAsync(Turn turn)
     {
@@ -25,7 +27,7 @@ public class SpecificWorldGenreAction(string genre, IRepository<World> worldRepo
         turn.Game.Value.World = newWorld;
         return Task.FromResult(turn with
         {
-            Message = $"World genre set to {genre}. Good choice!",
+            Message = $"World genre set to {genre} Good choice!",
             Game = turn.Game.Value with
             {
                 World = newWorld

@@ -28,6 +28,7 @@ public static class Extensions
         if (game.Value.World != null)
         {
             Console.WriteLine($"World Genre: {game.Value.World.Genre}");
+            Console.WriteLine($"World Settings: {game.Value.World.WorldSettings}");
         }
         AnsiConsole.Write(new Rule());
     }

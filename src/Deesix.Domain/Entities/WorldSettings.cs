@@ -12,7 +12,6 @@ public class WorldSettings
 
     public override string ToString() => 
         $"\n" + 
-        "## WorldSettings\n\n" +
         $"{Geography}\n\n" + 
         $"{Culture}\n\n" + 
         $"{Economy}\n\n" + 
