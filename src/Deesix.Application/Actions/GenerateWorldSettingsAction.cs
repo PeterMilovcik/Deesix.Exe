@@ -27,6 +27,8 @@ public class GenerateWorldSettingsAction(IGenerator generator) : IAction
             if (result.IsSuccess)
             {
                 turn.Game.Value.World.WorldSettings = result.Value;
+                turn.Message = $"World Settings: {result.Value}";
+                turn.Question = "How do you want to proceed?";
             }
         }
         return turn;
