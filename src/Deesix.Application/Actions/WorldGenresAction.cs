@@ -11,6 +11,8 @@ public class WorldGenresAction(IRepository<World> worldRepository) : IAction
 
     public string Title => "Choose a World Genre";
 
+    public string ProgressTitle => "Choosing a world genre...";
+
     public int Order => 1;
 
     public bool CanExecute(Turn turn) => 

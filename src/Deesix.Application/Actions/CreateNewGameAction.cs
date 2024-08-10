@@ -10,6 +10,7 @@ public sealed class CreateNewAction(IRepository<Game> gameRepository) : IAction
         ?? throw new ArgumentNullException(nameof(gameRepository));
 
     public string Title => "Create New Game";
+    public string ProgressTitle => "Creating new game...";
 
     public int Order => 1;
 

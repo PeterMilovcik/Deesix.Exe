@@ -12,6 +12,8 @@ public class LoadGamesAction(IRepository<Game> gameRepository) : IAction
 
     public string Title => "Load Game";
 
+    public string ProgressTitle => "Loading games...";
+
     public int Order => 2;
 
     public bool CanExecute(Turn turn) => 

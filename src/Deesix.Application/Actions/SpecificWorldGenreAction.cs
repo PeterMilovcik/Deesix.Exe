@@ -11,6 +11,8 @@ public class SpecificWorldGenreAction(string genre, IRepository<World> worldRepo
 
     public string Title => genre;
 
+    public string ProgressTitle => $"Setting world genre to {genre}...";
+
     public int Order => 1;
 
     public bool CanExecute(Turn turn) => 

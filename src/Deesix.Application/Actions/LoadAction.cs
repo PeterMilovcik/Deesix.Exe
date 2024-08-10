@@ -12,6 +12,8 @@ public class LoadAction(Game game) : IAction
         string.IsNullOrEmpty(gameToLoad.World?.Name)
             ? $"Load: {gameToLoad.GameId} - Unknown World"
             : $"Load: {gameToLoad.GameId} - {gameToLoad.World.Name}";
+    
+    public string ProgressTitle => "Loading game...";
 
     public int Order => 1;
 

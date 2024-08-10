@@ -6,7 +6,8 @@ namespace Deesix.Application;
 
 public class AcceptGeneratedWorldSettingsAction : IAction
 {
-    public string Title => "Accept Generated World Settings";
+    public string Title => "Accept generated world settings";
+    public string ProgressTitle => "Accepting generated world settings...";
 
     public int Order => 1;
 

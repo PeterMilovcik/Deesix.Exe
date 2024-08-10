@@ -10,6 +10,7 @@ public class GenerateWorldSettingsAction(IGenerator generator) : IAction
         ?? throw new ArgumentNullException(nameof(generator));
 
     public string Title => "Generate World Settings";
+    public string ProgressTitle => "Generating world settings...";
 
     public int Order => 1;
 

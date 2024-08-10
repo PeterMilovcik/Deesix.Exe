@@ -11,6 +11,7 @@ public class RegenerateWorldSettingsAction(IGenerator generator) : IAction
         ?? throw new ArgumentNullException(nameof(generator));
 
     public string Title => "Regenerate World Settings";
+    public string ProgressTitle => "Regenerating world settings...";
 
     public int Order => 2;
 
