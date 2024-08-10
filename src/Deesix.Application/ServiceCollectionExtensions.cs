@@ -17,6 +17,8 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IAction, LoadGamesAction>();
         services.AddScoped<IAction, WorldGenresAction>();
         services.AddScoped<IAction, GenerateWorldSettingsAction>();
+        services.AddScoped<IAction, AcceptGeneratedWorldSettingsAction>();
+        services.AddScoped<IAction, RegenerateWorldSettingsAction>();
 
         return services;
     }

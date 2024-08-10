@@ -1,23 +1,25 @@
-﻿using Deesix.Application.Interfaces;
+using Deesix.Application.Actions;
+using Deesix.Application.Interfaces;
 using Deesix.Domain.Entities;
 using Deesix.Domain.Interfaces;
 
-namespace Deesix.Application.Actions;
+namespace Deesix.Application;
 
-public class GenerateWorldSettingsAction(IGenerator generator) : IAction
+public class RegenerateWorldSettingsAction(IGenerator generator) : IAction
 {
     private readonly IGenerator generator = generator 
         ?? throw new ArgumentNullException(nameof(generator));
 
-    public string Title => "Generate World Settings";
+    public string Title => "Regenerate World Settings";
 
-    public int Order => 1;
+    public int Order => 2;
 
     public bool CanExecute(Turn turn) => 
-        turn.Game.HasValue && 
-        turn.Game.Value.World is not null && 
+        turn.Game.HasValue &&
+        turn.Game.Value.World is not null &&
         !string.IsNullOrWhiteSpace(turn.Game.Value.World.Genre) &&
-        turn.Game.Value.World.WorldSettings is null;
+        turn.Game.Value.World.WorldSettings is not null &&
+        turn.LastAction is GenerateWorldSettingsAction or RegenerateWorldSettingsAction;
 
     public async Task<Turn> ExecuteAsync(Turn turn)
     {
