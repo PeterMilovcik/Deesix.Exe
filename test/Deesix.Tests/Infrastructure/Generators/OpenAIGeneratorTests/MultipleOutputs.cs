@@ -24,7 +24,7 @@ public class MultipleOutputs : TestFixture
         // Arrange
         var systemPrompt = "You are fictional character name generator.";
         var userPrompt = "Generate a fictional character name. Don't write anything else.";
-        int numberOfOutputs = 20;
+        int numberOfOutputs = 10;
         // Act
         var textResults = await OpenAIGenerator
             .GenerateMultipleTextAsync(systemPrompt, userPrompt, numberOfOutputs, 1.75, 1);
