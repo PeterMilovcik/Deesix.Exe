@@ -17,5 +17,9 @@ public class AcceptGeneratedWorldSettingsAction : IAction
         turn.Game.Value.World.WorldSettings is not null &&
         (turn.LastAction is GenerateWorldSettingsAction or RegenerateWorldSettingsAction);
 
-    public Task<Turn> ExecuteAsync(Turn turn) => Task.FromResult(turn);
+    public Task<Turn> ExecuteAsync(Turn turn)
+    {
+        turn.Actions.Clear();
+        return Task.FromResult(turn);
+    }
 }
