@@ -20,6 +20,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IRepository<Game>, GenericRepository<Game>>();
         services.AddScoped<IRepository<World>, GenericRepository<World>>();
         services.AddScoped<IGenerator, Generator>();
+        services.AddScoped<ICharacterGenerator, CharacterGenerator>();
         services.AddScoped<IWorldGenerator, WorldGenerator>();
         services.AddScoped<IRealmGenerator, RealmGenerator>();
         services.AddScoped<IRegionGenerator, RegionGenerator>();
