@@ -2,6 +2,7 @@
 
 public interface IGenerator
 {
+    ICharacterGenerator Character { get; }
     IWorldGenerator World { get; }
     IRealmGenerator Realm { get; }
     IRegionGenerator Region { get; }

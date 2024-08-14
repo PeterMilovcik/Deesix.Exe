@@ -9,7 +9,7 @@ public class WorldGenerator(IOpenAIGenerator openAIGenerator) : IWorldGenerator
 {
     private readonly IOpenAIGenerator openAIGenerator = openAIGenerator;
 
-        public async Task<List<string>> GenerateWorldNamesAsync(string worldDescription, int count)
+    public async Task<List<string>> GenerateWorldNamesAsync(string worldDescription, int count)
     {
         var maxCharacterLength = 30;
         var systemPrompt = $"Generate {count} unique and captivating world names that reflect " + 
