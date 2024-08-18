@@ -10,9 +10,8 @@ public class RegenerateWorldSettingsAction(IGenerator generator) : IAction
     private readonly IGenerator generator = generator 
         ?? throw new ArgumentNullException(nameof(generator));
 
-    public string Title => "Regenerate World Settings";
+    public string Title => "Regenerate world settings";
     public string ProgressTitle => "Regenerating world settings...";
-
     public int Order => 2;
 
     public bool CanExecute(Turn turn) => 

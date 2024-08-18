@@ -9,10 +9,8 @@ public class WorldGenresAction(IRepository<World> worldRepository) : IAction
     private readonly IRepository<World> worldRepository = worldRepository
         ?? throw new ArgumentNullException(nameof(worldRepository));
 
-    public string Title => "Choose a World Genre";
-
+    public string Title => "Choose a world genre";
     public string ProgressTitle => "Choosing a world genre...";
-
     public int Order => 1;
 
     public bool CanExecute(Turn turn) => 

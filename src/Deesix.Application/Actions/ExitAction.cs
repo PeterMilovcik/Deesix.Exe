@@ -5,7 +5,7 @@ namespace Deesix.Application.Actions;
 
 public sealed class ExitAction : IAction
 {
-    public string Title => "Exit Game";
+    public string Title => "Exit game";
     public string ProgressTitle => "Exiting game...";
 
     public int Order => int.MaxValue;

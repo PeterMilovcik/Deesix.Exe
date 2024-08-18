@@ -10,7 +10,7 @@ public class LoadGamesAction(IRepository<Game> gameRepository) : IAction
     private readonly IRepository<Game> gameRepository = gameRepository
         ?? throw new ArgumentNullException(nameof(gameRepository));
 
-    public string Title => "Load Game";
+    public string Title => "Load game";
 
     public string ProgressTitle => "Loading games...";
 

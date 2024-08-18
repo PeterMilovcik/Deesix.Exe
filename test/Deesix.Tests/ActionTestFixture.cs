@@ -6,7 +6,8 @@ namespace Deesix.Tests;
 
 public abstract class ActionTestFixture<TAction> : ActionTestFixture where TAction : IAction
 {
-    protected override IAction CreateAction() => Services.GetRequiredService<TAction>();
+    protected override IAction CreateAction() => 
+        Services.GetRequiredService<IEnumerable<IAction>>().OfType<TAction>().Single();
 }
 
 public abstract class ActionTestFixture : TestFixture

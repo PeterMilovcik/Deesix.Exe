@@ -7,15 +7,8 @@ namespace Deesix.Tests.Actions;
 public class LoadGamesActionTests : ActionTestFixture<LoadGamesAction>
 {
     protected override string ExpectedTitle => "Load game";
-    protected override string ExpectedProgressTitle => "Loading game...";
+    protected override string ExpectedProgressTitle => "Loading games...";
     protected override int ExpectedOrder => 2;
-
-    public override void SetUp()
-    {
-        base.SetUp();
-        GameRepository.Add(new Game());
-        GameRepository.SaveChanges();
-    }
 
     [Test]
     public void CanExecute_Should_Return_False_When_Game_HasValue() => 
@@ -44,20 +37,32 @@ public class LoadGamesActionTests : ActionTestFixture<LoadGamesAction>
     }
 
     [Test]
-    public async Task ExecuteAsync_Should_Not_Return_Turn_With_Empty_Actions() => 
+    public async Task ExecuteAsync_Should_Not_Return_Turn_With_Empty_Actions()
+    {
+        GameRepository.Add(new Game());
+        GameRepository.SaveChanges();
         (await Action!.ExecuteAsync(new Turn())).Actions
-            .Should().NotBeEmpty(because: $"{nameof(LoadGamesAction)} " + 
+            .Should().NotBeEmpty(because: $"{nameof(LoadGamesAction)} " +
                 $"should create new {nameof(LoadGameAction)}(s) for loading game(s).");
-    
+    }
+
     [Test]
-    public async Task ExecuteAsync_Should_Return_Turn_With_Correct_Message() => 
+    public async Task ExecuteAsync_Should_Return_Turn_With_Correct_Message()
+    {
+        GameRepository.Add(new Game());
+        GameRepository.SaveChanges();
         (await Action!.ExecuteAsync(new Turn())).Message
-            .Should().Be("Please choose a game to play.", 
+            .Should().Be("Please choose a game to play.",
                 because: "that is the expected next message.");
-    
+    }
+
     [Test]
-    public async Task ExecuteAsync_Should_Return_Turn_With_Correct_Question() => 
+    public async Task ExecuteAsync_Should_Return_Turn_With_Correct_Question()
+    {
+        GameRepository.Add(new Game());
+        GameRepository.SaveChanges();
         (await Action!.ExecuteAsync(new Turn())).Question
-            .Should().Be("Which one would you like to play?", 
+            .Should().Be("Which one would you like to play?",
                 because: "that is the expected next question.");
+    }
 }
