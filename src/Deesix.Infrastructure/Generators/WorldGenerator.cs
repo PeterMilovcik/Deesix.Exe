@@ -93,4 +93,16 @@ public class WorldGenerator(IOpenAIGenerator openAIGenerator) : IWorldGenerator
 
         return await openAIGenerator.GenerateJsonObjectAsync<T>(systemPrompt, userPrompt);
     }
+
+    public async Task<Result<List<string>>> GenerateWorldDescriptionsAsync(World world, int count)
+    {
+        var systemPrompt = "You are a fictional writer.";
+        var userPrompt = $"Write a description for a fictional world based on the following world genre: '{world.Genre}' and world settings: \n{world.WorldSettings}\n" +
+            "---\n" +
+            "Don't mention world name in the description.\n" +
+            "Don't write anything in bold.\n" +
+            "Don't add 'RPG' in the description.\n" +
+            $"Remember, the maximum length for the world description should be {500} characters.\n";
+        return await openAIGenerator.GenerateMultipleTextAsync(systemPrompt, userPrompt, count);
+    }
 }

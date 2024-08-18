@@ -3,7 +3,7 @@ using Deesix.Domain.Interfaces;
 
 namespace Deesix.Application.Actions;
 
-public class LoadAction(Game game) : IAction
+public class LoadGameAction(Game game) : IAction
 {
     private readonly Game gameToLoad = game 
         ?? throw new ArgumentNullException(nameof(game));

@@ -96,23 +96,36 @@ public class OpenAIGenerator(IOpenAIApiKey openAIApiKey) : IOpenAIGenerator
         ChatClient client = new(Model, apiKey);
         try
         {
-            string inputJson = $@"
-            {{
-                ""model"": ""{Model}"",
-                ""messages"": [
-                    {{
-                        ""role"": ""system"",
-                        ""content"": ""{systemPrompt}""
-                    }},
-                    {{
-                        ""role"": ""user"",
-                        ""content"": ""{userPrompt}""
-                    }}
-                    ],
-                ""n"": {numberOfOutputs},
-                ""temperature"": {temperature.ToString(CultureInfo.InvariantCulture)},
-                ""top_p"": {topP.ToString(CultureInfo.InvariantCulture)}
-            }}";
+            // string requestPayload = $@"
+            // {{
+            //     ""model"": ""{Model}"",
+            //     ""messages"": [
+            //         {{
+            //             ""role"": ""system"",
+            //             ""content"": ""{systemPrompt}""
+            //         }},
+            //         {{
+            //             ""role"": ""user"",
+            //             ""content"": ""{userPrompt}""
+            //         }}
+            //         ],
+            //     ""n"": {numberOfOutputs},
+            //     ""temperature"": {temperature.ToString(CultureInfo.InvariantCulture)},
+            //     ""top_p"": {topP.ToString(CultureInfo.InvariantCulture)}
+            // }}";
+            var requestPayload = new
+            {
+                model = Model,
+                messages = new[]
+                {
+                    new { role = "system", content = systemPrompt },
+                    new { role = "user", content = userPrompt }
+                },
+                n = numberOfOutputs,
+                temperature = temperature,
+                top_p = topP
+            };
+            string inputJson = JsonSerializer.Serialize(requestPayload);
             BinaryData binaryData = BinaryData.FromString(inputJson);
             using BinaryContent binaryContent = BinaryContent.Create(binaryData);
             var clientResult = await client.CompleteChatAsync(binaryContent);

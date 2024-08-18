@@ -25,7 +25,7 @@ public class LoadGamesAction(IRepository<Game> gameRepository) : IAction
     {
         var games = gameRepository.GetAll().ToList();
         var loadGameOptions = new List<IAction>();
-        games.ForEach(game => loadGameOptions.Add(new LoadAction(game)));
+        games.ForEach(game => loadGameOptions.Add(new LoadGameAction(game)));
         return Task.FromResult(turn with 
         {
             Message = "Please choose a game to play.",
