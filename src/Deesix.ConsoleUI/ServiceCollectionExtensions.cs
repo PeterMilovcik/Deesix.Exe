@@ -1,4 +1,5 @@
 using Deesix.Infrastructure;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
@@ -6,9 +7,9 @@ namespace Deesix.ConsoleUI;
 
 public static class ServiceCollectionExtensions
 {
-    public static IServiceCollection AddDeesixConsoleUI(this IServiceCollection services)
+    public static IServiceCollection AddDeesixConsoleUI(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddDeesixInfrastructure();
+        services.AddDeesixInfrastructure(configuration);
 
         services.AddLogging(configure => 
         {

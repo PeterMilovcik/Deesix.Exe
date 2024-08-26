@@ -14,7 +14,8 @@ internal class Program
         {
             var host = Host
                 .CreateDefaultBuilder(args)
-                .ConfigureServices((hostContext, services) => services.AddDeesixConsoleUI()).Build();
+                .ConfigureServices((hostContext, services) => 
+                    services.AddDeesixConsoleUI(hostContext.Configuration)).Build();
             
             using (var scope = host.Services.CreateScope())
             {

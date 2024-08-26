@@ -27,7 +27,7 @@ public class DeesixTestKitSetUpFixture : AbstractTestKitSetUpFixture
     protected override void Configure(TestKitConfiguration config)
     {
         config.AddTestStep();
-        config.AddTestAspNetCoreEnvironment();
+        config.AddDevelopmentAspNetCoreEnvironment();
         config.AddProcessAction();
         var services = CreateServices();
         config.Add(services);
@@ -40,7 +40,7 @@ public class DeesixTestKitSetUpFixture : AbstractTestKitSetUpFixture
         Host.CreateDefaultBuilder()
             .ConfigureServices((hostContext, services) =>
             {
-                services.AddDeesixConsoleUI();
+                services.AddDeesixConsoleUI(hostContext.Configuration);
             })
             .Build().Services;
 

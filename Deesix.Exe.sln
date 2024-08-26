@@ -10,6 +10,9 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Deesix.Infrastructure", "src\Deesix.Infrastructure\Deesix.Infrastructure.csproj", "{627A0883-B6B2-4B37-BA9E-358B8620C987}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{91C59F3E-6965-4254-B18A-5C6D1A0B0D24}"
+	ProjectSection(SolutionItems) = preProject
+		appsettings.json = appsettings.json
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{1FFE403E-17A1-45D6-9E21-7A095CC11CE4}"
 	ProjectSection(SolutionItems) = preProject

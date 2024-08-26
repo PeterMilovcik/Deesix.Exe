@@ -4,16 +4,17 @@ using Deesix.Domain.Entities;
 using Deesix.Infrastructure.DataAccess;
 using Deesix.Infrastructure.Generators;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Deesix.Infrastructure;
 
 public static class ServiceCollectionExtensions
 {
-    public static IServiceCollection AddDeesixInfrastructure(this IServiceCollection services)
+    public static IServiceCollection AddDeesixInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddDeesixApplication();
-
+        
         var basePath = AppDomain.CurrentDomain.BaseDirectory;
         var dbPath = Path.Combine(basePath, IsTestEnvironment() ? "test.db" : "database.db");
         
@@ -27,10 +28,13 @@ public static class ServiceCollectionExtensions
         services.AddScoped<ILocationGenerator, LocationGenerator>();
         services.AddScoped<IOpenAIGenerator, OpenAIGenerator>();
 
-        services.AddDbContext<ApplicationDbContext>(options => 
+        services.AddDbContext<ApplicationDbContext>(options =>
+        {
+            var connectionString = configuration.GetConnectionString("DefaultConnection");
             options
-                .UseSqlite($"Data Source={dbPath}")
-                .EnableSensitiveDataLogging());
+                .UseSqlite(connectionString)
+                .EnableSensitiveDataLogging();
+        });
         
         return services;
     }

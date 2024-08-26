@@ -5,9 +5,9 @@ namespace Deesix.Tests;
 
 public static class TestKitConfigurationExtensions
 {
-    public static TestKitConfiguration AddTestAspNetCoreEnvironment(this TestKitConfiguration testKitConfiguration)
+    public static TestKitConfiguration AddDevelopmentAspNetCoreEnvironment(this TestKitConfiguration testKitConfiguration)
     {
-        Environment.SetEnvironmentVariable("ASPNETCORE_ENVIRONMENT", "Test");
+        Environment.SetEnvironmentVariable("ASPNETCORE_ENVIRONMENT", "Development");
         return testKitConfiguration;
     }
 
