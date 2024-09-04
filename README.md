@@ -2,9 +2,23 @@
 
 Deesix.Exe is a cross-platform, .NET 8 powered text-based RPG console game. It features rich, dynamic UIs, intricate storytelling, and deep gameplay mechanics. Explore, survive, and unravel mysteries in a procedurally generated world. Perfect for fans of classic RPGs and modern console interfaces.
 
-## Using EF Core with a Centralized Build Output (SQLite) in .NET 8
+## Available Functionality
 
-### Prerequisites
+- Create new game
+- Choose a world genre
+   - Select specific world genre
+- Generate world settings
+   - Accept generated world settings
+   - Regenerate world settings
+- Generate world description
+   - Select specific world description (in work)
+- Exit game
+
+## Implementation details
+
+### Using EF Core with a Centralized Build Output (SQLite) in .NET 8
+
+#### Prerequisites
 
 - **.NET 8 SDK**: Ensure the .NET 8 SDK is installed on your system.
 - **Entity Framework Core CLI**: Install or update the EF Core CLI tools to ensure compatibility with .NET 8:
@@ -13,7 +27,7 @@ Deesix.Exe is a cross-platform, .NET 8 powered text-based RPG console game. It f
 dotnet tool install --global dotnet-ef --version 8.0.6
 ```
 
-### Setting Up the Database
+#### Setting Up the Database
 
 1. **Ensure You're in the Repository Root**:
    - Start your terminal session in the root of your repository where your solution file (.sln) is located.
@@ -35,7 +49,7 @@ Important: Don't forget to update `<YourMigrationName>` to your migration name, 
 dotnet ef database update --project src/Deesix.Infrastructure/Deesix.Infrastructure.csproj
 ```
 
-### Additional Useful Commands
+#### Additional Useful Commands
 
 - **Remove a Migration**:
   - If you need to reverse a migration, you can execute:
@@ -44,7 +58,7 @@ dotnet ef database update --project src/Deesix.Infrastructure/Deesix.Infrastruct
 dotnet ef migrations remove --project src/Deesix.Infrastructure/Deesix.Infrastructure.csproj
 ```
 
-### Final Notes
+#### Final Notes
 
 - **Maintain CLI Tool Updates**: Regularly update your EF Core CLI tools to match the SDK version used in development:
 
