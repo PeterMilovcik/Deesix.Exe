@@ -5,12 +5,14 @@ Deesix.Exe is a cross-platform, .NET 8 powered text-based RPG console game. It f
 ## Available Functionality
 
 - Create new game
+- Load game
 - Choose a world genre
    - Select specific world genre
 - Generate world settings
    - Accept generated world settings
    - Regenerate world settings
 - Generate world description
+   - Accept generated world description
    - Select specific world description (in work)
 - Exit game
 
