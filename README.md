@@ -71,3 +71,27 @@ dotnet tool update --global dotnet-ef
 This guide is designed to facilitate the use of EF Core commands from the root of your repository, making it more convenient and ensuring a smooth workflow with .NET 8. Adjust the guide as needed based on the specifics of your environment and project configurations.
 
 ---
+
+### How to run test coverage
+
+To run test coverage, use the following command:
+
+```bash
+dotnet test --collect:"XPlat Code Coverage"
+```
+
+### Report Generator
+
+To install the report generator tool, use the following command:
+
+```bash
+dotnet tool install -g dotnet-reportgenerator-globaltool
+```
+
+To generate a report, use the following command:
+
+```bash
+reportgenerator -reports:"TestResults/**/*.cobertura.xml" -targetdir:"coverage-report" -reporttypes:Cobertura,Json,Lcov,Html,TextSummary
+```
+
+Replace `reporttypes` with your desired formats, separated by commas.
