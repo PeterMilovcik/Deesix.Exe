@@ -20,7 +20,6 @@ public class TestFixture
         Environment.SetEnvironmentVariable("ASPNETCORE_ENVIRONMENT", "Development");
         Services = CreateServices();
         RecreateDatabase();
-        ApplyMigrations();
         GameRepository = Services.GetRequiredService<IRepository<Game>>();
         WorldRepository = Services.GetRequiredService<IRepository<World>>();
     }
@@ -30,6 +29,7 @@ public class TestFixture
             .ConfigureServices((hostContext, services) =>
             {
                 services.AddDeesixConsoleUI(hostContext.Configuration);
+                services.AddInMemoryDeesixContext(); // Use in-memory database for testing
             })
             .Build().Services;
 
@@ -38,12 +38,5 @@ public class TestFixture
         var database = Services.CreateScope().ServiceProvider.GetRequiredService<ApplicationDbContext>().Database;
         database.EnsureDeleted();
         database.EnsureCreated();
-    }
-
-    private void ApplyMigrations()
-    {
-        using var scope = Services.CreateScope();
-        var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-        dbContext.Database.Migrate();
     }
 }

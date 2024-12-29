@@ -40,8 +40,4 @@
     <ProjectReference Include="..\TestKitLibrary\TestKitLibrary.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="TestSteps\" />
-  </ItemGroup>
-
 </Project>
