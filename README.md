@@ -16,6 +16,85 @@ Deesix.Exe is a cross-platform, .NET 8 powered text-based RPG console game. It f
    - Select specific world description (in work)
 - Exit game
 
+## Roadmap
+
+### Implemented Features
+
+- Create new game
+- Load game
+- Choose a world genre
+  - Select specific world genre
+- Generate world settings
+  - Accept generated world settings
+  - Regenerate world settings
+- Generate world description
+  - Accept generated world description
+- Exit game
+
+### Planned Features
+
+- Generate world description
+  - Select specific world description (in work)
+- Additional world genres
+- Create character
+  - Choose character race
+  - Customize character appearance
+  - Choose character background story
+  - Choose character name
+- Crafting and resource management
+  - Gather resources
+  - Craft items and equipment
+  - Upgrade equipment
+  - Discover new crafting recipes
+- In-game economy and trading system
+  - Buy and sell items
+  - Manage inventory
+  - Barter with NPCs
+  - Establish trade routes
+- Random events and encounters
+  - Encounter unique NPCs
+  - Discover hidden locations
+  - Trigger random story events
+- Voice acting and sound effects
+- Localization and multi-language support
+- Exploration actions
+  - Search for hidden items
+  - Interact with NPCs
+  - Map exploration and discovery
+  - Set waypoints on the map
+- Quest system
+  - Accept and complete quests
+  - Track quest progress
+  - Branching quest outcomes
+  - Replayable quests
+- Health and stamina management
+  - Rest to recover health and stamina
+  - Use items to restore health and stamina
+  - Manage hunger and thirst
+  - Treat injuries and illnesses
+- Skill development
+  - Train skills to improve proficiency
+  - Unlock new abilities and spells
+- Combat actions
+  - Attack enemies
+  - Defend against attacks
+  - Use items during combat
+  - Flee from combat
+  - Use environment for tactical advantage
+  - Perform combo attacks
+- Social interactions
+  - Form alliances with NPCs
+  - Engage in dialogue with multiple choices
+  - Influence NPCs' attitudes and decisions
+  - Recruit companions
+  - Build relationships with NPCs
+- Environmental interactions
+  - Set up camp
+  - Build and upgrade shelters
+  - Forage for food and water
+  - Navigate through different terrains
+  - Use tools to interact with the environment
+
 ## Implementation details
 
 ### Using EF Core with a Centralized Build Output (SQLite) in .NET 8
