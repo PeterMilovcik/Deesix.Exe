@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Spectre.Console;
+using Deesix.Product.Infrastructure;
 
 namespace Deesix.ConsoleUI;
 
@@ -14,8 +15,11 @@ internal class Program
         {
             var host = Host
                 .CreateDefaultBuilder(args)
-                .ConfigureServices((hostContext, services) => 
-                    services.AddDeesixConsoleUI(hostContext.Configuration)).Build();
+                .ConfigureServices((hostContext, services) =>
+                {
+                    string connectionString = "Data Source=deesix.db";
+                    services.AddDeesixInfrastructure(connectionString);
+                }).Build();
             
             using (var scope = host.Services.CreateScope())
             {
