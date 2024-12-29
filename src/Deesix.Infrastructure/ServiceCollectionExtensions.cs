@@ -39,6 +39,33 @@ public static class ServiceCollectionExtensions
         return services;
     }
 
+    public static IServiceCollection AddDeesixInfrastructure(this IServiceCollection services, string connectionString)
+    {
+        services.AddDbContext<ApplicationDbContext>(options =>
+            options.UseSqlite(connectionString));
+
+        services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));
+
+        return services;
+    }
+
+    public static IServiceCollection AddInMemoryDeesixContext(this IServiceCollection services)
+    {
+        var descriptor = services.SingleOrDefault(
+            d => d.ServiceType == typeof(DbContextOptions<ApplicationDbContext>));
+        if (descriptor != null)
+        {
+            services.Remove(descriptor);
+        }
+
+        services.AddDbContext<ApplicationDbContext>(options =>
+        {
+            options.UseInMemoryDatabase("DeesixTestDb");
+        });
+
+        return services;
+    }
+
     private static bool IsTestEnvironment() => 
         Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Test";
 }
