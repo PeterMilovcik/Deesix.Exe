@@ -26,7 +26,7 @@ Deesix.Exe is a cross-platform, .NET 8 powered text-based RPG console game. It f
 - **Entity Framework Core CLI**: Install or update the EF Core CLI tools to ensure compatibility with .NET 8:
 
 ```bash
-dotnet tool install --global dotnet-ef --version 8.0.6
+dotnet tool install --global dotnet-ef --version 8.0.8
 ```
 
 #### Setting Up the Database
